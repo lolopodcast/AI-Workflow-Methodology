@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIWF · AI Workflow Methodology</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: { fontFamily: { sans: ['Inter','sans-serif'], serif: ['Merriweather','serif'] } } }
+}
+</script>
+<style>
+body { font-family: 'Inter', sans-serif; overflow-x: hidden; }
+@keyframes fadeInUp { from{opacity:0;transform:translateY(15px)} to{opacity:1;transform:translateY(0)} }
+.animate-fade-in { animation: fadeInUp 0.5s ease-out forwards; }
+.perspective { perspective: 1000px; }
+.transform-style-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.rotate-y-180 { transform: rotateY(180deg); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
+header, footer, button, [role="button"], .ui-decoration { -webkit-user-select: none; user-select: none; }
+input, textarea, select { -webkit-user-select: text; user-select: text; }
+.toast-anim { animation: toastIn 0.3s ease-out forwards; }
+@keyframes toastIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+::selection { background: #004030; color: white; }
+.dark ::selection { background: #D8C3A5; color: #004030; }
+</style>
+</head>
+<body class="bg-[#f4f4f4] dark:bg-[#121212] text-slate-800 dark:text-slate-200">
+<div id="root"></div>
+
+<script>
+// ════════ Domain Lock + Iframe Busting ════════
+(function(){
+  const ALLOWED = ['lolopodcast.github.io','localhost','127.0.0.1'];
+  const REDIRECT = 'https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo';
+  if (!ALLOWED.some(d => location.hostname === d || location.hostname.endsWith('.'+d))) {
+    if (location.protocol !== 'file:') {
+      document.body.innerHTML = '<div style="text-align:center;padding:60px;font-family:sans-serif"><h1>Access Denied</h1><p>This resource is not authorised on this domain.</p></div>';
+      setTimeout(() => location.href = REDIRECT, 3000);
+      return;
+    }
+  }
+  if (window.self !== window.top) {
+    try { window.top.location.href = window.self.location.href; }
+    catch(e) { document.body.innerHTML = '<div style="text-align:center;padding:60px"><h1>Frame Blocked</h1><p>This content cannot be embedded.</p></div>'; }
+  }
+})();
+
+// ════════ 智慧型右鍵 + 快捷鍵攔截 ════════
+const COPYRIGHT_MSG = 'Intellectual Property of Prof. Shihmin Lo';
+window._showCopyrightToast = () => {
+  const existing = document.getElementById('cr-toast');
+  if (existing) existing.remove();
+  const t = document.createElement('div');
+  t.id = 'cr-toast';
+  t.className = 'toast-anim';
+  t.style.cssText = 'position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#004030;color:#D8C3A5;padding:12px 24px;border-radius:8px;font-size:14px;font-family:sans-serif;z-index:9999;box-shadow:0 8px 20px rgba(0,0,0,0.3);';
+  t.textContent = COPYRIGHT_MSG;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+};
+document.addEventListener('contextmenu', e => {
+  const sel = window.getSelection().toString().trim();
+  const isImg = e.target.tagName === 'IMG' || e.target.closest('svg');
+  if (sel.length > 0) return true;
+  if (isImg) { e.preventDefault(); window._showCopyrightToast(); return; }
+  e.preventDefault(); window._showCopyrightToast();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'F12') { e.preventDefault(); window._showCopyrightToast(); return; }
+  if (e.ctrlKey && e.key.toLowerCase() === 'u') { e.preventDefault(); window._showCopyrightToast(); return; }
+  if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(e.key.toLowerCase())) { e.preventDefault(); window._showCopyrightToast(); return; }
+});
+document.addEventListener('dragstart', e => {
+  if (e.target.tagName === 'IMG' || e.target.closest('svg')) e.preventDefault();
+});
+</script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+// ════════ 動態模組常數 ════════
+const NUM_LEARN = 6;
+const TOTAL = 1 + NUM_LEARN + 3;
+const IDX_LAB = NUM_LEARN + 1;
+const IDX_RES = NUM_LEARN + 2;
+const IDX_ANA = NUM_LEARN + 3;
+
+// ════════ 答案混淆（XOR + Base64）════════
+const _SALT = 'AIWF2026';
+const _e = (s, n) => {
+  const p = s + ':' + n;
+  let r = '';
+  for (let i = 0; i < p.length; i++)
+    r += String.fromCharCode(p.charCodeAt(i) ^ ((i + 7) * 3 & 0xFF));
+  return btoa(r);
+};
+const _d = (token) => {
+  const decoded = atob(token);
+  let r = '';
+  for (let i = 0; i < decoded.length; i++)
+    r += String.fromCharCode(decoded.charCodeAt(i) ^ ((i + 7) * 3 & 0xFF));
+  return parseInt(r.split(':')[1], 10);
+};
+const _A0 = _e(_SALT, 0), _A1 = _e(_SALT, 1), _A2 = _e(_SALT, 2), _A3 = _e(_SALT, 3);
+
+// ════════ 輸入清理 ════════
+const sanitizeStudentId = (v) => v.replace(/[^0-9]/g, '').slice(0, 12);
+const sanitizeName = (v) => v.replace(/[<>"'&\\]/g, '').slice(0, 50);
+
+// ════════ Icons ════════
+const IconBookOpen = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>;
+const IconAlertTriangle = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
+const IconCheckCircle = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>;
+const IconGlobe = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>;
+const IconChevronRight = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>;
+const IconChevronUp = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="18 15 12 9 6 15"/></svg>;
+const IconMenu = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>;
+const IconX = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+const IconMoon = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>;
+const IconSun = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>;
+const IconPlay = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>;
+const IconPause = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>;
+const IconSquare = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16"/></svg>;
+const IconArrowRight = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>;
+const IconActivity = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
+const IconCpu = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>;
+const IconTrendingUp = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>;
+const IconLayers = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>;
+const IconFlag = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>;
+const IconZap = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>;
+const IconFlask = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>;
+const IconZapLab = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 2v6.5a2 2 0 0 1-.59 1.41L4.42 14a2 2 0 0 0-.42 2.18A2 2 0 0 0 6 17.5h12a2 2 0 0 0 2-1.32 2 2 0 0 0-.42-2.18l-3.99-4.09A2 2 0 0 1 15 8.5V2"/><line x1="9" y1="2" x2="15" y2="2"/><circle cx="10" cy="14" r="1" fill="currentColor"/><circle cx="14" cy="13" r="1" fill="currentColor"/></svg>;
+const IconHome = ({size=20}) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>;
+
+// ════════ 雙語字典 ════════
+const dict = {
+  zh: {
+    brand: "AIWF",
+    title: "AI 協作工作流方法論",
+    subtitle: "Chat, Project, Cowork, Skill, Code 的整合決策架構",
+
+    nav_modules: "單元目錄", nav_prev: "上一單元", nav_next: "下一單元", nav_home: "首頁",
+    key_terms: "關鍵專有名詞", flip_prompt: "點擊翻轉",
+    flip_status: "已讀 {read} / 已顯示 {shown} / 總計 {total}",
+    flip_next: "下一組", flip_retry: "重新開始",
+    audio_read: "語音導覽",
+    quiz_title: "模組知識檢定",
+    quiz_status: "答對 {correct} / 已答 {answered} / 總計 {total}",
+    quiz_next: "下一組", quiz_retry: "重新測驗",
+    submit: "提交答案",
+    score: "得分", correct: "正確", incorrect: "錯誤", explanation: "解析",
+    overview_label: "Overview 概述",
+    highlights_label: "Highlights 重點",
+    deep_dive_label: "Deep Dive 深入解析",
+    wrapup_label: "Wrap-up 總結",
+
+    // Analytics
+    analytics_title: "學習歷程分析",
+    analytics_desc: "本模組以 localStorage 持久保存您的學習軌跡，並提供弱點分析與 CSV 匯出。",
+    analytics_form_title: "學員基本資料",
+    analytics_group: "組別", analytics_group_select: "請選擇", analytics_dept: "系級",
+    analytics_dept_ph: "例：IBS3",
+    analytics_id: "學號", analytics_id_ph: "例：113212599",
+    analytics_name_en: "英文姓名", analytics_name_en_ph: "例：Shihmin Lo",
+    analytics_name_zh: "中文姓名", analytics_name_zh_ph: "例：王阿吉",
+    analytics_export_csv: "匯出 CSV 歷程記錄",
+    analytics_fill_required: "請填寫完整資訊以解鎖匯出",
+    analytics_refresh_prompt: "是否刷新紀錄儲存？",
+    group_options: ["G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","G11","G12","Others"],
+    analytics_total_time: "總學習時間", analytics_total_clicks: "總互動點擊",
+    analytics_overall_acc: "總體測驗答對率",
+    analytics_card_usage: "學習卡使用率",
+    analytics_module: "模組", analytics_time: "停留時間",
+    analytics_clicks: "點擊次數", analytics_acc: "答對率",
+    analytics_correct_ans_total: "答對 / 已填答 / 總題數",
+    analytics_cards_read_total: "已讀 / 總卡數",
+    analytics_no_data: "尚未測驗", analytics_sec: "秒", analytics_times: "次",
+    analytics_progress_title: "整體學習進度",
+    analytics_progress_visited: "已瀏覽", analytics_progress_not_visited: "未瀏覽",
+    analytics_progress_quiz_done: "已測驗",
+    analytics_wp_title: "弱點分析與複習建議",
+    analytics_wp_incorrect: "答錯題目：",
+    analytics_wp_goto: "→ 前往複習此模組",
+    analytics_wp_allpass: "所有已測驗模組答對率均達 75% 以上，表現優異！",
+    analytics_wp_saved: "學習歷程已自動儲存於本機瀏覽器",
+    analytics_wp_clear: "🗑 清除歷程",
+    analytics_wp_clear_confirm: "確定要清除所有學習歷程資料嗎？此操作無法復原。",
+    analytics_wp_tts_intro: "以下是您的弱點分析。",
+    analytics_wp_tts_module: "模組:{name},答對率{acc}%,建議複習。",
+    analytics_wp_tts_allpass: "恭喜！所有已測驗模組答對率均達 75% 以上。",
+
+    // M0
+    m0_nav: "0. 執行概要",
+    m0_title: "AI 協作工作流方法論",
+    m0_intro: "AI 工具的價值不只在於「能做什麼」,更在於「該如何被組織」。當 Chat、Project、Cowork、Skill、Code、Memory、KB 同時存在時,真正考驗使用者的是判斷力,而非單一功能。本方法論將分散的工具元素整合為一個可決策、可優化、可演進的工作流體系。從基礎概念出發,釐清 SPA 與純前端的差異;進入五種工作模式的光譜比較,理解它們不是互斥而是疊加;深入記憶與知識體系的四層分工,看見 Context Window、Memory、Project、Skill、KB 各自的位置;再以 Token 經濟學作為共同度量,把直覺的「該用哪個」轉化為可計算的決策。Code 執行的角色釐清思考型與執行型任務的本質差異,Semi-Agent 工作流設計揭示為何精修 SKILL.md 等於設計微型 agent。最後以批次任務的判準與維運型 skill 的開發,完成從「創造端」到「規模端」的完整工作流。",
+    m0_why: "為什麼這套方法論重要？",
+    m0_why_desc: "因為 AI 工具正在從「單一對話助手」演進為「分層的工作流體系」。沒有方法論,使用者會在每次任務中重新發明輪子、燒掉 token、做出錯誤決策。有方法論,使用者能把精力放在真正需要思考的地方,讓機械性任務自動化。這份體系最終的目標是「Semi-Agent 工作流」——人類定義目標,AI 自主執行,雙方各司其職。",
+    m0_modules: [
+      { num: "01", title: "工作模式光譜", desc: "Chat、Project、Cowork、Skill、Code 五層架構的角色定位與組合策略" },
+      { num: "02", title: "記憶與知識體系", desc: "Context Window 內的 Memory、Project、Skill、KB 四層分工" },
+      { num: "03", title: "Token 經濟學", desc: "一次性成本、累積成本、起手成本的計算與權衡" },
+      { num: "04", title: "Code 執行的角色", desc: "思考型任務與執行型任務的判準,以及 Skill+Code 的組合" },
+      { num: "05", title: "Semi-Agent 工作流", desc: "從工具呼叫到自主執行的光譜,SKILL.md 作為微型 agent 章程" },
+      { num: "06", title: "維運型 Skill 與批次任務", desc: "從創造端到規模端的擴展,spa-consistency-check 案例剖析" }
+    ],
+    m0_stats: [
+      { val: "5", label: "工作模式層級" },
+      { val: "4", label: "記憶體系構面" },
+      { val: "3", label: "Token 成本類型" },
+      { val: "11", label: "決策速查表" }
+    ],
+    m0_start: "開始學習 →",
+
+    // ============ M1 工作模式光譜 ============
+    m1_nav: "1. 工作模式光譜",
+    m1_title: "Chat、Project、Cowork、Skill、Code 的五層架構",
+    m1_overview: "五種工作模式不是互斥的選項,而是可以疊加組合的層次。最強的工作流是 Chat + Skill + Project + Cowork + Code 的混合。",
+    m1_highlights: ["五層疊加", "不是互斥", "Chat 端到桌上", "Cowork 廚房鑰匙", "Skill 章程"],
+    m1_p1: "Chat 模式是最基礎的對話介面,使用者把材料直接貼進對話視窗。它像是把材料端到我桌上,我就地加工。適合一次性、單一文件來源、需要快速迭代的任務。Chat 模式的優點是 token 成本可預測——你上傳什麼,我讀什麼;缺點是長對話會持續累積 context,後期 token 消耗快速膨脹。",
+    m1_p2: "Project 模式是「建立專案並掛上檔案、指令、知識庫」,所有 Project 內對話會自動載入這些內容。它像是每次開對話前,桌上已經擺好參考資料。適合持續性專案、規格穩定、需要跨對話延續脈絡的場景。Cowork 模式則是「給 Claude 指定資料夾,自行掃描、讀取、產出、寫回」——把廚房鑰匙交給我,自己去翻冰箱做菜再放回去。Cowork 適合素材龐雜、產出物需要直接歸檔、可串接部署流程的工作。",
+    m1_p3: "Skill 模式是把規格寫進 SKILL.md,Claude 觸發時自動載入。它的本質是「把對話裡反覆講的規格,搬到一份可重用的章程裡」。一次性固定成本,多次重用——對話越長、修改越多輪,省 token 效益越明顯。Code 模式則是讓 Claude 在 Linux 環境執行 Python/bash,處理檔案、計算、產生二進位檔。它的價值是「給我一台真正的電腦,不只是一張嘴」,適合規模性、機械性、二進位產出任務。五種模式的真正威力不在單獨使用,而在組合。例如:Skill 規範產出格式,Code 處理批次操作,Project 提供長期脈絡,Cowork 完成歸檔閉環。",
+    m1_wrapup: "選擇模式的本質是「讓每件事放在最適合它的層級」。Chat 處理對話、Project 提供脈絡、Cowork 操作檔案、Skill 封裝規格、Code 執行運算。當你開始把這五層視為「可組合的積木」而非「五選一的選項」,你的工作流就會從單點工具升級為完整體系。",
+
+    m1_terms: [
+      { front: "SPA", back: "Single Page Application,單一 HTML 檔案 + JS 動態切換畫面的應用程式。網址會變但不重新載入整頁。" },
+      { front: "純前端", back: "所有程式碼在瀏覽器端執行,沒有後端伺服器邏輯。SPA 是純前端的子集,但純前端不一定是 SPA。" },
+      { front: "Chat 模式", back: "對話內處理。使用者把材料直接貼進對話視窗,Claude 就地加工。適合一次性任務。" },
+      { front: "Project 模式", back: "專案範圍記憶。建立 Project 掛上檔案,所有對話自動載入。適合持續性專案。" },
+      { front: "Cowork 模式", back: "檔案系統存取。Claude 在指定資料夾中掃描、讀取、產出、寫回。適合素材龐雜需歸檔的工作。" },
+      { front: "Skill 模式", back: "規格與流程封裝。把規格寫進 SKILL.md,觸發時自動載入。本質是微型 agent 的章程。" },
+      { front: "Code 模式", back: "程式執行環境。Claude 在 Linux 環境執行 Python/bash,處理檔案、計算、產生二進位檔。" },
+      { front: "MPA", back: "Multi-Page Application,多頁應用程式。每個連結載入新 HTML,跟 SPA 形成對比。" }
+    ],
+
+    m1_q: [
+      { q: "下列哪一項最能描述「SPA 與純前端的關係」?",
+        opts: ["完全相同的概念", "純前端 ⊂ SPA", "SPA ⊂ 純前端", "兩者完全無關"],
+        ans: _A2, exp: "純前端是「沒有後端」,SPA 是「單一 HTML + JS 動態路由」。SPA 是純前端的子集之一,但純前端不一定要是 SPA。" },
+      { q: "Cowork 模式最適合什麼場景?",
+        opts: ["快速一次性查詢", "素材龐雜、產出物需直接歸檔到資料夾", "純粹的對話與創意發想", "簡單的程式碼問答"],
+        ans: _A1, exp: "Cowork 的核心價值是「給 Claude 廚房鑰匙」,讓它自己去翻檔案、處理、寫回。素材多且需要歸檔流程的工作最受益。" },
+      { q: "Skill 模式的本質是什麼?",
+        opts: ["一種對話技巧", "把規格從對話搬到檔案,可重用的章程", "另一種付費方案", "Claude 的隱藏模式"],
+        ans: _A1, exp: "Skill 把規格從對話搬到檔案。每次精修 SKILL.md 等於設計微型 agent 的章程,降低每次認知對齊的成本。" },
+      { q: "Chat、Project、Cowork、Skill、Code 五者的關係是?",
+        opts: ["五選一,只能用一種", "互斥的競爭模式", "可疊加組合的層次", "依時間順序使用"],
+        ans: _A2, exp: "五種模式不是互斥,而是可以同時組合的層次。最強工作流是 Chat + Skill + Project + Cowork + Code 的混合。" },
+      { q: "下列何者「不是」純前端 SPA 的特徵?",
+        opts: ["所有程式碼在瀏覽器端執行", "單一 HTML 檔案動態切換畫面", "需要 Node.js 伺服器渲染", "可部署到 GitHub Pages"],
+        ans: _A2, exp: "需要 Node.js 後端渲染(例如 Next.js SSR)的網站,雖然可能是單頁應用,但不是「純前端」SPA。" }
+    ],
+
+    // ============ M2 記憶與知識體系 ============
+    m2_nav: "2. 記憶與知識體系",
+    m2_title: "Context Window 內的四層分工",
+    m2_overview: "Memory 管你是誰、Project 管任務範圍、Skill 管執行規格、KB 管知識內容。四者分工互補,共同存在於 Context Window 這個容器中。",
+    m2_highlights: ["Context 是容器", "Memory 個人記憶", "Project 任務脈絡", "Skill 執行章程", "KB 知識資產"],
+    m2_p1: "Context Window 是「Claude 這次對話能看到的所有文字」的總空間。很多人誤以為 Memory 等於 Context Window,其實 Memory 只是 Context Window 內的一個區塊。一個完整的 Context Window 包含:System Prompt、Memory(個人記憶)、Project Files(專案脈絡)、User Preferences(使用偏好)、Skill 內容(觸發時載入)、本次對話歷史、工具呼叫結果。這一坨全部加起來,不能超過模型的上限。理解這個結構後,你會發現「為什麼長對話會變慢、變不準」——因為 context 持續累積、擠壓其他區塊的空間。",
+    m2_p2: "四層記憶各司其職。Memory 是「跨對話延續、記住你這個人的長期樣貌」,由系統自動維護,內容是濃縮摘要而非逐字稿。Project 是「記住這個任務範圍的固定脈絡」,每次對話自動載入,起手就有完整背景。Skill 是「把執行規格與流程封裝為可觸發的章程」,一次性固定成本、多次重用。KB 是「把外部材料萃取結構化的長期資產」,比原始材料精簡,跨平台可攜耐久。這四者疊起來才是完整的記憶與執行體系,互相補位、不是互相取代。",
+    m2_p3: "為什麼這個分層重要?因為每一層的 token 經濟特性不同。Memory 是「免費背景」但不能塞太多細節,否則會稀釋掉真正重要的個人資訊。Project 「起手稍貴但對話省力」,適合穩定脈絡。Skill 「一次性成本換無限重用紅利」。KB「投資未來,換取後續無數次的省力與精準」。當你誤把 Project 當 Memory 用,或把 Skill 當 KB 用,效率就會大打折扣。正確的分層,讓每種記憶放在最適合它的位置。",
+    m2_wrapup: "Memory、Project、Skill、KB 不是「都記住你的東西」的同義詞,而是四種不同性質的記憶機制。理解它們的分工,你就能精準決定:這個資訊該放在哪一層?塞錯地方不只浪費 token,還會降低 AI 的判斷品質。",
+
+    m2_terms: [
+      { front: "Context Window", back: "Claude 這次對話能看到的所有文字的總空間。包含 System Prompt、Memory、Project、Skill、對話歷史等所有區塊。" },
+      { front: "Memory", back: "跨對話延續、記住「你這個人」的長期樣貌。由系統自動維護,內容是濃縮摘要不是逐字稿。" },
+      { front: "Project", back: "記住「這個任務範圍」的固定脈絡。掛上的檔案、指令、知識庫,每次對話自動載入。" },
+      { front: "Skill", back: "把執行規格與流程封裝為可觸發的章程。一次性固定成本、多次重用,本質是微型 agent 章程。" },
+      { front: "Knowledge Base", back: "把外部材料萃取結構化的長期資產。比原始材料精簡、跨平台可攜耐久。" },
+      { front: "Parametric Knowledge", back: "模型訓練時學到的內建知識。存在神經網路權重裡,無法直接編輯或新增。" },
+      { front: "External Knowledge", back: "使用者提供給 AI 的、原本不知道的內容。存在 Context Window 或可被檢索的位置。" },
+      { front: "元知識 KB", back: "處理「如何使用工具的方法論」的 KB。生命週期極長,會影響所有未來決策。" }
+    ],
+
+    m2_q: [
+      { q: "Memory 跟 Context Window 的關係是什麼?",
+        opts: ["完全相同", "Memory ⊂ Context Window", "Context Window ⊂ Memory", "兩者無關"],
+        ans: _A1, exp: "Context Window 是容器,Memory 是裡面的其中一個區塊。Context Window 還包含 System Prompt、Project、Skill、對話歷史等其他內容。" },
+      { q: "下列哪一項最適合放在 Memory 而不是 Project?",
+        opts: ["某門課的教學大綱", "你的長期工作背景與偏好", "某個專案的程式碼", "一份特定 PDF 的內容"],
+        ans: _A1, exp: "Memory 適合放「關於你這個人」的長期樣貌,不適合放任務細節。任務細節該放 Project。" },
+      { q: "Skill 跟 KB 最主要的差異是?",
+        opts: ["Skill 比較貴", "Skill 封裝執行流程、KB 封裝知識內容", "兩者完全相同", "KB 比較新潮"],
+        ans: _A1, exp: "Skill 是「怎麼做」的章程,KB 是「知道什麼」的資產。兩者性質不同、互相補位。" },
+      { q: "「元知識 KB」與一般領域 KB 的差別?",
+        opts: ["沒有差別", "元知識處理方法論,生命週期更長", "元知識比較短", "元知識只能給 AI 看"],
+        ans: _A1, exp: "元知識 KB 處理「如何使用工具」的方法論,會影響所有未來決策,比領域 KB 的生命週期更長。" }
+    ],
+
+    // ============ M3 Token 經濟學 ============
+    m3_nav: "3. Token 經濟學",
+    m3_title: "一次性成本、累積成本、起手成本的權衡",
+    m3_overview: "看單次成本會誤判,要看任務生命週期的總成本。投資結構化(Skill、KB)= 用一次成本換無限重用紅利。",
+    m3_highlights: ["三種成本類型", "生命週期視角", "反直覺真相", "投資 vs. 即用"],
+    m3_p1: "Token 成本可分為三種類型。一次性成本(One-time)指的是讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。累積成本(Cumulative)指的是對話歷史越長吃越多、每次重講規格的成本。起手成本(Startup)指的是 Project 載入、Memory 注入這類「每次對話開頭就有」的成本。三種成本的時間分布不同,決定了它們的最佳使用情境。",
+    m3_p2: "一個反直覺的真相:Skill 通常省 token,不是耗 token。因為它取代了「每次都要對齊規格」的累積成本。同樣地,Code 通常省 token,不是耗 token——大檔案不必進 context。Project 起手貴,但長期省——適合穩定脈絡、不適合一次性任務。看單次成本會誤判,要看任務生命週期的總成本。一個 SKILL.md 讀一次 5000 token,但替你省下後續 20 輪對話中每輪 2000 token 的規格對齊,總帳是大賺。",
+    m3_p3: "Token 經濟學的最高境界是「結構化投資」。把規格寫進 Skill、把材料整理成 KB、把任務交給 Code、把脈絡放進 Project——這些都是用一次性投資換取後續無數次的省力與精準。當你開始用「生命週期總成本」而非「單次成本」來判斷,你的工作流就會自然往最高效率的方向演化。終極判準是:這個投資的回收期是多長?如果同類任務會做 3 次以上,投資 Skill 或 KB 幾乎一定划算;只做一次,就不必。",
+    m3_wrapup: "Token 經濟學不是「省錢」的小聰明,而是「設計工作流」的核心邏輯。每個決策——用 Chat 還是 Project、用 Skill 還是即時對話、用 Code 還是肉眼處理——背後都是 token 經濟學在運作。理解它,你的決策就會從直覺升級為計算。",
+
+    m3_terms: [
+      { front: "一次性成本", back: "讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。投資型支出。" },
+      { front: "累積成本", back: "對話歷史越長吃越多、每次重講規格的成本。長對話的隱性成本來源。" },
+      { front: "起手成本", back: "Project 載入、Memory 注入這類「每次對話開頭就有」的成本。" },
+      { front: "Skill 經濟學", back: "Skill 通常省 token 不是耗 token,因為它取代了每次對齊規格的累積成本。" },
+      { front: "Code 經濟學", back: "Code 通常省 token,因為大檔案不必進 context,只有結果回到對話。" },
+      { front: "生命週期總成本", back: "把所有 token 支出加總,看整個任務週期的成本。比單次成本更能反映真實效率。" }
+    ],
+
+    m3_q: [
+      { q: "「Skill 通常省 token」的核心理由是?",
+        opts: ["Skill 比較便宜", "它取代了每次對齊規格的累積成本", "它縮短了對話", "它跳過了系統檢查"],
+        ans: _A1, exp: "Skill 是一次性讀取,但替你省下每次都要重新講規格的累積成本。對話越長、修改越多輪,省 token 效益越明顯。" },
+      { q: "為什麼「看單次成本會誤判」?",
+        opts: ["單次成本不準", "因為要看生命週期總成本", "因為 token 計算有誤", "因為 Anthropic 隱藏資訊"],
+        ans: _A1, exp: "一次性投資(Skill、KB)單次看很貴,但生命週期內被重用多次,總帳反而省。要用生命週期視角才能看清。" },
+      { q: "Project 的 token 特性是?",
+        opts: ["完全免費", "起手成本中到高,累積成本低", "純粹只是浪費", "等於 Memory"],
+        ans: _A1, exp: "Project 每次對話起手就載入專案內容,起手成本較高;但對話中不用重複講背景,累積成本低。適合穩定脈絡。" },
+      { q: "下列何者「不是」結構化投資?",
+        opts: ["把規格寫進 Skill", "把材料整理成 KB", "把任務交給 Code", "在每次對話重講需求"],
+        ans: _A3, exp: "每次重講需求是典型的「累積成本」,反而是結構化投資要避免的。前三項都是用一次投資換重用紅利。" }
+    ],
+
+    // ============ M4 Code 執行的角色 ============
+    m4_nav: "4. Code 執行的角色",
+    m4_title: "思考型任務與執行型任務的本質差異",
+    m4_overview: "Code 是執行的工具,不是思考的工具。需要「真的做出某個結果」時用它,需要「想清楚某件事」時不用。",
+    m4_highlights: ["思考 vs. 執行", "Skill + Code 絕配", "規模問題用 Code", "100 份法則"],
+    m4_p1: "「該不該用 Code」對應一個更根本的問題:這個任務的本質是「思考」還是「執行」?思考型任務包括理解、解釋、討論、決策、創作——這些用「對話模式」最有效。執行型任務包括計算、轉檔、處理大量資料、產生檔案——這些用「Code 模式」最有效。混淆兩者會出問題:思考型任務硬上 Code = 浪費;執行型任務硬不用 Code = 出錯、燒 token。",
+    m4_p2: "必須用 Code 的情境包括:產生二進位檔案(docx、xlsx、pptx、pdf)、精確數值運算與統計分析、批次檔案操作、圖表生成、部署與 Git 操作。強烈建議用 Code 的情境包括:長文件程式化處理、大資料量但只要重點、重複性操作。不該用 Code 的情境包括:純對話與寫作、寫程式碼給使用者拿走(不需執行驗證時)、簡單邏輯推理。判斷的訣竅是問自己:這個任務是「需要想清楚」還是「需要真的做出來」?",
+    m4_p3: "Skill 跟 Code 不是衝突的工具,而是絕配。Code 做髒活、Skill 做精緻產出。例如:Code 負責讀 30 份 PDF、跑詞頻、生統計;Skill(例如 docx)負責把結果包裝成正式報告格式。這樣是分工合作,各司其職。一個更深層的判準是「100 份法則」:如果這個任務有 100 份要處理,會不會崩潰?如果會崩潰,就用 Code;如果不會,就用 Chat + Skill。3 份還能撐,30 份開始痛,100 份必定崩潰——這個簡單的問題能幫你做出 90% 的正確判斷。",
+    m4_wrapup: "Code 是執行的工具,不是思考的工具。殺雞不用牛刀,挖隧道別用牙籤——選對工具是 token 經濟學最具體的展現。當你開始把任務分為「思考型」和「執行型」並對應不同模式,你的工作流效率會立刻提升一個層級。",
+
+    m4_terms: [
+      { front: "思考型任務", back: "理解、解釋、決策、創作這類「需要想清楚」的任務。對話模式最有效。" },
+      { front: "執行型任務", back: "計算、轉檔、批次、產檔這類「需要真的做出來」的任務。Code 模式最有效。" },
+      { front: "Skill + Code 組合", back: "Code 做髒活、Skill 做精緻產出。兩者分工合作,是 semi-agent 工作流的核心配置。" },
+      { front: "100 份法則", back: "如果這個任務有 100 份要處理會不會崩潰?會崩潰就用 Code,不會就用 Chat+Skill。" },
+      { front: "二進位產出", back: "docx、xlsx、pptx、pdf 這類非純文字檔案。必須透過 Code 生成,無法用對話直接產出。" },
+      { front: "規模密集型", back: "需要重複、檢查、批次處理的任務。Code 的主場。" },
+      { front: "腦力密集型", back: "需要創造、判斷、設計的任務。Chat + Skill + Project 的主場。" }
+    ],
+
+    m4_q: [
+      { q: "下列哪個任務最適合用 Code?",
+        opts: ["寫一篇 500 字的文章", "解釋什麼是 React", "批次處理 50 個 CSV 檔案", "討論職涯方向"],
+        ans: _A2, exp: "批次處理大量檔案是典型的執行型任務,Code 是最佳工具。其他三項都是思考型,對話模式更適合。" },
+      { q: "「100 份法則」是什麼意思?",
+        opts: ["要做 100 份才會被收費", "如果任務有 100 份會不會崩潰,會就用 Code", "Code 最多處理 100 份檔案", "Skill 最多 100 個"],
+        ans: _A1, exp: "問自己「這個任務 100 份會不會崩潰」是判斷該不該用 Code 的簡單訣竅。會崩就用 Code,不會就用 Chat+Skill。" },
+      { q: "Skill 跟 Code 的關係是?",
+        opts: ["互相競爭", "Skill 取代 Code", "Code 取代 Skill", "絕配——Code 做髒活,Skill 做精緻產出"],
+        ans: _A3, exp: "Skill 跟 Code 不衝突反而是絕配。例如 Code 跑詞頻,docx skill 包裝成報告。各司其職、分工合作。" },
+      { q: "下列何者「不需要」用 Code?",
+        opts: ["生成 .docx 報告", "批次更新 50 個 HTML 檔", "解釋什麼是 Semi-Agent", "跑統計分析並產出圖表"],
+        ans: _A2, exp: "「解釋什麼是 Semi-Agent」是純思考型任務,對話模式即可。其他三項都需要實際執行,必須用 Code。" }
+    ],
+
+    // ============ M5 Semi-Agent 工作流 ============
+    m5_nav: "5. Semi-Agent 工作流",
+    m5_title: "從工具呼叫到自主執行的光譜",
+    m5_overview: "Semi-Agent 是「人類定義目標 + AI 自主執行流程」的甜蜜點。SKILL.md 本質上是微型 agent 的章程。",
+    m5_highlights: ["Agent 光譜", "Level 2 甜蜜點", "向內自主", "Skill 是章程"],
+    m5_p1: "Agent 光譜從淺到深可分為五層。Level 0 純對話工具——你問一句我答一句,所有決策都在使用者身上。Level 1 工具呼叫——AI 會主動搜尋、讀檔、執行程式碼,但每一步仍是「你下指令、我執行單一動作」。Level 2 Semi-Agent——AI 能讀 Skill 內化規格與流程,自己決定多步驟工作的順序,在使用者定義的任務範圍內有局部自主性。Level 3 Agent——AI 有持續目標,自己排定子任務,會主動回報或發起對話。Level 4 Autonomous Agent——長時間運行、跨多個目標、自己管理優先順序。",
+    m5_p2: "Semi-Agent 的關鍵特徵是「向內自主、向外受控」。向內:AI 在任務內部多步驟自主執行——讀 SKILL.md、掃描資料夾、生成產出物、寫回資料夾,這一連串不需要使用者一步步指令。向外:任務的啟動與終止由使用者掌握——你說「做 SPA」AI 才做、做完就停。這種「半自主」的特性,既保留使用者的控制權,又釋放 AI 的執行能力,是目前最實用的工作流型態。判斷你的工作流位於哪個 Level,可以問:AI 有沒有在做你沒明確下指令、但任務需要的事?",
+    m5_p3: "SKILL.md 本質上是「微型 agent 的章程」。每次精修 SKILL.md,等於訓練這個 semi-agent 行為更穩定、更不需要使用者介入。換個角度看,你不是在「使用」AI,而是在「設計」一個小型 agent 系統。要從 Semi-Agent 推進到 Level 3 Agent,還需要三樣東西:觸發機制(webhook、定時、檔案變更偵測)讓任務自動啟動、跨任務記憶(執行狀態、未完成清單)、自主邊界判斷(哪些情況該自主、哪些該停下來問)。這些 Claude Code 或自建 agent 架構可以做到,但 Chat + Skill + Cowork 刻意停在 Semi-Agent 是有道理的——保留控制權,避免 AI 自作主張。",
+    m5_wrapup: "你不只是 AI 的使用者,你是 AI 工作流的設計者。每一份 SKILL.md 都是微型 agent 的章程,每一次工具組合都是工作流架構決策。Semi-Agent 不是技術名詞,而是一個讓人類與 AI 各司其職的設計哲學。",
+
+    m5_terms: [
+      { front: "Agent 光譜", back: "從 Level 0 純對話到 Level 4 Autonomous Agent 的五層分級。Semi-Agent 在 Level 2。" },
+      { front: "Semi-Agent", back: "Level 2,任務內部多步驟自主,任務範圍由使用者定義。向內自主、向外受控。" },
+      { front: "向內自主", back: "AI 在任務內部多步驟自主執行,不需使用者一步步指令。" },
+      { front: "向外受控", back: "任務的啟動與終止由使用者掌握,AI 不自己跨任務。" },
+      { front: "SKILL.md 章程", back: "每次精修 SKILL.md 等於訓練微型 agent 行為更穩定。SKILL.md 是 semi-agent 的 constitution。" },
+      { front: "Level 3 Agent", back: "持續目標、自排子任務、會主動發起。需要觸發機制、跨任務記憶、自主邊界判斷。" },
+      { front: "甜蜜點", back: "Semi-Agent 是目前最實用的甜蜜點——既釋放 AI 執行能力,又保留使用者控制權。" }
+    ],
+
+    m5_q: [
+      { q: "Semi-Agent 在 Agent 光譜的哪個位置?",
+        opts: ["Level 0", "Level 1", "Level 2", "Level 4"],
+        ans: _A2, exp: "Level 0 純對話、Level 1 工具呼叫、Level 2 Semi-Agent、Level 3 Agent、Level 4 Autonomous Agent。Semi-Agent 是 Level 2。" },
+      { q: "Semi-Agent 的關鍵特徵是?",
+        opts: ["完全自主", "完全受控", "向內自主、向外受控", "完全隨機"],
+        ans: _A2, exp: "Semi-Agent 在任務內部多步驟自主(向內),但任務的啟動終止由使用者掌握(向外)。這是它的核心特徵。" },
+      { q: "SKILL.md 的本質是?",
+        opts: ["一份說明文件", "微型 agent 的章程", "AI 的程式碼", "對話的腳本"],
+        ans: _A1, exp: "SKILL.md 是 semi-agent 的 constitution——每次精修等於訓練 agent 行為更穩定,降低使用者介入需求。" },
+      { q: "要從 Semi-Agent 推進到 Level 3 Agent,「不」需要下列哪一項?",
+        opts: ["觸發機制", "跨任務記憶", "自主邊界判斷", "更大的 context window"],
+        ans: _A3, exp: "推進到 Level 3 需要觸發機制、跨任務記憶、邊界判斷。Context window 大小不是關鍵,關鍵是「能否自主啟動和管理任務」。" }
+    ],
+
+    // ============ M6 維運型 Skill 與批次任務 ============
+    m6_nav: "6. 維運型 Skill 與批次任務",
+    m6_title: "從創造端到規模端的完整工作流",
+    m6_overview: "AI 協作工作流不只要優化「創造」,也要優化「規模」。維運型 skill 是 semi-agent 工作流的另一半,讓系統有自我修復能力。",
+    m6_highlights: ["創造 vs. 維運", "批次任務判準", "spa-consistency-check", "自我修復系統"],
+    m6_p1: "目前大多數 skill 都集中在「創造端」——把無變成有、把素材變成產出物。例如 note-to-kb 把筆記變 KB、kb-to-quiz 把 KB 變測驗、interactive-learning-spa 把規格變 SPA。但工作不只是「創造」,還有「維護現有產出物」——當規範更新後,舊的產出物該怎麼跟上?當資料夾結構漂移時,該如何稽核?這些「維護、檢查、批次更新」的工作,就是「維運型 skill」要解決的。",
+    m6_p2: "創造型與維運型 skill 在五個構面上有本質差異。輸入:創造型是原始素材,維運型是現有產出物。輸出:創造型是新的產出物,維運型是報告 + 修正後的檔案。任務本質:創造型是思考型(理解、設計),維運型是執行型(掃描、比對、修改)。是否需要 Code:創造型通常不需要,維運型通常必要。觸發頻率:創造型是每次新任務,維運型是每次規範更新或定期稽核。創造型 skill 解決「重新發明輪子」的痛,維運型 skill 解決「機械性重複勞動」的痛。",
+    m6_p3: "spa-consistency-check 是維運型 skill 的典型案例。它掃描指定資料夾中的所有 SPA HTML 檔案,依照 interactive-learning-spa 最新規範進行一致性檢查,產出 Markdown 報告,並以「逐項互動式修補」模式協助使用者更新不合規檔案。當你同時擁有創造型(produces SPA)與維運型(maintains SPA)skill 後,工作流會出現有趣的特性——它有自我修復能力。改了規範 → 跑 consistency-check 找不合規檔案 → 跑 batch-update 批次修補 → 整個系統自動跟上最新標準。這就從 Level 2 Semi-Agent 往 Level 3 Agent 推進了一小步。",
+    m6_wrapup: "AI 協作工作流的完整型態需要兩端優化:創造端 + 維運端。創造型 skill 解決「從 0 到 1」的問題,維運型 skill 解決「從 1 到 N 的一致性」問題。當兩端都建立後,你的 semi-agent 工作流會接近全自動——而起點往往就是第一個維運型 skill 的開發。",
+
+    m6_terms: [
+      { front: "創造型 Skill", back: "從原始素材產出新的產出物。例如 note-to-kb、kb-to-quiz、interactive-learning-spa。" },
+      { front: "維運型 Skill", back: "維護現有產出物的一致性。例如 spa-consistency-check、spa-batch-update。" },
+      { front: "100 份崩潰法則", back: "如果這個任務 100 份會不會崩潰?會崩潰就用 Code,不會就用 Chat+Skill。" },
+      { front: "spa-consistency-check", back: "掃描資料夾中所有 SPA 並依規範一致性檢查,產出 Markdown 報告,支援逐項互動式修補。" },
+      { front: "自我修復系統", back: "創造型 + 維運型 skill 同時存在時,系統能自動追上最新規範,接近 Level 3 Agent。" },
+      { front: "規模密集型任務", back: "需要重複、檢查、批次處理的任務,屬於 Code 的主場,維運型 skill 的應用場域。" },
+      { front: "腦力密集型任務", back: "需要創造、判斷、設計的任務,屬於 Chat + Skill 的主場,創造型 skill 的應用場域。" }
+    ],
+
+    m6_q: [
+      { q: "創造型 skill 跟維運型 skill 最主要的差異是?",
+        opts: ["創造型比較貴", "創造型解決從 0 到 1,維運型解決從 1 到 N 的一致性", "兩者沒有差異", "維運型比較新"],
+        ans: _A1, exp: "創造型 skill 把無變成有,維運型 skill 維護現有產出物的一致性。兩者解決的痛點不同。" },
+      { q: "spa-consistency-check 的主要功能是?",
+        opts: ["生成新的 SPA", "掃描現有 SPA 並依規範檢查、互動式修補", "翻譯 SPA 為多語言", "部署 SPA 到 GitHub"],
+        ans: _A1, exp: "spa-consistency-check 是維運型 skill,掃描現有 SPA、依規範檢查、產出報告,並逐項互動式修補不合規檔案。" },
+      { q: "「自我修復系統」需要什麼條件?",
+        opts: ["只要創造型 skill", "只要維運型 skill", "創造型 + 維運型 skill 同時存在", "只要 Code"],
+        ans: _A2, exp: "兩端 skill 同時存在,系統才能自動追上規範變化——改規範 → 找不合規 → 批次修補,這是自我修復的基本鏈條。" },
+      { q: "下列何者「不是」維運型 skill 的特徵?",
+        opts: ["輸入是現有產出物", "通常需要 Code", "從 0 創造新內容", "解決機械性重複勞動"],
+        ans: _A2, exp: "「從 0 創造新內容」是創造型 skill 的特徵。維運型 skill 的輸入是現有產出物,目的是維護而非創造。" }
+    ],
+
+    // ============ M{N+1} 互動實驗室 ============
+    mlab_nav: "7. 互動實驗室",
+    mlab_title: "決策速查工具",
+    mlab_desc: "把 KB 第 9 章「決策速查表」轉化為可互動的判斷工具。輸入你的情境,得到工具推薦。",
+    mlab_labs: [
+      { title: "工作模式選擇器", desc: "依任務性質推薦最適合的工作模式組合(Chat / Project / Cowork / Skill / Code)" },
+      { title: "Token 經濟計算器", desc: "估算不同模式下的 token 消耗,幫你決定該投資哪一層結構化" },
+      { title: "Code 必要性判斷器", desc: "輸入任務描述,自動判斷該用 Code 還是純對話(基於 100 份法則)" },
+      { title: "Skill 開發優先順序", desc: "依痛點頻率、規格穩定性、重用次數,排序你該優先開發哪個 Skill" }
+    ],
+
+    // ============ M{N+2} 外部學習資源 ============
+    mres_nav: "8. 外部學習資源",
+    mres_title: "延伸學習與工具",
+    mres_desc: "本方法論的延伸資源,包含 Anthropic 官方文件、Skill 開發指南、Claude 產品說明等。",
+
+    // Footer
+    date: "Version 2026.05.23",
+    copyright: "For Educational Use Only",
+    architect_label: "Architect:",
+    architect_name: "Prof. Shihmin Lo",
+    architect_url: "https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo"
+  },
+  en: {
+    brand: "AIWF",
+    title: "AI Workflow Methodology",
+    subtitle: "An Integrated Decision Framework for Chat, Project, Cowork, Skill, and Code",
+
+    nav_modules: "Modules", nav_prev: "Previous", nav_next: "Next", nav_home: "Home",
+    key_terms: "Key Terms", flip_prompt: "Click to flip",
+    flip_status: "Read {read} / Shown {shown} / Total {total}",
+    flip_next: "Next", flip_retry: "Restart",
+    audio_read: "Audio Guide",
+    quiz_title: "Module Quiz",
+    quiz_status: "Correct {correct} / Answered {answered} / Total {total}",
+    quiz_next: "Next", quiz_retry: "Retry",
+    submit: "Submit",
+    score: "Score", correct: "Correct", incorrect: "Incorrect", explanation: "Explanation",
+    overview_label: "Overview",
+    highlights_label: "Highlights",
+    deep_dive_label: "Deep Dive",
+    wrapup_label: "Wrap-up",
+
+    // Analytics
+    analytics_title: "Learning Analytics",
+    analytics_desc: "This module persists your learning trace via localStorage, with weak-point analysis and CSV export.",
+    analytics_form_title: "Student Information",
+    analytics_group: "Group", analytics_group_select: "Please select", analytics_dept: "Dept.",
+    analytics_dept_ph: "e.g., IBS3",
+    analytics_id: "Student ID", analytics_id_ph: "e.g., 113212599",
+    analytics_name_en: "Name (EN)", analytics_name_en_ph: "e.g., Shihmin Lo",
+    analytics_name_zh: "Name (ZH)", analytics_name_zh_ph: "e.g., 王阿吉",
+    analytics_export_csv: "Export CSV Record",
+    analytics_fill_required: "Fill in all fields to unlock export",
+    analytics_refresh_prompt: "Refresh saved records?",
+    group_options: ["G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","G11","G12","Others"],
+    analytics_total_time: "Total Study Time", analytics_total_clicks: "Total Interactions",
+    analytics_overall_acc: "Overall Quiz Accuracy",
+    analytics_card_usage: "Flashcard Usage",
+    analytics_module: "Module", analytics_time: "Time Spent",
+    analytics_clicks: "Clicks", analytics_acc: "Accuracy",
+    analytics_correct_ans_total: "Correct / Answered / Total",
+    analytics_cards_read_total: "Read / Total",
+    analytics_no_data: "Not yet attempted", analytics_sec: "s", analytics_times: "x",
+    analytics_progress_title: "Overall Learning Progress",
+    analytics_progress_visited: "Visited", analytics_progress_not_visited: "Not Visited",
+    analytics_progress_quiz_done: "Quiz Done",
+    analytics_wp_title: "Weak Point Analysis & Review Suggestions",
+    analytics_wp_incorrect: "Incorrect questions:",
+    analytics_wp_goto: "→ Review this module",
+    analytics_wp_allpass: "All attempted modules above 75% accuracy. Excellent!",
+    analytics_wp_saved: "Learning record auto-saved in your browser",
+    analytics_wp_clear: "🗑 Clear Record",
+    analytics_wp_clear_confirm: "Clear all learning records? This cannot be undone.",
+    analytics_wp_tts_intro: "Here is your weak point analysis.",
+    analytics_wp_tts_module: "Module: {name}, accuracy {acc}%, review recommended.",
+    analytics_wp_tts_allpass: "Congratulations! All attempted modules above 75% accuracy.",
+
+    // M0
+    m0_nav: "0. Executive Summary",
+    m0_title: "AI Workflow Methodology",
+    m0_intro: "The value of AI tools lies not only in what they can do, but in how they are organised. When Chat, Project, Cowork, Skill, Code, Memory, and Knowledge Base coexist, the real test for users is judgment rather than features. This methodology integrates scattered tool elements into a workflow system that can be reasoned about, optimised, and evolved. Starting from foundational concepts, it clarifies the distinction between SPAs and frontend-only sites; it then enters the spectrum of five working modes, showing they are not mutually exclusive but layered; it deepens into the four-tier memory and knowledge system, revealing the positions of Context Window, Memory, Project, Skill, and KB; with Token Economics as a shared metric, intuitive guesses become calculable decisions. The role of Code execution clarifies the essential difference between thinking-tasks and doing-tasks. Semi-Agent workflow design reveals why refining SKILL.md equals designing a micro-agent. Finally, with criteria for batch tasks and the development of operational skills, the workflow extends from the creation end to the scale end.",
+    m0_why: "Why does this methodology matter?",
+    m0_why_desc: "Because AI tools are evolving from a single conversational assistant into a layered workflow system. Without methodology, users reinvent the wheel, burn tokens, and make poor decisions on every task. With methodology, users focus on what truly requires thinking and automate the mechanical. The ultimate goal of this system is the Semi-Agent workflow — humans define goals, AI executes autonomously, both parties play their proper roles.",
+    m0_modules: [
+      { num: "01", title: "Working Mode Spectrum", desc: "Roles and combination strategies across Chat, Project, Cowork, Skill, and Code" },
+      { num: "02", title: "Memory & Knowledge System", desc: "Four-tier division within Context Window: Memory, Project, Skill, KB" },
+      { num: "03", title: "Token Economics", desc: "Calculating and weighing one-time, cumulative, and startup costs" },
+      { num: "04", title: "Role of Code Execution", desc: "Thinking-tasks vs doing-tasks, and the Skill+Code combination" },
+      { num: "05", title: "Semi-Agent Workflow", desc: "From tool-use to autonomy. SKILL.md as a micro-agent constitution" },
+      { num: "06", title: "Operational Skills & Batch Tasks", desc: "Extending from creation-end to scale-end. Case study: spa-consistency-check" }
+    ],
+    m0_stats: [
+      { val: "5", label: "Working Modes" },
+      { val: "4", label: "Memory Tiers" },
+      { val: "3", label: "Cost Types" },
+      { val: "11", label: "Decision Tables" }
+    ],
+    m0_start: "Start Learning →",
+
+    // ============ M1 ============
+    m1_nav: "1. Working Mode Spectrum",
+    m1_title: "The Five-Layer Architecture: Chat, Project, Cowork, Skill, Code",
+    m1_overview: "Five modes are not mutually exclusive options, but layers that can be stacked. The strongest workflow mixes Chat + Skill + Project + Cowork + Code.",
+    m1_highlights: ["Five Layers", "Not Exclusive", "Chat = On the Table", "Cowork = Kitchen Key", "Skill = Constitution"],
+    m1_p1: "Chat is the most basic conversational interface — the user pastes material directly into the chat window. It is like bringing materials to my desk for on-site processing. Suitable for one-off tasks, single-source documents, and rapid iteration. Its strength is predictable token cost; its weakness is that long conversations accumulate context, with token consumption growing fast in later turns.",
+    m1_p2: "Project mode means creating a project and attaching files, instructions, and knowledge bases — all conversations inside auto-load this content. It is like having reference material already on the desk before every conversation. Suitable for ongoing projects, stable specifications, and contexts that need to persist across conversations. Cowork mode hands Claude a folder to scan, read, produce, and write back — like giving me the kitchen key, I go through the fridge, cook, and put things back. Cowork suits tasks with heterogeneous material that needs in-place archiving or deployment.",
+    m1_p3: "Skill mode means writing specifications into SKILL.md, which Claude loads when triggered. Its essence is moving repeatedly-stated specs out of conversation and into a reusable constitution. One-time fixed cost, repeated reuse — the longer the conversation and more iterations, the greater the token saving. Code mode lets Claude execute Python/bash in a Linux environment, handling files, computations, and binary outputs — it is like giving me a real computer, not just a mouth. Suitable for scale, mechanical work, and binary outputs. The real power of these five modes is not standalone use, but combination: Skill regulates output format, Code handles batches, Project provides long-term context, Cowork closes the archiving loop.",
+    m1_wrapup: "The essence of mode selection is placing each thing at the layer best suited for it. Chat handles dialogue, Project provides context, Cowork operates files, Skill encapsulates specs, Code executes computation. Once you see these five as composable building blocks rather than five mutually-exclusive options, your workflow upgrades from a single-point tool to a complete system.",
+
+    m1_terms: [
+      { front: "SPA", back: "Single Page Application — one HTML file plus JS dynamic view switching. URL changes but page does not fully reload." },
+      { front: "Frontend-only", back: "All code runs in the browser, no backend server logic. SPA is a subset of frontend-only, but frontend-only is not necessarily SPA." },
+      { front: "Chat Mode", back: "In-conversation processing. The user pastes material into the chat window, Claude processes on-site. Suitable for one-off tasks." },
+      { front: "Project Mode", back: "Project-scope memory. Create a Project with attached files; all conversations auto-load. Suitable for ongoing projects." },
+      { front: "Cowork Mode", back: "File-system access. Claude scans, reads, produces, and writes back inside a designated folder. Suitable for heavy material needing archiving." },
+      { front: "Skill Mode", back: "Spec & workflow encapsulation. Specs go into SKILL.md, auto-loaded on trigger. Essentially the constitution of a micro-agent." },
+      { front: "Code Mode", back: "Program execution environment. Claude runs Python/bash in Linux to handle files, computation, and binary outputs." },
+      { front: "MPA", back: "Multi-Page Application. Each link loads a new HTML, contrasting with SPA." }
+    ],
+
+    m1_q: [
+      { q: "Which best describes the relationship between SPA and frontend-only?",
+        opts: ["Identical concepts", "Frontend-only ⊂ SPA", "SPA ⊂ Frontend-only", "Completely unrelated"],
+        ans: _A2, exp: "Frontend-only means no backend. SPA means single HTML + JS dynamic routing. SPA is a subset of frontend-only, but frontend-only does not have to be SPA." },
+      { q: "Which scenario suits Cowork mode best?",
+        opts: ["Quick one-off queries", "Heterogeneous material with output requiring direct archiving to folder", "Pure dialogue and brainstorming", "Simple code Q&A"],
+        ans: _A1, exp: "Cowork's core value is handing Claude the kitchen key to handle files in place. Heavy material that needs archiving workflow benefits most." },
+      { q: "What is the essence of Skill mode?",
+        opts: ["A conversational technique", "Moving specs from conversation to a reusable constitution file", "A paid tier", "Claude's hidden mode"],
+        ans: _A1, exp: "Skill moves specs from conversation to file. Each refinement to SKILL.md equals designing a micro-agent's constitution, reducing per-task alignment cost." },
+      { q: "What is the relationship among Chat, Project, Cowork, Skill, and Code?",
+        opts: ["Choose one only", "Mutually exclusive modes", "Composable layered stack", "Used in time sequence"],
+        ans: _A2, exp: "These five are not mutually exclusive but stackable layers. The strongest workflow combines Chat + Skill + Project + Cowork + Code." },
+      { q: "Which is NOT a characteristic of a pure-frontend SPA?",
+        opts: ["All code runs in the browser", "Single HTML with dynamic view switching", "Requires Node.js server rendering", "Can be deployed to GitHub Pages"],
+        ans: _A2, exp: "Sites requiring Node.js backend rendering (e.g., Next.js SSR), while possibly single-page apps, are not 'pure frontend' SPAs." }
+    ],
+
+    // ============ M2 ============
+    m2_nav: "2. Memory & Knowledge System",
+    m2_title: "Four-Tier Division Within the Context Window",
+    m2_overview: "Memory manages who you are, Project manages task scope, Skill manages execution specs, KB manages knowledge content. Four tiers complement each other inside the Context Window container.",
+    m2_highlights: ["Context as Container", "Memory = Personal", "Project = Task Scope", "Skill = Constitution", "KB = Asset"],
+    m2_p1: "The Context Window is the total space of all text Claude can see in this conversation. Many mistake Memory for Context Window itself — but Memory is only one block inside the Context Window. A complete Context Window contains: System Prompt, Memory, Project Files, User Preferences, Skill content (when triggered), the current conversation history, and tool-call results. The whole stack cannot exceed the model's limit. Understanding this structure explains why long conversations become slow and inaccurate — context keeps accumulating and squeezes out other blocks.",
+    m2_p2: "Each of the four memory tiers has its own role. Memory persists across conversations, recording the long-term shape of who you are; it is system-maintained, condensed summary rather than transcript. Project remembers the fixed context of a task scope, auto-loaded each conversation, providing complete background upfront. Skill encapsulates execution specs and flow as a triggerable constitution — one-time fixed cost, repeated reuse. KB is a long-term asset extracted and structured from external material — more concise than the raw, cross-platform, portable, durable. The four together form a complete memory-and-execution system, complementing rather than replacing each other.",
+    m2_p3: "Why does this layering matter? Because each tier has different token-economic properties. Memory is 'free background' but cannot be overloaded with detail — it would dilute the truly important personal information. Project is 'higher startup, easier conversation', suiting stable contexts. Skill is 'one-time investment for unlimited reuse dividend'. KB is 'invest in the future, harvest endless future savings and precision'. When you mistakenly treat Project as Memory, or Skill as KB, efficiency drops sharply. Correct layering places each memory type at the position best suited for it.",
+    m2_wrapup: "Memory, Project, Skill, and KB are not synonyms for 'things AI remembers about you' — they are four distinct mechanisms with different natures. Understanding their division of labour lets you decide precisely: which tier should this information go into? Wrong placement wastes tokens and degrades AI judgment quality.",
+
+    m2_terms: [
+      { front: "Context Window", back: "The total space of all text Claude can see in this conversation. Contains System Prompt, Memory, Project, Skill, conversation history, etc." },
+      { front: "Memory", back: "Cross-conversation persistence, recording your long-term shape. System-maintained, condensed summary not transcript." },
+      { front: "Project", back: "Remembers the fixed context of a task scope. Attached files, instructions, KB, auto-loaded every conversation." },
+      { front: "Skill", back: "Encapsulates execution specs and flow as a triggerable constitution. One-time fixed cost, repeated reuse. The micro-agent constitution." },
+      { front: "Knowledge Base", back: "Long-term asset from external material, extracted and structured. More concise than raw, cross-platform, portable, durable." },
+      { front: "Parametric Knowledge", back: "Built-in knowledge from model training. Stored in neural network weights, cannot be directly edited or added." },
+      { front: "External Knowledge", back: "Content provided to AI that it didn't originally know. Exists in Context Window or retrievable locations." },
+      { front: "Meta-knowledge KB", back: "A KB about 'methodology for using tools'. Extremely long lifecycle, influencing all future decisions." }
+    ],
+
+    m2_q: [
+      { q: "What is the relationship between Memory and Context Window?",
+        opts: ["Identical", "Memory ⊂ Context Window", "Context Window ⊂ Memory", "Unrelated"],
+        ans: _A1, exp: "Context Window is the container, Memory is one block within. Context Window also contains System Prompt, Project, Skill, conversation history, etc." },
+      { q: "Which item belongs better in Memory rather than Project?",
+        opts: ["A course syllabus", "Your long-term work background and preferences", "Source code of a project", "Content of a specific PDF"],
+        ans: _A1, exp: "Memory suits 'long-term shape of who you are'. Task details belong in Project, not Memory." },
+      { q: "What is the main difference between Skill and KB?",
+        opts: ["Skill is more expensive", "Skill encapsulates execution flow, KB encapsulates knowledge content", "Identical", "KB is newer"],
+        ans: _A1, exp: "Skill is the constitution of 'how to do', KB is the asset of 'what to know'. Different in nature, complementary." },
+      { q: "What's the difference between meta-knowledge KB and a regular domain KB?",
+        opts: ["No difference", "Meta-knowledge covers methodology, longer lifecycle", "Meta-knowledge is shorter", "Meta-knowledge only for AI"],
+        ans: _A1, exp: "Meta-knowledge KB covers 'how to use tools' methodology, influencing all future decisions, with a longer lifecycle than domain KBs." }
+    ],
+
+    // ============ M3 ============
+    m3_nav: "3. Token Economics",
+    m3_title: "Weighing One-Time, Cumulative, and Startup Costs",
+    m3_overview: "Looking at single-instance cost misleads; look at lifecycle total cost. Investing in structure (Skill, KB) equals trading one-time cost for unlimited reuse dividend.",
+    m3_highlights: ["Three Cost Types", "Lifecycle View", "Counter-Intuitive Truths", "Invest vs. Throwaway"],
+    m3_p1: "Token costs come in three types. One-time costs come from reading SKILL.md or loading KB — pay once, reuse many times. Cumulative costs come from growing conversation history and repeated spec restatements. Startup costs come from Project loading or Memory injection — present at the start of every conversation. These three differ in time distribution, determining their optimal use scenarios.",
+    m3_p2: "A counter-intuitive truth: Skills usually save tokens, not consume them — because they replace the cumulative cost of realigning specs every time. Likewise, Code usually saves tokens, not consumes them — large files don't enter context. Project has high startup cost but long-term savings, suiting stable contexts not one-off tasks. Looking at single-instance cost misleads; look at lifecycle total cost. A SKILL.md read costs 5000 tokens once, but saves 2000 tokens per turn across 20 subsequent turns — total ledger: massive savings.",
+    m3_p3: "The highest form of token economics is 'structured investment'. Writing specs into Skill, organising material into KB, delegating tasks to Code, placing context into Project — all are one-time investments traded for endless future savings and precision. When you judge by lifecycle total cost rather than single-instance cost, your workflow naturally evolves toward maximum efficiency. The ultimate criterion: what is the payback period? If similar tasks will be done 3+ times, investing in Skill or KB is almost always worth it; only once — don't bother.",
+    m3_wrapup: "Token economics is not penny-pinching cleverness, but the core logic of workflow design. Every decision — Chat or Project, Skill or live conversation, Code or manual — is underpinned by token economics. Understanding it upgrades your decisions from intuition to calculation.",
+
+    m3_terms: [
+      { front: "One-time Cost", back: "Reading SKILL.md, loading KB — 'pay once, reuse many'. Investment-type spending." },
+      { front: "Cumulative Cost", back: "Growing conversation history, repeated spec restatement. Hidden cost source in long conversations." },
+      { front: "Startup Cost", back: "Project loading, Memory injection — costs present at every conversation start." },
+      { front: "Skill Economics", back: "Skills usually save tokens, not consume them, because they replace per-turn spec realignment costs." },
+      { front: "Code Economics", back: "Code usually saves tokens — large files don't enter context, only results return to conversation." },
+      { front: "Lifecycle Total Cost", back: "Sum of all token expenditure across the task's lifecycle. Better reflects real efficiency than single-instance cost." }
+    ],
+
+    m3_q: [
+      { q: "Why do 'Skills usually save tokens'?",
+        opts: ["Skills are cheaper", "They replace per-turn spec realignment cumulative cost", "They shorten conversations", "They skip system checks"],
+        ans: _A1, exp: "A Skill is loaded once, but replaces the cumulative cost of restating specs every turn. The longer the conversation, the greater the saving." },
+      { q: "Why does 'looking at single-instance cost mislead'?",
+        opts: ["Single cost is inaccurate", "Lifecycle total cost is what matters", "Token math is wrong", "Anthropic hides info"],
+        ans: _A1, exp: "One-time investments (Skill, KB) look expensive single-instance but get reused many times within the lifecycle — total ledger reverses. Use the lifecycle view." },
+      { q: "What is the token characteristic of Project?",
+        opts: ["Completely free", "Medium-high startup, low cumulative", "Pure waste", "Equals Memory"],
+        ans: _A1, exp: "Project loads project content at every conversation start (higher startup), but no need to repeat background mid-conversation (lower cumulative). Good for stable context." },
+      { q: "Which is NOT a structured investment?",
+        opts: ["Writing specs into Skill", "Organising material into KB", "Delegating tasks to Code", "Restating requirements every conversation"],
+        ans: _A3, exp: "Restating requirements is typical 'cumulative cost' — exactly what structured investment avoids. The first three are one-time investments for reuse dividend." }
+    ],
+
+    // ============ M4 ============
+    m4_nav: "4. Role of Code Execution",
+    m4_title: "Essential Difference Between Thinking and Doing Tasks",
+    m4_overview: "Code is the tool of doing, not thinking. Use it when something must actually be produced; don't use it when you need to think something through.",
+    m4_highlights: ["Thinking vs. Doing", "Skill + Code Pairing", "Scale Problems → Code", "100-File Law"],
+    m4_p1: "Whether to use Code maps to a deeper question: is this task's essence 'thinking' or 'doing'? Thinking-tasks include understanding, explaining, discussing, deciding, creating — best handled in conversation mode. Doing-tasks include calculation, file conversion, processing large data, generating files — best handled in Code mode. Confusing these creates problems: thinking-tasks forced into Code = waste; doing-tasks denied Code = errors and burned tokens.",
+    m4_p2: "Code is mandatory when: generating binary files (docx, xlsx, pptx, pdf), precise numerical computation and statistics, batch file operations, chart generation, deployment and Git operations. Strongly recommended for: long-document programmatic processing, big data but only need highlights, repetitive operations. Code is NOT for: pure conversation and writing, code-for-the-user-to-take-away (when no execution verification needed), simple logical reasoning. The trick is to ask yourself: does this task 'need to be thought through' or 'need to be actually produced'?",
+    m4_p3: "Skill and Code are not competing tools but a perfect pairing. Code does the dirty work, Skill produces the polished output. Example: Code reads 30 PDFs, runs word frequency, generates statistics; the docx Skill wraps results into a formal report. Division of labour. A deeper criterion is the '100-file law': if this task had 100 items to process, would it collapse? If yes, use Code; if no, use Chat + Skill. Three items: bearable; thirty: painful; one hundred: certain collapse — this simple question yields 90% correct judgments.",
+    m4_wrapup: "Code is the tool of doing, not thinking. Don't kill a chicken with a battle-axe; don't dig a tunnel with a toothpick — choosing the right tool is the most concrete embodiment of token economics. When you start classifying tasks as 'thinking' or 'doing' and applying the corresponding mode, your workflow efficiency jumps a level.",
+
+    m4_terms: [
+      { front: "Thinking Tasks", back: "Understanding, explaining, deciding, creating — 'need to be thought through'. Conversation mode is best." },
+      { front: "Doing Tasks", back: "Computation, conversion, batch, file production — 'need to be actually produced'. Code mode is best." },
+      { front: "Skill + Code Combo", back: "Code does dirty work, Skill polishes output. The core configuration of a semi-agent workflow." },
+      { front: "100-File Law", back: "Would this task collapse with 100 items? If yes, use Code; if no, use Chat + Skill." },
+      { front: "Binary Output", back: "Non-text files like docx, xlsx, pptx, pdf. Must go through Code; cannot be produced by conversation alone." },
+      { front: "Scale-Intensive", back: "Tasks requiring repetition, checking, batching. Code's home turf." },
+      { front: "Brain-Intensive", back: "Tasks requiring creation, judgment, design. Home turf of Chat + Skill + Project." }
+    ],
+
+    m4_q: [
+      { q: "Which task best suits Code?",
+        opts: ["Write a 500-word article", "Explain what React is", "Batch process 50 CSV files", "Discuss career direction"],
+        ans: _A2, exp: "Batch processing large file counts is a textbook doing-task; Code is optimal. The other three are thinking-tasks better suited to conversation mode." },
+      { q: "What is the '100-File Law'?",
+        opts: ["You're charged after 100 files", "Ask whether the task collapses at 100 items; if yes, use Code", "Code handles max 100 files", "Skills max at 100"],
+        ans: _A1, exp: "Asking 'would this collapse at 100 items?' is the simple trick to decide Code or not. Collapse → Code; no collapse → Chat + Skill." },
+      { q: "What is the relationship between Skill and Code?",
+        opts: ["Competitors", "Skill replaces Code", "Code replaces Skill", "Perfect pairing — Code dirty work, Skill polished output"],
+        ans: _A3, exp: "Skill and Code don't conflict — they're a perfect pairing. Example: Code runs word frequency, docx Skill wraps it as report. Division of labour." },
+      { q: "Which task does NOT need Code?",
+        opts: ["Generate a .docx report", "Batch update 50 HTML files", "Explain what Semi-Agent means", "Run statistics and produce charts"],
+        ans: _A2, exp: "'Explain Semi-Agent' is a pure thinking-task — conversation mode suffices. The other three require actual execution and must use Code." }
+    ],
+
+    // ============ M5 ============
+    m5_nav: "5. Semi-Agent Workflow",
+    m5_title: "From Tool-Use to Autonomous Execution",
+    m5_overview: "Semi-Agent is the sweet spot of 'human defines goals + AI executes autonomously'. SKILL.md is essentially the constitution of a micro-agent.",
+    m5_highlights: ["Agent Spectrum", "Level 2 Sweet Spot", "Inward Autonomy", "Skill as Constitution"],
+    m5_p1: "The Agent spectrum has five levels, from shallow to deep. Level 0 Pure Conversation — you ask, I answer; all decisions sit with the user. Level 1 Tool Use — AI actively searches, reads files, runs code, but each step is still 'user commands, I execute one action'. Level 2 Semi-Agent — AI loads Skills, internalises specs and flow, and self-decides multi-step task sequences within the user-defined task scope. Level 3 Agent — AI has persistent goals, self-schedules subtasks, proactively reports or initiates. Level 4 Autonomous Agent — long-running, cross-goal, self-prioritising.",
+    m5_p2: "The defining trait of Semi-Agent is 'inward autonomy, outward control'. Inward: AI autonomously executes multi-step tasks — reading SKILL.md, scanning folder, generating output, writing back — without step-by-step user commands. Outward: tasks are initiated and terminated by the user — you say 'make a SPA' and AI starts; when done, AI stops. This semi-autonomous quality preserves user control while releasing AI's execution power. It is currently the most practical workflow type. To identify your workflow's Level, ask: is the AI doing things you didn't explicitly command but the task requires?",
+    m5_p3: "SKILL.md is essentially the constitution of a micro-agent. Each refinement trains the semi-agent to behave more stably with less user intervention. In other words: you're not 'using' AI, you're 'designing' a small agent system. To push from Semi-Agent to Level 3 Agent, three things are needed: trigger mechanisms (webhook, schedule, file-change detection) for self-starting tasks; cross-task memory (execution state, pending list); autonomy-boundary judgment (when to act, when to ask). Claude Code or self-built agent frameworks can do this — but Chat + Skill + Cowork deliberately stops at Semi-Agent for a reason: preserve control, prevent AI overreach.",
+    m5_wrapup: "You are not merely a user of AI; you are the designer of AI workflows. Every SKILL.md is a micro-agent's constitution; every tool combination is a workflow architecture decision. Semi-Agent is not a technical term but a design philosophy for humans and AI to share roles properly.",
+
+    m5_terms: [
+      { front: "Agent Spectrum", back: "Five levels from Level 0 Pure Conversation to Level 4 Autonomous Agent. Semi-Agent sits at Level 2." },
+      { front: "Semi-Agent", back: "Level 2, multi-step autonomy inside user-defined task scope. Inward autonomy, outward control." },
+      { front: "Inward Autonomy", back: "AI autonomously executes multi-step tasks without step-by-step user commands." },
+      { front: "Outward Control", back: "Task initiation and termination remain in the user's hands. AI doesn't self-jump across tasks." },
+      { front: "SKILL.md Constitution", back: "Each refinement trains the micro-agent to behave more stably. SKILL.md is the semi-agent's constitution." },
+      { front: "Level 3 Agent", back: "Persistent goals, self-scheduling subtasks, proactive initiation. Needs triggers, cross-task memory, autonomy boundaries." },
+      { front: "Sweet Spot", back: "Semi-Agent is today's most practical sweet spot — releases AI execution power while preserving user control." }
+    ],
+
+    m5_q: [
+      { q: "Where does Semi-Agent sit on the Agent spectrum?",
+        opts: ["Level 0", "Level 1", "Level 2", "Level 4"],
+        ans: _A2, exp: "Level 0 Pure Conversation; Level 1 Tool Use; Level 2 Semi-Agent; Level 3 Agent; Level 4 Autonomous Agent. Semi-Agent is Level 2." },
+      { q: "What is the defining trait of Semi-Agent?",
+        opts: ["Fully autonomous", "Fully controlled", "Inward autonomous, outward controlled", "Fully random"],
+        ans: _A2, exp: "Semi-Agent is autonomous within the task (inward), but task start/stop is user-controlled (outward). That is its core trait." },
+      { q: "What is the essence of SKILL.md?",
+        opts: ["A user guide", "A micro-agent's constitution", "AI's source code", "A conversation script"],
+        ans: _A1, exp: "SKILL.md is the semi-agent's constitution — each refinement trains agent behaviour to be more stable, reducing user-intervention needs." },
+      { q: "What is NOT needed to push from Semi-Agent to Level 3 Agent?",
+        opts: ["Trigger mechanism", "Cross-task memory", "Autonomy boundary judgment", "Larger context window"],
+        ans: _A3, exp: "Advancing to Level 3 requires triggers, cross-task memory, and boundary judgment. Context-window size isn't critical — what matters is autonomous task launch and management." }
+    ],
+
+    // ============ M6 ============
+    m6_nav: "6. Operational Skills & Batch Tasks",
+    m6_title: "Completing the Workflow from Creation End to Scale End",
+    m6_overview: "An AI workflow needs to optimise not only creation but also scale. Operational skills are the other half of a semi-agent workflow, giving the system self-healing capability.",
+    m6_highlights: ["Creation vs. Operations", "Batch Task Criterion", "spa-consistency-check", "Self-Healing System"],
+    m6_p1: "Most skills today cluster at the 'creation end' — turning nothing into something, materials into output. For example: note-to-kb turns notes into KB, kb-to-quiz turns KB into quiz, interactive-learning-spa turns spec into SPA. But work is not only creation — there's also maintaining existing outputs. When the spec updates, how do older outputs catch up? When folder structures drift, how to audit? These maintenance, check, and batch-update tasks are what operational skills solve.",
+    m6_p2: "Creation and operational skills differ in nature across five dimensions. Input: creation takes raw material, operations takes existing output. Output: creation makes new artefacts, operations makes report + corrected files. Task nature: creation is thinking (understand, design), operations is doing (scan, compare, modify). Need for Code: creation typically does not need it, operations typically does. Trigger frequency: creation triggers per new task, operations triggers per spec update or periodic audit. Creation skills cure 'reinventing the wheel'; operational skills cure 'mechanical repetition'.",
+    m6_p3: "spa-consistency-check is a canonical example of an operational skill. It scans all SPA HTML files in a folder, checks consistency against the latest interactive-learning-spa spec, produces a Markdown report, and helps the user update non-compliant files via 'item-by-item interactive patching'. When you have both creation-type (produces SPA) and operational-type (maintains SPA) skills, an interesting property emerges — the workflow becomes self-healing. Change the spec → run consistency-check to find non-compliant → run batch-update to patch — the whole system auto-catches-up to the new standard. This pushes Level 2 Semi-Agent a small step toward Level 3 Agent.",
+    m6_wrapup: "The complete form of an AI workflow needs optimisation at both ends: creation + operations. Creation skills solve the 'zero-to-one' problem; operational skills solve the 'one-to-N consistency' problem. Once both ends are built, your semi-agent workflow approaches full automation — and the starting point is usually the development of your first operational skill.",
+
+    m6_terms: [
+      { front: "Creation Skill", back: "Produces new artefacts from raw material. Examples: note-to-kb, kb-to-quiz, interactive-learning-spa." },
+      { front: "Operational Skill", back: "Maintains consistency of existing artefacts. Examples: spa-consistency-check, spa-batch-update." },
+      { front: "100-File Collapse Law", back: "Would this task collapse at 100 items? Collapse → Code; not → Chat+Skill." },
+      { front: "spa-consistency-check", back: "Scans all SPAs in a folder against the spec, produces Markdown report, supports item-by-item interactive patching." },
+      { front: "Self-Healing System", back: "When creation + operational skills coexist, the system auto-catches-up to spec changes — approaching Level 3 Agent." },
+      { front: "Scale-Intensive Task", back: "Tasks requiring repetition, checking, batching. Code's home turf and the realm of operational skills." },
+      { front: "Brain-Intensive Task", back: "Tasks requiring creation, judgment, design. Home turf of Chat + Skill, and the realm of creation skills." }
+    ],
+
+    m6_q: [
+      { q: "What is the main difference between creation and operational skills?",
+        opts: ["Creation is more expensive", "Creation solves zero-to-one, operations solves one-to-N consistency", "No difference", "Operations is newer"],
+        ans: _A1, exp: "Creation skills turn nothing into something. Operational skills maintain consistency of existing artefacts. Different pain points." },
+      { q: "What is the main function of spa-consistency-check?",
+        opts: ["Generate new SPAs", "Scan existing SPAs against spec, check + interactive patching", "Translate SPAs into multiple languages", "Deploy SPAs to GitHub"],
+        ans: _A1, exp: "spa-consistency-check is an operational skill — scans existing SPAs, checks spec compliance, produces report, and item-by-item patches non-compliant files." },
+      { q: "What enables a 'self-healing system'?",
+        opts: ["Only creation skills", "Only operational skills", "Both creation and operational skills coexisting", "Only Code"],
+        ans: _A2, exp: "Both types must coexist before the system can auto-catch-up to spec changes — change spec → find non-compliant → batch patch. That's the basic self-healing chain." },
+      { q: "Which is NOT a trait of operational skills?",
+        opts: ["Input is existing output", "Typically needs Code", "Creates new content from zero", "Solves mechanical repetition"],
+        ans: _A2, exp: "'Creates new content from zero' is a trait of creation skills. Operational skills take existing artefacts as input, aiming to maintain rather than create." }
+    ],
+
+    // Lab
+    mlab_nav: "7. Interactive Lab",
+    mlab_title: "Decision Quick-Reference Tools",
+    mlab_desc: "The 'Decision Quick-Reference' chapter from the KB, turned into interactive judgment tools. Input your scenario, get tool recommendations.",
+    mlab_labs: [
+      { title: "Working Mode Selector", desc: "Recommends the best mode combination (Chat / Project / Cowork / Skill / Code) based on task nature" },
+      { title: "Token Economics Calculator", desc: "Estimates token consumption under different modes to help decide which structural layer to invest in" },
+      { title: "Code Necessity Judge", desc: "Input task description, auto-judges whether to use Code or pure conversation (based on 100-file law)" },
+      { title: "Skill Development Priority", desc: "Ranks which Skill to develop first based on pain frequency, spec stability, and reuse count" }
+    ],
+
+    // Resources
+    mres_nav: "8. Learning Resources",
+    mres_title: "Extended Resources and Tools",
+    mres_desc: "Extended resources for this methodology, including Anthropic official docs, Skill development guides, and Claude product information.",
+
+    // Footer
+    date: "Version 2026.05.23",
+    copyright: "For Educational Use Only",
+    architect_label: "Architect:",
+    architect_name: "Prof. Shihmin Lo",
+    architect_url: "https://www.ibs.ncnu.edu.tw/index.php/faculty/tenured-professor/299-smlo"
+  }
+};
+
+// ════════ FlipCardDeck ════════
+const FlipCardDeck = ({ terms, t, moduleId, onCardRead }) => {
+  const [groupIdx, setGroupIdx] = useState(0);
+  const [flipped, setFlipped] = useState({});
+  const [readSet, setReadSet] = useState(new Set());
+  const [shownSet, setShownSet] = useState(new Set());
+
+  const [shuffledOrder] = useState(() =>
+    [...Array(terms.length).keys()].sort(() => Math.random() - 0.5)
+  );
+
+  const groupSize = 2;
+  const totalGroups = Math.ceil(terms.length / groupSize);
+  const startIdx = groupIdx * groupSize;
+  const currentCardIndices = shuffledOrder.slice(startIdx, startIdx + groupSize);
+
+  useEffect(() => {
+    const newShown = new Set(shownSet);
+    currentCardIndices.forEach(idx => newShown.add(idx));
+    if (newShown.size !== shownSet.size) setShownSet(newShown);
+  }, [groupIdx]);
+
+  const handleFlip = (origIdx) => {
+    setFlipped(f => ({ ...f, [origIdx]: !f[origIdx] }));
+    if (!readSet.has(origIdx)) {
+      const newRead = new Set(readSet); newRead.add(origIdx); setReadSet(newRead);
+      if (onCardRead) onCardRead(moduleId, newRead.size, shownSet.size, terms.length);
+    }
+  };
+
+  const statusText = t.flip_status
+    .replace('{read}', readSet.size).replace('{shown}', shownSet.size).replace('{total}', terms.length);
+
+  return (
+    <div className="mt-8">
+      <h3 className="text-lg font-bold uppercase tracking-wider text-slate-500 mb-2">{t.key_terms}</h3>
+      <p className="text-sm text-slate-400 mb-4">{statusText}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {currentCardIndices.map((origIdx) => {
+          const term = terms[origIdx];
+          return (
+            <div key={origIdx} className="perspective cursor-pointer h-36" onClick={() => handleFlip(origIdx)}>
+              <div className={`transform-style-3d relative w-full h-full transition-transform duration-500 ${flipped[origIdx] ? 'rotate-y-180' : ''}`}>
+                <div className="backface-hidden absolute inset-0 bg-white dark:bg-slate-800 rounded-xl p-4 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 shadow-sm">
+                  <p className="font-serif font-bold text-center text-[#004030] dark:text-[#D8C3A5]">{term.front}</p>
+                  <p className="text-xs text-slate-400 mt-2">{t.flip_prompt}</p>
+                </div>
+                <div className="backface-hidden rotate-y-180 absolute inset-0 bg-[#004030] dark:bg-slate-700 rounded-xl p-4 flex items-center justify-center">
+                  <p className="text-sm text-center text-[#D8C3A5] dark:text-slate-200 leading-relaxed">{term.back}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex items-center gap-3 mt-4">
+        <button onClick={() => { setGroupIdx(0); setFlipped({}); }}
+          className="px-4 py-2 text-sm border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+          {t.flip_retry}
+        </button>
+        <button onClick={() => groupIdx < totalGroups-1 && setGroupIdx(groupIdx+1)}
+          disabled={groupIdx >= totalGroups-1}
+          className="px-4 py-2 text-sm bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] font-bold rounded-lg disabled:opacity-40">
+          {t.flip_next}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ════════ ModuleQuiz ════════
+const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
+  const [selected, setSelected] = useState({});
+  const [submitted, setSubmitted] = useState({});
+  const [groupIdx, setGroupIdx] = useState(0);
+  const groupSize = 2;
+
+  const [quizIndices] = useState(() =>
+    [...Array(questions.length).keys()].sort(() => Math.random() - 0.5)
+  );
+  const totalGroups = Math.ceil(quizIndices.length / groupSize);
+
+  const [shuffledMaps] = useState(() =>
+    quizIndices.map(qIdx => {
+      const n = questions[qIdx].opts.length;
+      return [...Array(n).keys()].sort(() => Math.random() - 0.5);
+    })
+  );
+
+  const totalAnswered = Object.keys(selected).length;
+  const computeCorrect = () => {
+    let c = 0;
+    quizIndices.forEach((qIdx, qi) => {
+      if (selected[qi] === undefined) return;
+      if (shuffledMaps[qi][selected[qi]] === _d(questions[qIdx].ans)) c++;
+    });
+    return c;
+  };
+  const statusText = t.quiz_status
+    .replace('{correct}', computeCorrect())
+    .replace('{answered}', totalAnswered)
+    .replace('{total}', quizIndices.length);
+
+  const currentStart = groupIdx * groupSize;
+  const currentIndices = quizIndices.slice(currentStart, currentStart + groupSize);
+
+  const handleGroupSubmit = () => {
+    const allDone = currentIndices.every((_, i) => selected[currentStart + i] !== undefined);
+    if (!allDone) return;
+    setSubmitted(s => ({ ...s, [groupIdx]: true }));
+    if (groupIdx === totalGroups - 1 || Object.keys(submitted).length + 1 === totalGroups) {
+      const wrongQs = [];
+      let correct = 0;
+      quizIndices.forEach((qIdx, qi) => {
+        if (selected[qi] === undefined) return;
+        if (shuffledMaps[qi][selected[qi]] === _d(questions[qIdx].ans)) correct++;
+        else wrongQs.push(questions[qIdx].q);
+      });
+      onQuizSubmit(moduleId, correct, quizIndices.length, wrongQs, moduleName);
+    }
+  };
+
+  return (
+    <div className="mt-8 bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+      <h3 className="text-lg font-bold font-serif text-[#004030] dark:text-[#D8C3A5] mb-2">{t.quiz_title}</h3>
+      <p className="text-sm text-slate-400 mb-6">{statusText}</p>
+      {currentIndices.map((qIdx, localI) => {
+        const qi = currentStart + localI;
+        const q = questions[qIdx];
+        const sMap = shuffledMaps[qi];
+        const isGrpSub = !!submitted[groupIdx];
+        return (
+          <div key={qIdx} className="mb-6">
+            <p className="font-bold mb-3">{qi+1}. {q.q}</p>
+            <div className="space-y-2">
+              {sMap.map((origIdx, dIdx) => {
+                const isCorrect = origIdx === _d(q.ans);
+                const isSel = selected[qi] === dIdx;
+                return (
+                  <button key={dIdx} onClick={() => !isGrpSub && setSelected(s => ({...s, [qi]: dIdx}))}
+                    className={`w-full text-left px-4 py-3 rounded-lg border transition-all text-sm
+                      ${isGrpSub
+                        ? isCorrect ? 'bg-green-100 border-green-500 dark:bg-green-900/30'
+                          : isSel ? 'bg-red-100 border-red-400 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-700'
+                        : isSel ? 'border-[#004030] dark:border-[#D8C3A5] bg-[#004030]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-400'
+                      }`}>
+                    {q.opts[origIdx]}
+                  </button>
+                );
+              })}
+            </div>
+            {isGrpSub && (
+              <p className={`mt-2 text-sm italic ${
+                shuffledMaps[qi][selected[qi]] === _d(q.ans)
+                  ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'
+              }`}>
+                {shuffledMaps[qi][selected[qi]] === _d(q.ans)
+                  ? `✓ ${t.correct}` : `✗ ${t.incorrect}`} — {t.explanation}：{q.exp}
+              </p>
+            )}
+          </div>
+        );
+      })}
+      <div className="flex items-center gap-3">
+        {!submitted[groupIdx]
+          ? <button onClick={handleGroupSubmit}
+              disabled={!currentIndices.every((_,i) => selected[currentStart+i] !== undefined)}
+              className="px-6 py-2 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] font-bold rounded-lg disabled:opacity-40">
+              {t.submit}
+            </button>
+          : <>
+              {groupIdx < totalGroups-1 && (
+                <button onClick={() => setGroupIdx(groupIdx+1)}
+                  className="px-6 py-2 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] font-bold rounded-lg">
+                  {t.quiz_next}
+                </button>
+              )}
+              <button onClick={() => { setGroupIdx(0); setSelected({}); setSubmitted({}); }}
+                className="px-6 py-2 border border-[#004030] dark:border-[#D8C3A5] text-[#004030] dark:text-[#D8C3A5] font-bold rounded-lg">
+                {t.quiz_retry}
+              </button>
+            </>
+        }
+      </div>
+    </div>
+  );
+};
+
+// ════════ H2 ════════
+const H2 = ({ children, icon, number }) => (
+  <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5] mb-6 flex items-center gap-3">
+    {icon && <span className="text-2xl">{icon}</span>}
+    {number !== undefined && <span>{number}.</span>}
+    <span>{children}</span>
+  </h2>
+);
+
+// ════════ LinkCard ════════
+const LinkCard = ({label, url, desc}) => (
+  <a href={url} target="_blank" rel="noopener noreferrer"
+    className="block bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 hover:border-[#004030] dark:hover:border-[#D8C3A5] hover:shadow-md transition-all group">
+    <span className="font-bold font-serif text-sm text-[#004030] dark:text-[#D8C3A5] group-hover:underline">{label}</span>
+    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-1">{desc}</p>
+  </a>
+);
+
+// ════════ Lab 1: 工作模式選擇器 ════════
+const ModeSelectorLab = ({lang}) => {
+  const [taskType, setTaskType] = useState('');
+  const [reuseFreq, setReuseFreq] = useState('');
+  const [scale, setScale] = useState('');
+  const txt = {
+    zh: { title: "工作模式選擇器", q1: "任務性質？", q2: "重用頻率？", q3: "規模大小？",
+      t1: "一次性查詢", t2: "持續性專案", t3: "重複性任務", t4: "批次處理",
+      r1: "只做一次", r2: "做 3-5 次", r3: "做 10 次以上",
+      s1: "< 5 個檔案", s2: "5-20 個檔案", s3: "20+ 個檔案",
+      result: "推薦組合", select: "請選擇" },
+    en: { title: "Working Mode Selector", q1: "Task nature?", q2: "Reuse frequency?", q3: "Scale?",
+      t1: "One-off query", t2: "Ongoing project", t3: "Repetitive task", t4: "Batch processing",
+      r1: "Once only", r2: "3-5 times", r3: "10+ times",
+      s1: "< 5 files", s2: "5-20 files", s3: "20+ files",
+      result: "Recommended Combo", select: "Please select" }
+  }[lang];
+  const recommend = () => {
+    if (!taskType || !reuseFreq || !scale) return null;
+    const parts = ['Chat'];
+    if (reuseFreq === 'high' || taskType === 'project') parts.push('Project');
+    if (reuseFreq !== 'once') parts.push('Skill');
+    if (scale === 'big' || taskType === 'batch') parts.push('Code');
+    if (taskType === 'project' || taskType === 'batch') parts.push('Cowork');
+    return parts.join(' + ');
+  };
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+      <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
+      <div className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">{txt.q1}</label>
+          <select value={taskType} onChange={e=>setTaskType(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+            <option value="">{txt.select}</option>
+            <option value="oneoff">{txt.t1}</option>
+            <option value="project">{txt.t2}</option>
+            <option value="repeat">{txt.t3}</option>
+            <option value="batch">{txt.t4}</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">{txt.q2}</label>
+          <select value={reuseFreq} onChange={e=>setReuseFreq(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+            <option value="">{txt.select}</option>
+            <option value="once">{txt.r1}</option>
+            <option value="mid">{txt.r2}</option>
+            <option value="high">{txt.r3}</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">{txt.q3}</label>
+          <select value={scale} onChange={e=>setScale(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+            <option value="">{txt.select}</option>
+            <option value="small">{txt.s1}</option>
+            <option value="mid">{txt.s2}</option>
+            <option value="big">{txt.s3}</option>
+          </select>
+        </div>
+        {recommend() && (
+          <div className="mt-4 p-4 bg-[#004030]/10 dark:bg-[#D8C3A5]/10 rounded-lg border-l-4 border-[#D8C3A5]">
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{txt.result}</p>
+            <p className="text-lg font-bold text-[#004030] dark:text-[#D8C3A5]">{recommend()}</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ════════ Lab 2: Token 經濟計算器 ════════
+const TokenCalcLab = ({lang}) => {
+  const [skillSize, setSkillSize] = useState(5000);
+  const [perTurnSaving, setPerTurnSaving] = useState(2000);
+  const [turns, setTurns] = useState(20);
+  const txt = {
+    zh: { title: "Token 經濟計算器", skill: "Skill 載入成本(token)", save: "每輪省下(token)",
+      turn: "對話總輪數", total_save: "累積省下", net: "淨收益", payback: "回收輪數",
+      verdict_good: "✅ 投資 Skill 划算", verdict_bad: "⚠️ 還沒回本,考慮再用幾次" },
+    en: { title: "Token Economics Calculator", skill: "Skill load cost (tokens)", save: "Save per turn (tokens)",
+      turn: "Total turns", total_save: "Total saved", net: "Net gain", payback: "Payback turns",
+      verdict_good: "✅ Skill investment pays off", verdict_bad: "⚠️ Not yet recouped, use more times" }
+  }[lang];
+  const totalSave = perTurnSaving * turns;
+  const net = totalSave - skillSize;
+  const payback = Math.ceil(skillSize / perTurnSaving);
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+      <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
+      <div className="space-y-3">
+        <div>
+          <label className="block text-sm mb-1">{txt.skill}: <span className="font-bold">{skillSize}</span></label>
+          <input type="range" min="1000" max="20000" step="500" value={skillSize}
+            onChange={e=>setSkillSize(+e.target.value)} className="w-full" />
+        </div>
+        <div>
+          <label className="block text-sm mb-1">{txt.save}: <span className="font-bold">{perTurnSaving}</span></label>
+          <input type="range" min="100" max="5000" step="100" value={perTurnSaving}
+            onChange={e=>setPerTurnSaving(+e.target.value)} className="w-full" />
+        </div>
+        <div>
+          <label className="block text-sm mb-1">{txt.turn}: <span className="font-bold">{turns}</span></label>
+          <input type="range" min="1" max="100" value={turns}
+            onChange={e=>setTurns(+e.target.value)} className="w-full" />
+        </div>
+        <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
+            <p className="text-xs text-slate-500">{txt.total_save}</p>
+            <p className="font-bold text-[#004030] dark:text-[#D8C3A5]">{totalSave}</p>
+          </div>
+          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
+            <p className="text-xs text-slate-500">{txt.net}</p>
+            <p className={`font-bold ${net>0?'text-green-600':'text-red-500'}`}>{net>0?'+':''}{net}</p>
+          </div>
+          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
+            <p className="text-xs text-slate-500">{txt.payback}</p>
+            <p className="font-bold text-[#004030] dark:text-[#D8C3A5]">{payback}</p>
+          </div>
+        </div>
+        <p className="text-sm text-center mt-3 italic">{net>0?txt.verdict_good:txt.verdict_bad}</p>
+      </div>
+    </div>
+  );
+};
+
+// ════════ Lab 3: Code 必要性判斷器 ════════
+const CodeNecessityLab = ({lang}) => {
+  const [n, setN] = useState(10);
+  const [hasBinary, setHasBinary] = useState(false);
+  const [hasCompute, setHasCompute] = useState(false);
+  const txt = {
+    zh: { title: "Code 必要性判斷器", count: "任務數量(假設要做 N 份)",
+      binary: "需要產出 .docx/.xlsx/.pptx/.pdf?",
+      compute: "需要精確數值運算或統計?",
+      verdict: "判斷", must: "必須用 Code", recommend: "建議用 Code", optional: "可不用 Code" },
+    en: { title: "Code Necessity Judge", count: "Item count (assume N items)",
+      binary: "Output .docx/.xlsx/.pptx/.pdf?",
+      compute: "Precise computation or statistics?",
+      verdict: "Verdict", must: "Must use Code", recommend: "Recommend Code", optional: "Code optional" }
+  }[lang];
+  const verdict = () => {
+    if (hasBinary) return { text: txt.must, color: 'text-red-500' };
+    if (hasCompute || n >= 20) return { text: txt.recommend, color: 'text-orange-500' };
+    return { text: txt.optional, color: 'text-green-600' };
+  };
+  const v = verdict();
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+      <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
+      <div className="space-y-3">
+        <div>
+          <label className="block text-sm mb-1">{txt.count}: <span className="font-bold">{n}</span></label>
+          <input type="range" min="1" max="100" value={n}
+            onChange={e=>setN(+e.target.value)} className="w-full" />
+        </div>
+        <label className="flex items-center gap-2 text-sm cursor-pointer">
+          <input type="checkbox" checked={hasBinary} onChange={e=>setHasBinary(e.target.checked)} />
+          {txt.binary}
+        </label>
+        <label className="flex items-center gap-2 text-sm cursor-pointer">
+          <input type="checkbox" checked={hasCompute} onChange={e=>setHasCompute(e.target.checked)} />
+          {txt.compute}
+        </label>
+        <div className="mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-lg text-center">
+          <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">{txt.verdict}</p>
+          <p className={`text-xl font-bold ${v.color}`}>{v.text}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ════════ Lab 4: Skill 開發優先順序 ════════
+const SkillPriorityLab = ({lang}) => {
+  const [pain, setPain] = useState(5);
+  const [stable, setStable] = useState(5);
+  const [reuse, setReuse] = useState(5);
+  const txt = {
+    zh: { title: "Skill 開發優先順序", pain: "痛點頻率(1-10)", stable: "規格穩定性(1-10)", reuse: "預期重用次數(1-10)",
+      score: "優先級分數", high: "🔥 高優先級,立刻做", mid: "⭐ 中優先級,排程做", low: "💭 低優先級,先觀察" },
+    en: { title: "Skill Development Priority", pain: "Pain frequency (1-10)", stable: "Spec stability (1-10)", reuse: "Expected reuse (1-10)",
+      score: "Priority Score", high: "🔥 High priority, do now", mid: "⭐ Medium priority, schedule it", low: "💭 Low priority, observe first" }
+  }[lang];
+  const score = Math.round((pain * 2 + stable + reuse * 2) / 5 * 10) / 10;
+  const verdict = score >= 7 ? txt.high : score >= 5 ? txt.mid : txt.low;
+  return (
+    <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
+      <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
+      <div className="space-y-3">
+        <div>
+          <label className="block text-sm mb-1">{txt.pain}: <span className="font-bold">{pain}</span></label>
+          <input type="range" min="1" max="10" value={pain} onChange={e=>setPain(+e.target.value)} className="w-full" />
+        </div>
+        <div>
+          <label className="block text-sm mb-1">{txt.stable}: <span className="font-bold">{stable}</span></label>
+          <input type="range" min="1" max="10" value={stable} onChange={e=>setStable(+e.target.value)} className="w-full" />
+        </div>
+        <div>
+          <label className="block text-sm mb-1">{txt.reuse}: <span className="font-bold">{reuse}</span></label>
+          <input type="range" min="1" max="10" value={reuse} onChange={e=>setReuse(+e.target.value)} className="w-full" />
+        </div>
+        <div className="mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-lg text-center">
+          <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">{txt.score}: {score}</p>
+          <p className="text-lg font-bold text-[#004030] dark:text-[#D8C3A5]">{verdict}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ════════ Module Meta ════════
+const modulesList = [
+  { id: 0, title: '', icon: '🏠', num: '0' },
+  { id: 1, title: '', icon: '🧩', num: '1' },
+  { id: 2, title: '', icon: '🧠', num: '2' },
+  { id: 3, title: '', icon: '⚖️', num: '3' },
+  { id: 4, title: '', icon: '⚡', num: '4' },
+  { id: 5, title: '', icon: '🤖', num: '5' },
+  { id: 6, title: '', icon: '🔧', num: '6' },
+  { id: IDX_LAB, title: '', icon: '🧪', num: '7' },
+  { id: IDX_RES, title: '', icon: '🌐', num: '8' },
+  { id: IDX_ANA, title: '', icon: '📊', num: '9' }
+];
+
+// ════════ App ════════
+function App() {
+  const LS_KEY = 'AIWF_SPA_analytics';
+  const LS_STU = 'AIWF_SPA_student';
+  const loadLS = (key, fb) => { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fb; } catch { return fb; } };
+
+  const [lang, setLang] = useState('en');
+  const [isDark, setIsDark] = useState(true);
+  const [module, setModule] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [ttsState, setTtsState] = useState('idle');
+  const [studentInfo, setStudentInfo] = useState(() => loadLS(LS_STU, { group:'', dept:'', id:'', nameEn:'', nameZh:'' }));
+  const [analytics, setAnalytics] = useState(() => loadLS(LS_KEY, {
+    time: Array(TOTAL).fill(0), clicks: Array(TOTAL).fill(0),
+    quizCorrect: Array(TOTAL).fill(0), quizTotal: Array(TOTAL).fill(0),
+    cardsRead: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
+    wrongTopics: {}
+  }));
+  const menuRef = useRef(null);
+  const t = dict[lang];
+
+  // Module list with translated titles
+  const ml = modulesList.map((m, i) => ({
+    ...m,
+    title: i === 0 ? t.m0_nav :
+      i <= NUM_LEARN ? t[`m${i}_nav`] :
+      i === IDX_LAB ? t.mlab_nav :
+      i === IDX_RES ? t.mres_nav : t.analytics_title
+  }));
+
+  useEffect(() => { document.documentElement.classList.toggle('dark', isDark); }, [isDark]);
+  useEffect(() => { try { localStorage.setItem(LS_KEY, JSON.stringify(analytics)); } catch {} }, [analytics]);
+  useEffect(() => { try { localStorage.setItem(LS_STU, JSON.stringify(studentInfo)); } catch {} }, [studentInfo]);
+
+  // Time tracker
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnalytics(a => {
+        const newTime = [...a.time]; newTime[module] = (newTime[module] || 0) + 1;
+        return { ...a, time: newTime };
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [module]);
+
+  // Click tracker
+  useEffect(() => {
+    const handler = () => {
+      setAnalytics(a => {
+        const newClicks = [...a.clicks]; newClicks[module] = (newClicks[module] || 0) + 1;
+        return { ...a, clicks: newClicks };
+      });
+    };
+    document.addEventListener('click', handler);
+    return () => document.removeEventListener('click', handler);
+  }, [module]);
+
+  // Menu outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    };
+    if (menuOpen) document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [menuOpen]);
+
+  // Quiz handler (= 覆蓋)
+  const handleQuizSubmit = (mid, correct, total, wrongQs, moduleName) => {
+    setAnalytics(a => {
+      const qc = [...a.quizCorrect], qt = [...a.quizTotal];
+      qc[mid] = correct; qt[mid] = total;
+      const wt = { ...a.wrongTopics }; wt[mid] = wrongQs || [];
+      return { ...a, quizCorrect: qc, quizTotal: qt, wrongTopics: wt };
+    });
+  };
+
+  const handleCardRead = (mid, readCount, shownCount, totalCount) => {
+    setAnalytics(a => {
+      const cr = [...a.cardsRead], ct = [...a.cardsTotal];
+      cr[mid] = readCount; ct[mid] = totalCount;
+      return { ...a, cardsRead: cr, cardsTotal: ct };
+    });
+  };
+
+  // TTS
+  const handleTTS = (action) => {
+    if (!('speechSynthesis' in window)) return;
+    if (action === 'stop') { speechSynthesis.cancel(); setTtsState('idle'); return; }
+    if (action === 'pause') { speechSynthesis.pause(); setTtsState('paused'); return; }
+    if (action === 'play') {
+      if (ttsState === 'paused') { speechSynthesis.resume(); setTtsState('playing'); return; }
+      speechSynthesis.cancel();
+      const sep = lang === 'zh' ? '。 ' : '. ';
+      let texts = [];
+      if (module === 0) {
+        texts = [t.m0_title, t.m0_intro, t.m0_why, t.m0_why_desc,
+          ...(t.m0_stats||[]).map(s=>`${s.label}: ${s.val}`),
+          ...(t.m0_modules||[]).map(m=>`${m.title}. ${m.desc}`)
+        ];
+      } else if (module >= 1 && module <= NUM_LEARN) {
+        const mk = `m${module}`;
+        texts = [t[`${mk}_title`], t[`${mk}_overview`],
+          ...(t[`${mk}_highlights`]||[]),
+          t[`${mk}_p1`], t[`${mk}_p2`], t[`${mk}_p3`],
+          t[`${mk}_wrapup`],
+          ...(t[`${mk}_terms`]||[]).flatMap(tm=>[tm.front, tm.back])
+        ];
+      } else if (module === IDX_LAB) {
+        texts = [t.mlab_title, t.mlab_desc, ...(t.mlab_labs||[]).map(l=>`${l.title}. ${l.desc||''}`)];
+      } else if (module === IDX_RES) {
+        texts = [t.mres_title, t.mres_desc];
+      } else if (module === IDX_ANA) {
+        const tc = analytics.quizCorrect.reduce((a,b)=>a+b,0);
+        const ta = analytics.quizTotal.reduce((a,b)=>a+b,0);
+        const oa = ta>0 ? Math.round(tc/ta*100) : 0;
+        const wk = [];
+        for (let i=1;i<=NUM_LEARN;i++) {
+          if (analytics.quizTotal[i]>0) {
+            const a = Math.round(analytics.quizCorrect[i]/analytics.quizTotal[i]*100);
+            if (a<75) wk.push({name: ml[i].title, acc:a});
+          }
+        }
+        wk.sort((a,b)=>a.acc-b.acc);
+        texts = [t.analytics_title, t.analytics_desc,
+          `${t.analytics_total_time}: ${analytics.time.reduce((a,b)=>a+b,0)}${t.analytics_sec}`,
+          `${t.analytics_total_clicks}: ${analytics.clicks.reduce((a,b)=>a+b,0)}${t.analytics_times}`,
+          `${t.analytics_overall_acc}: ${oa}%`
+        ];
+        if (wk.length) { texts.push(t.analytics_wp_tts_intro); wk.forEach(w=>texts.push(t.analytics_wp_tts_module.replace('{name}',w.name).replace('{acc}',w.acc))); }
+        else if (ta>0) texts.push(t.analytics_wp_tts_allpass);
+      }
+      texts = texts.filter(Boolean);
+      const utt = new SpeechSynthesisUtterance(texts.join(sep));
+      utt.rate = 0.95;
+      const voices = speechSynthesis.getVoices();
+      if (lang==='zh') {
+        const v = voices.find(v=>v.lang==='zh-TW'&&v.name.includes('Yating'))||voices.find(v=>v.lang==='zh-TW')||voices.find(v=>v.lang.startsWith('zh'));
+        if (v) utt.voice = v; utt.lang = 'zh-TW';
+      } else {
+        const v = voices.find(v=>v.lang==='en-GB'&&(v.name.includes('Male')||v.name.includes('Daniel')))||voices.find(v=>v.lang==='en-GB')||voices.find(v=>v.lang.startsWith('en'));
+        if (v) utt.voice = v; utt.lang = 'en-GB';
+      }
+      utt.onend = () => setTtsState('idle');
+      utt.onerror = () => setTtsState('idle');
+      speechSynthesis.speak(utt);
+      setTtsState('playing');
+    }
+  };
+
+  // CSV export
+  const allInfoFilled = studentInfo.group && studentInfo.dept && studentInfo.id && studentInfo.nameEn && studentInfo.nameZh;
+  const exportCSV = () => {
+    if (!allInfoFilled) return;
+    const BOM = '\uFEFF';
+    let csv = BOM + 'Module,Time(s),Clicks,Correct,Answered,Total,CardsRead,CardsTotal,WrongQuestions\n';
+    for (let i = 0; i < TOTAL; i++) {
+      const wq = (analytics.wrongTopics[i]||[]).join(' | ').replace(/"/g, '""');
+      const mName = ml[i].title.replace(/,/g, ' ');
+      csv += `"${mName}",${analytics.time[i]||0},${analytics.clicks[i]||0},${analytics.quizCorrect[i]||0},${analytics.quizTotal[i]||0},${(i>=1&&i<=NUM_LEARN)?(t[`m${i}_q`]?.length||0):0},${analytics.cardsRead[i]||0},${analytics.cardsTotal[i]||0},"${wq}"\n`;
+    }
+    const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const date = new Date();
+    const ymd = `${date.getFullYear()}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}`;
+    const fn = `${dict.zh.brand}.${dict.zh.title}_${studentInfo.nameEn} ${studentInfo.nameZh}_${ymd}.csv`;
+    a.href = url; a.download = fn; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const clearAnalytics = () => {
+    if (confirm(t.analytics_wp_clear_confirm)) {
+      setAnalytics({
+        time: Array(TOTAL).fill(0), clicks: Array(TOTAL).fill(0),
+        quizCorrect: Array(TOTAL).fill(0), quizTotal: Array(TOTAL).fill(0),
+        cardsRead: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
+        wrongTopics: {}
+      });
+    }
+  };
+
+  // ════════ Render Module Content ════════
+  const renderModule = () => {
+    if (module === 0) {
+      // M0 Executive Summary
+      return (
+        <div className="space-y-8 animate-fade-in">
+          <div className="text-center py-8">
+            <h1 className="text-4xl md:text-6xl font-serif font-black text-[#004030] dark:text-[#D8C3A5] mb-4">{t.m0_title}</h1>
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-3xl mx-auto">{t.subtitle}</p>
+          </div>
+          <div className="bg-gradient-to-br from-[#004030] to-[#004030]/80 dark:from-slate-800 dark:to-slate-900 text-white rounded-2xl p-8 shadow-xl">
+            <p className="text-base md:text-lg leading-relaxed text-[#D8C3A5]/95">{t.m0_intro}</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {t.m0_stats.map((s,i)=>(
+              <div key={i} className="bg-white dark:bg-slate-800 rounded-xl p-5 text-center border border-slate-200 dark:border-slate-700">
+                <p className="text-3xl md:text-4xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{s.val}</p>
+                <p className="text-xs uppercase tracking-wider text-slate-500 mt-1">{s.label}</p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border-l-4 border-[#D8C3A5]">
+            <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-3">{t.m0_why}</h3>
+            <p className="text-slate-700 dark:text-slate-300">{t.m0_why_desc}</p>
+          </div>
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">{t.nav_modules}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {t.m0_modules.map((m,i)=>(
+                <button key={i} onClick={()=>{setModule(i+1); window.scrollTo({top:0,behavior:'smooth'});}}
+                  className="text-left bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 hover:border-[#004030] dark:hover:border-[#D8C3A5] hover:shadow-md transition-all group">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="font-serif font-black text-[#D8C3A5] text-xl">{m.num}</span>
+                    <span className="font-bold text-[#004030] dark:text-[#D8C3A5]">{m.title}</span>
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{m.desc}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="text-center">
+            <button onClick={()=>{setModule(1); window.scrollTo({top:0,behavior:'smooth'});}}
+              className="px-8 py-3 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition-all">
+              {t.m0_start}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (module >= 1 && module <= NUM_LEARN) {
+      const mk = `m${module}`;
+      return (
+        <div className="space-y-6 text-base md:text-lg leading-relaxed text-slate-700 dark:text-slate-300 animate-fade-in">
+          <H2 icon={ml[module].icon} number={ml[module].num}>{t[`${mk}_title`]}</H2>
+
+          {/* Overview */}
+          <div className="bg-[#004030]/5 dark:bg-[#D8C3A5]/5 rounded-xl p-5 border-l-4 border-[#D8C3A5]">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-2">{t.overview_label}</h3>
+            <p>{t[`${mk}_overview`]}</p>
+          </div>
+
+          {/* Highlights */}
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">{t.highlights_label}</h3>
+            <div className="flex flex-wrap gap-2">
+              {t[`${mk}_highlights`].map((h,i)=>(
+                <span key={i} className="px-3 py-1 bg-[#004030]/10 dark:bg-[#D8C3A5]/10 text-[#004030] dark:text-[#D8C3A5] rounded-full text-sm font-medium">{h}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Deep Dive */}
+          <div>
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-3">{t.deep_dive_label}</h3>
+            <div className="space-y-4">
+              <p>{t[`${mk}_p1`]}</p>
+              <p className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg italic font-serif border-l-4 border-[#D8C3A5]">{t[`${mk}_p2`]}</p>
+              <p>{t[`${mk}_p3`]}</p>
+            </div>
+          </div>
+
+          {/* SVG 圖示 - Module 相關示意圖 */}
+          <div className="flex justify-center my-6">
+            <svg viewBox="0 0 400 200" className="w-full max-w-md" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id={`grad-${module}`} x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#004030"/>
+                  <stop offset="100%" stopColor="#D8C3A5"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="80" width="360" height="40" rx="20" fill={`url(#grad-${module})`} opacity="0.3"/>
+              <circle cx="80" cy="100" r="30" fill="#004030"/>
+              <text x="80" y="106" textAnchor="middle" fill="#D8C3A5" fontSize="14" fontWeight="bold" fontFamily="serif">M{module}</text>
+              <circle cx="200" cy="100" r="25" fill="#D8C3A5"/>
+              <text x="200" y="106" textAnchor="middle" fill="#004030" fontSize="12" fontWeight="bold">{module*2}x</text>
+              <circle cx="320" cy="100" r="30" fill="#004030"/>
+              <text x="320" y="106" textAnchor="middle" fill="#D8C3A5" fontSize="14" fontWeight="bold">✓</text>
+            </svg>
+          </div>
+
+          {/* FlipCards */}
+          <FlipCardDeck key={`cards-${module}`} terms={t[`${mk}_terms`]} t={t} moduleId={module} onCardRead={handleCardRead} />
+
+          {/* Wrap-up */}
+          <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-5">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-2">{t.wrapup_label}</h3>
+            <p className="italic">{t[`${mk}_wrapup`]}</p>
+          </div>
+
+          {/* Quiz */}
+          <ModuleQuiz key={`quiz-${module}`} questions={t[`${mk}_q`]} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} moduleName={t[`${mk}_title`]} />
+        </div>
+      );
+    }
+
+    if (module === IDX_LAB) {
+      return (
+        <div className="space-y-6 animate-fade-in">
+          <H2 icon={ml[IDX_LAB].icon} number={ml[IDX_LAB].num}>{t.mlab_title}</H2>
+          <p className="text-slate-600 dark:text-slate-400">{t.mlab_desc}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ModeSelectorLab lang={lang}/>
+            <TokenCalcLab lang={lang}/>
+            <CodeNecessityLab lang={lang}/>
+            <SkillPriorityLab lang={lang}/>
+          </div>
+        </div>
+      );
+    }
+
+    if (module === IDX_RES) {
+      const resources = lang === 'zh' ? [
+        { label: "Anthropic 官方文件", url: "https://docs.claude.com", desc: "Claude 產品、API、Skill 開發、Prompt 工程完整文件" },
+        { label: "Claude.ai 產品支援", url: "https://support.claude.com", desc: "使用說明、訂閱方案、功能介紹" },
+        { label: "Skill 開發指南", url: "https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview", desc: "Prompt 工程基礎,Skill 設計可參考" },
+        { label: "Claude Code", url: "https://docs.claude.com", desc: "命令列工具,Level 3 Agent 的開發環境" },
+        { label: "MCP (Model Context Protocol)", url: "https://docs.claude.com", desc: "外部工具與服務的整合協定" },
+        { label: "Anthropic Newsroom", url: "https://www.anthropic.com/news", desc: "最新產品發布、研究進展、政策說明" }
+      ] : [
+        { label: "Anthropic Documentation", url: "https://docs.claude.com", desc: "Complete docs for Claude products, API, Skill development, Prompt engineering" },
+        { label: "Claude.ai Support", url: "https://support.claude.com", desc: "User guide, subscription plans, feature introduction" },
+        { label: "Skill Development Guide", url: "https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview", desc: "Prompt engineering basics, reference for Skill design" },
+        { label: "Claude Code", url: "https://docs.claude.com", desc: "Command-line tool, dev environment for Level 3 Agent" },
+        { label: "MCP (Model Context Protocol)", url: "https://docs.claude.com", desc: "Integration protocol for external tools and services" },
+        { label: "Anthropic Newsroom", url: "https://www.anthropic.com/news", desc: "Latest product releases, research progress, policy notes" }
+      ];
+      return (
+        <div className="space-y-6 animate-fade-in">
+          <H2 icon={ml[IDX_RES].icon} number={ml[IDX_RES].num}>{t.mres_title}</H2>
+          <p className="text-slate-600 dark:text-slate-400">{t.mres_desc}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {resources.map((r,i)=><LinkCard key={i} {...r}/>)}
+          </div>
+        </div>
+      );
+    }
+
+    if (module === IDX_ANA) {
+      const totalCorrect = analytics.quizCorrect.reduce((a,b)=>a+b,0);
+      const totalAnswered = analytics.quizTotal.reduce((a,b)=>a+b,0);
+      const overallAcc = totalAnswered>0 ? Math.round(totalCorrect/totalAnswered*100) : 0;
+      const totalCardsRead = analytics.cardsRead.reduce((a,b)=>a+b,0);
+      const totalCardsTotal = analytics.cardsTotal.reduce((a,b)=>a+b,0);
+      const cardUsage = totalCardsTotal>0 ? Math.round(totalCardsRead/totalCardsTotal*100) : 0;
+      const weakPoints = [];
+      for (let i=1; i<=NUM_LEARN; i++) {
+        if (analytics.quizTotal[i]>0) {
+          const acc = Math.round(analytics.quizCorrect[i]/analytics.quizTotal[i]*100);
+          if (acc<75) weakPoints.push({id:i, name:ml[i].title, acc, wrong: analytics.wrongTopics[i]||[]});
+        }
+      }
+      weakPoints.sort((a,b)=>a.acc-b.acc);
+
+      return (
+        <div className="space-y-6 animate-fade-in">
+          <H2 icon={ml[IDX_ANA].icon} number={ml[IDX_ANA].num}>{t.analytics_title}</H2>
+          <p className="text-slate-600 dark:text-slate-400">{t.analytics_desc}</p>
+
+          {/* 統計卡 4 個 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+              <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">{t.analytics_total_time}</p>
+              <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{analytics.time.reduce((a,b)=>a+b,0)}{t.analytics_sec}</p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+              <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">{t.analytics_total_clicks}</p>
+              <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{analytics.clicks.reduce((a,b)=>a+b,0)}{t.analytics_times}</p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+              <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">{t.analytics_overall_acc}</p>
+              <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{overallAcc}%</p>
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 text-center">
+              <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">{t.analytics_card_usage}</p>
+              <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{cardUsage}%</p>
+            </div>
+          </div>
+
+          {/* 整體進度 */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+            <h3 className="font-serif font-bold text-[#004030] dark:text-[#D8C3A5] mb-4">{t.analytics_progress_title}</h3>
+            <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-2">
+              {ml.slice(1).map((m,i)=>{
+                const idx = i+1;
+                const visited = (analytics.time[idx]||0) > 5;
+                const quizDone = (analytics.quizTotal[idx]||0) > 0;
+                return (
+                  <button key={idx} onClick={()=>{setModule(idx); window.scrollTo({top:0,behavior:'smooth'});}}
+                    className={`p-2 rounded-lg text-xs text-center transition-all border ${
+                      quizDone ? 'bg-[#004030] text-[#D8C3A5] border-[#004030]' :
+                      visited ? 'bg-[#D8C3A5]/30 border-[#D8C3A5]' :
+                      'bg-slate-100 dark:bg-slate-700 border-slate-200 dark:border-slate-600 text-slate-500'
+                    }`}>
+                    <div>{m.icon}</div>
+                    <div className="truncate">{m.num}</div>
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex gap-4 mt-3 text-xs text-slate-500">
+              <span>⬛ {t.analytics_progress_quiz_done}</span>
+              <span>⬜ {t.analytics_progress_visited}</span>
+              <span>▫️ {t.analytics_progress_not_visited}</span>
+            </div>
+          </div>
+
+          {/* 弱點分析 */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+            <h3 className="font-serif font-bold text-[#004030] dark:text-[#D8C3A5] mb-4">{t.analytics_wp_title}</h3>
+            {weakPoints.length === 0 ? (
+              <p className="text-slate-600 dark:text-slate-400">{totalAnswered>0 ? t.analytics_wp_allpass : t.analytics_no_data}</p>
+            ) : (
+              <div className="space-y-3">
+                {weakPoints.map(w=>(
+                  <div key={w.id} className="border-l-4 border-red-400 bg-red-50 dark:bg-red-900/20 p-4 rounded-r-lg">
+                    <p className="font-bold text-[#004030] dark:text-[#D8C3A5]">{w.name} — {w.acc}%</p>
+                    {w.wrong.length>0 && (
+                      <div className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+                        <p>{t.analytics_wp_incorrect}</p>
+                        <ul className="list-disc list-inside ml-2 mt-1">
+                          {w.wrong.map((q,i)=><li key={i}>{q}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                    <button onClick={()=>{setModule(w.id); window.scrollTo({top:0,behavior:'smooth'});}}
+                      className="mt-2 text-sm text-[#004030] dark:text-[#D8C3A5] underline">{t.analytics_wp_goto}</button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 模組明細 */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-200 dark:border-slate-700 text-slate-500 text-left">
+                  <th className="p-2">{t.analytics_module}</th>
+                  <th className="p-2">{t.analytics_time}</th>
+                  <th className="p-2">{t.analytics_clicks}</th>
+                  <th className="p-2">{t.analytics_card_usage}</th>
+                  <th className="p-2">{t.analytics_correct_ans_total}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ml.slice(1).map((m,i)=>{
+                  const idx = i+1;
+                  const tot = (idx>=1&&idx<=NUM_LEARN) ? (t[`m${idx}_q`]?.length||0) : 0;
+                  return (
+                    <tr key={idx} className="border-b border-slate-100 dark:border-slate-700/50">
+                      <td className="p-2">{m.icon} {m.title}</td>
+                      <td className="p-2">{analytics.time[idx]||0}{t.analytics_sec}</td>
+                      <td className="p-2">{analytics.clicks[idx]||0}</td>
+                      <td className="p-2">{analytics.cardsRead[idx]||0}/{analytics.cardsTotal[idx]||0}</td>
+                      <td className="p-2">{analytics.quizCorrect[idx]||0}/{analytics.quizTotal[idx]||0}/{tot}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {/* 基本資料表單 */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+            <h3 className="font-serif font-bold text-[#004030] dark:text-[#D8C3A5] mb-4">{t.analytics_form_title}</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">{t.analytics_group}</label>
+                <select value={studentInfo.group} onChange={e=>setStudentInfo(s=>({...s, group:e.target.value}))}
+                  className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm">
+                  <option value="">{t.analytics_group_select}</option>
+                  {t.group_options.map(g=><option key={g} value={g}>{g}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">{t.analytics_dept}</label>
+                <input type="text" value={studentInfo.dept} placeholder={t.analytics_dept_ph}
+                  onChange={e=>setStudentInfo(s=>({...s, dept:sanitizeName(e.target.value)}))}
+                  className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">{t.analytics_id}</label>
+                <input type="text" value={studentInfo.id} placeholder={t.analytics_id_ph}
+                  onChange={e=>setStudentInfo(s=>({...s, id:sanitizeStudentId(e.target.value)}))}
+                  className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">{t.analytics_name_en}</label>
+                <input type="text" value={studentInfo.nameEn} placeholder={t.analytics_name_en_ph}
+                  onChange={e=>setStudentInfo(s=>({...s, nameEn:sanitizeName(e.target.value)}))}
+                  className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm" />
+              </div>
+              <div>
+                <label className="text-xs text-slate-500 mb-1 block">{t.analytics_name_zh}</label>
+                <input type="text" value={studentInfo.nameZh} placeholder={t.analytics_name_zh_ph}
+                  onChange={e=>setStudentInfo(s=>({...s, nameZh:sanitizeName(e.target.value)}))}
+                  className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-sm" />
+              </div>
+            </div>
+            <div className="mt-4 flex flex-wrap gap-3 items-center">
+              <button onClick={exportCSV} disabled={!allInfoFilled}
+                className="px-6 py-2 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] font-bold rounded-lg disabled:opacity-40">
+                {t.analytics_export_csv}
+              </button>
+              {!allInfoFilled && <span className="text-xs text-slate-500">{t.analytics_fill_required}</span>}
+              <button onClick={clearAnalytics}
+                className="px-4 py-2 text-sm border border-red-400 text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20">
+                {t.analytics_wp_clear}
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 mt-3">💾 {t.analytics_wp_saved}</p>
+          </div>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 h-16 bg-[#004030] dark:bg-slate-900 text-white z-50 shadow-lg border-b border-[#D8C3A5]/30">
+        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="relative" ref={menuRef}>
+              <button onClick={()=>setMenuOpen(!menuOpen)} className="p-2 hover:bg-white/10 rounded-lg"><IconMenu/></button>
+              {menuOpen && (
+                <div className="absolute top-full left-0 mt-1 w-64 max-w-[calc(100vw-2rem)] max-h-[calc(100vh-5rem)] overflow-y-auto bg-white dark:bg-slate-800 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 z-[100]">
+                  {ml.map(m=>(
+                    <button key={m.id} onClick={()=>{setModule(m.id); setMenuOpen(false); window.scrollTo({top:0,behavior:'smooth'});}}
+                      className={`w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 text-left ${module===m.id?'bg-[#004030]/10 dark:bg-[#D8C3A5]/10 text-[#004030] dark:text-[#D8C3A5] font-bold':'text-slate-700 dark:text-slate-200'}`}>
+                      <span>{m.icon}</span>
+                      <span className="text-[#D8C3A5] dark:text-[#D8C3A5] font-bold mr-1">{m.num}.</span>
+                      <span className="truncate">{m.title}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <button onClick={()=>{setModule(0); window.scrollTo({top:0,behavior:'smooth'});}} className="p-2 hover:bg-white/10 rounded-lg"><IconHome size={18}/></button>
+            <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} className="flex items-center gap-2">
+              <span className="font-serif font-black text-[#D8C3A5] text-lg tracking-widest">{t.brand}</span>
+              <span className="hidden sm:inline font-serif font-bold text-sm md:text-base">{t.title}</span>
+            </button>
+          </div>
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* TTS */}
+            <button onClick={()=>handleTTS(ttsState==='playing'?'pause':'play')}
+              className="p-2 hover:bg-white/10 rounded-lg" title={t.audio_read}>
+              {ttsState==='playing' ? <IconPause size={16}/> : <IconPlay size={16}/>}
+            </button>
+            {ttsState!=='idle' && (
+              <button onClick={()=>handleTTS('stop')} className="p-2 hover:bg-white/10 rounded-lg">
+                <IconSquare size={14}/>
+              </button>
+            )}
+            {/* Lang */}
+            <button onClick={()=>setLang(lang==='zh'?'en':'zh')} className="px-3 py-1 hover:bg-white/10 rounded-lg text-sm font-bold">
+              {lang==='zh'?'EN':'中'}
+            </button>
+            {/* Theme */}
+            <button onClick={()=>setIsDark(!isDark)} className="p-2 hover:bg-white/10 rounded-lg">
+              {isDark ? <IconSun size={16}/> : <IconMoon size={16}/>}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main */}
+      <main className="flex-1 pt-16 pb-16">
+        <div className="max-w-5xl mx-auto px-4 py-8">
+          {renderModule()}
+          {/* Bottom Nav */}
+          <div className="mt-12 flex justify-between items-center pt-8 border-t border-slate-300 dark:border-slate-700">
+            <button onClick={()=>{setModule(Math.max(0,module-1)); window.scrollTo({top:0,behavior:'smooth'});}}
+              disabled={module===0}
+              className="px-4 py-2 text-sm font-medium text-[#004030] dark:text-[#D8C3A5] disabled:opacity-0">
+              ← {t.nav_prev}
+            </button>
+            <button onClick={()=>{setModule(Math.min(TOTAL-1,module+1)); window.scrollTo({top:0,behavior:'smooth'});}}
+              disabled={module===TOTAL-1}
+              className="px-4 py-2 text-sm font-medium text-[#004030] dark:text-[#D8C3A5] disabled:opacity-0">
+              {t.nav_next} →
+            </button>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="h-8 bg-[#004030] flex items-center justify-between px-4 shrink-0 fixed bottom-0 left-0 right-0">
+        <span className="text-[#D8C3A5]/60 text-[10px] sm:text-xs">{t.date} · {t.copyright}</span>
+        <span className="text-[#D8C3A5]/60 text-[10px] sm:text-xs flex items-center gap-3">
+          <span className="hidden sm:inline">{t.architect_label}&nbsp;<a href={t.architect_url} target="_blank" rel="noopener noreferrer" className="text-[#D8C3A5] hover:text-white underline">{t.architect_name}</a></span>
+          <button onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} className="text-[#D8C3A5] hover:text-white font-bold">Top ↑</button>
+        </span>
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
