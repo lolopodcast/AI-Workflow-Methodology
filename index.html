@@ -204,11 +204,11 @@ const dict = {
     // M0
     m0_nav: "0. 執行概要",
     m0_title: "AI 協作工作流方法論",
-    m0_intro: "AI 工具的價值不只在於「能做什麼」,更在於「該如何被組織」。當 Chat、Project、Cowork、Skill、Code、Memory、KB 同時存在時,真正考驗使用者的是判斷力,而非單一功能。本方法論將分散的工具元素整合為一個可決策、可優化、可演進的工作流體系。從基礎概念出發,釐清 SPA 與純前端的差異;進入五種工作模式的光譜比較,理解它們不是互斥而是疊加;深入記憶與知識體系的四層分工,看見 Context Window、Memory、Project、Skill、KB 各自的位置;再以 Token 經濟學作為共同度量,把直覺的「該用哪個」轉化為可計算的決策。Code 執行的角色釐清思考型與執行型任務的本質差異,Semi-Agent 工作流設計揭示為何精修 SKILL.md 等於設計微型 agent。最後以批次任務的判準與維運型 skill 的開發,完成從「創造端」到「規模端」的完整工作流。",
+    m0_intro: "AI 工具的價值不只在於「能做什麼」,更在於「該如何被組織」。當 Chat、Project、Cowork、Skill、Code、Memory、KB 同時存在時,真正考驗使用者的是判斷力,而非單一功能。本方法論將分散的工具元素整合為一個可決策、可優化、可演進的工作流體系。從基礎概念出發,釐清 SPA 與純前端的差異;進入工作模式的「介面 × 能力」二維架構,理解 Cowork 內建 Code 能力、不是與 Code 並列的選項;深入記憶與知識體系的四層分工,看見 Context Window、Memory、Project、Skill、KB 各自的位置;再以 Token 經濟學作為共同度量,把直覺的「該用哪個」轉化為可計算的決策。Code 執行的角色釐清思考型與執行型任務的本質差異,以及 Code 作用範圍由介面決定的關鍵校正。Semi-Agent 工作流設計揭示為何精修 SKILL.md 等於設計微型 agent。最後以批次任務的判準與維運型 skill 的開發,完成從「創造端」到「規模端」的完整工作流。",
     m0_why: "為什麼這套方法論重要？",
     m0_why_desc: "因為 AI 工具正在從「單一對話助手」演進為「分層的工作流體系」。沒有方法論,使用者會在每次任務中重新發明輪子、燒掉 token、做出錯誤決策。有方法論,使用者能把精力放在真正需要思考的地方,讓機械性任務自動化。這份體系最終的目標是「Semi-Agent 工作流」——人類定義目標,AI 自主執行,雙方各司其職。",
     m0_modules: [
-      { num: "01", title: "工作模式光譜", desc: "Chat、Project、Cowork、Skill、Code 五層架構的角色定位與組合策略" },
+      { num: "01", title: "工作模式光譜", desc: "介面 × 能力的二維架構,Cowork 內建 Code 能力的關鍵校正" },
       { num: "02", title: "記憶與知識體系", desc: "Context Window 內的 Memory、Project、Skill、KB 四層分工" },
       { num: "03", title: "Token 經濟學", desc: "一次性成本、累積成本、起手成本的計算與權衡" },
       { num: "04", title: "Code 執行的角色", desc: "思考型任務與執行型任務的判準,以及 Skill+Code 的組合" },
@@ -225,41 +225,41 @@ const dict = {
 
     // ============ M1 工作模式光譜 ============
     m1_nav: "1. 工作模式光譜",
-    m1_title: "Chat、Project、Cowork、Skill、Code 的五層架構",
-    m1_overview: "五種工作模式不是互斥的選項,而是可以疊加組合的層次。最強的工作流是 Chat + Skill + Project + Cowork + Code 的混合。",
-    m1_highlights: ["五層疊加", "不是互斥", "Chat 端到桌上", "Cowork 廚房鑰匙", "Skill 章程"],
-    m1_p1: "Chat 模式是最基礎的對話介面,使用者把材料直接貼進對話視窗。它像是把材料端到我桌上,我就地加工。適合一次性、單一文件來源、需要快速迭代的任務。Chat 模式的優點是 token 成本可預測——你上傳什麼,我讀什麼;缺點是長對話會持續累積 context,後期 token 消耗快速膨脹。",
-    m1_p2: "Project 模式是「建立專案並掛上檔案、指令、知識庫」,所有 Project 內對話會自動載入這些內容。它像是每次開對話前,桌上已經擺好參考資料。適合持續性專案、規格穩定、需要跨對話延續脈絡的場景。Cowork 模式則是「給 Claude 指定資料夾,自行掃描、讀取、產出、寫回」——把廚房鑰匙交給我,自己去翻冰箱做菜再放回去。Cowork 適合素材龐雜、產出物需要直接歸檔、可串接部署流程的工作。",
-    m1_p3: "Skill 模式是把規格寫進 SKILL.md,Claude 觸發時自動載入。它的本質是「把對話裡反覆講的規格,搬到一份可重用的章程裡」。一次性固定成本,多次重用——對話越長、修改越多輪,省 token 效益越明顯。Code 模式則是讓 Claude 在 Linux 環境執行 Python/bash,處理檔案、計算、產生二進位檔。它的價值是「給我一台真正的電腦,不只是一張嘴」,適合規模性、機械性、二進位產出任務。五種模式的真正威力不在單獨使用,而在組合。例如:Skill 規範產出格式,Code 處理批次操作,Project 提供長期脈絡,Cowork 完成歸檔閉環。",
-    m1_wrapup: "選擇模式的本質是「讓每件事放在最適合它的層級」。Chat 處理對話、Project 提供脈絡、Cowork 操作檔案、Skill 封裝規格、Code 執行運算。當你開始把這五層視為「可組合的積木」而非「五選一的選項」,你的工作流就會從單點工具升級為完整體系。",
+    m1_title: "介面 × 能力的二維組合架構",
+    m1_overview: "過去把 Chat / Project / Cowork / Skill / Code 講成「五個並列層次」是錯的。正確的視角是：介面決定能力範圍,能力組合決定工作流型態。Cowork 不是與 Code 並列的工具,而是內建 Code 能力的桌面 GUI 版本。",
+    m1_highlights: ["介面 × 能力", "Cowork 內建 Code", "檔案位置決定介面", "不是五選一"],
+    m1_p1: "工作模式應拆成兩個軸線。介面軸代表你在哪裡跟 Claude 互動:Claude.ai 網頁、Claude Desktop(含 Cowork 模式)、Claude Code CLI。能力軸代表這個介面內建什麼:對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。不同介面內建的能力組合不同——Claude.ai 網頁的 Code 只能作用在雲端容器,Cowork 的 Code 可以作用在你授權的本機資料夾,Claude Code CLI 則完全跑在你本機。",
+    m1_p2: "最常見的誤解是把「Cowork」和「Code」當成並列的兩個工具——其實 Cowork 內建 Code 能力,本質上就是 Claude Code 的桌面 GUI 版本,跑在 Apple Virtualization Framework 隔離的虛擬機上,你授權的本機資料夾被 mount 進這個 VM,Code(Python/bash)就能直接操作那個資料夾。換句話說,「Cowork vs Code」這個問題本身就問錯了——你用 Cowork,就自動有 Code,兩者是同一件事的兩個面向,不是要選一個。",
+    m1_p3: "校正後的判斷流程很簡單。第一步問:檔案在哪裡?在本機就選 Cowork 或 CLI;在對話內就用網頁版。第二步問:任務需要什麼能力?確認你選的介面內建那些能力。第三步:要不要加 Skill、Project、Connector?視重用頻率與脈絡需求而定。這個流程把工具決策從「五選一的水平選擇」改成「介面層 + 能力層的垂直疊加」,避免了過去「Cowork 還是 Code」這種偽問題。維運型 skill(如 spa-consistency-check)的執行就是典型案例:它需要本機檔案存取 + Code 批次處理,在 Cowork 環境一次到位,不需要分階段。",
+    m1_wrapup: "不要把工具當成五選一,要拆成介面 × 能力二維。Cowork 不是與 Code 並列的選項——Cowork 內建 Code 能力。真正的決策軸線是「檔案在哪裡 + 需要什麼能力組合」,而不是「該用哪個模式」。理解這個校正,你的工作流選擇就會從直覺猜測升級為可推理的架構決策。",
 
     m1_terms: [
-      { front: "SPA", back: "Single Page Application,單一 HTML 檔案 + JS 動態切換畫面的應用程式。網址會變但不重新載入整頁。" },
-      { front: "純前端", back: "所有程式碼在瀏覽器端執行,沒有後端伺服器邏輯。SPA 是純前端的子集,但純前端不一定是 SPA。" },
-      { front: "Chat 模式", back: "對話內處理。使用者把材料直接貼進對話視窗,Claude 就地加工。適合一次性任務。" },
-      { front: "Project 模式", back: "專案範圍記憶。建立 Project 掛上檔案,所有對話自動載入。適合持續性專案。" },
-      { front: "Cowork 模式", back: "檔案系統存取。Claude 在指定資料夾中掃描、讀取、產出、寫回。適合素材龐雜需歸檔的工作。" },
-      { front: "Skill 模式", back: "規格與流程封裝。把規格寫進 SKILL.md,觸發時自動載入。本質是微型 agent 的章程。" },
-      { front: "Code 模式", back: "程式執行環境。Claude 在 Linux 環境執行 Python/bash,處理檔案、計算、產生二進位檔。" },
-      { front: "MPA", back: "Multi-Page Application,多頁應用程式。每個連結載入新 HTML,跟 SPA 形成對比。" }
+      { front: "介面軸", back: "你在哪裡跟 Claude 互動:Claude.ai 網頁、Claude Desktop(Cowork)、Claude Code CLI。介面決定能力的觸及範圍。" },
+      { front: "能力軸", back: "介面內建什麼:對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。" },
+      { front: "Cowork 模式", back: "Claude Desktop 的桌面 agent 模式,內建 Code 能力 + 本機資料夾存取。跑在隔離 VM,plan-then-act 模式。本質是 Claude Code 的 GUI 版本。" },
+      { front: "Claude.ai 網頁", back: "Code 跑在雲端容器內,只能存取上傳檔案與下載產出物,無法直接讀寫本機資料夾。" },
+      { front: "Claude Code CLI", back: "終端機工具,完全跑在使用者本機,原生作業系統權限,適合開發者與 CI 整合。" },
+      { front: "Code 能力", back: "跑 Python/bash 的能力。存在於所有介面,但作用範圍由介面決定(雲端容器 / 本機 mount / 完全本機)。" },
+      { front: "Cowork ≠ Code", back: "錯誤觀念。Cowork 內建 Code 能力,兩者不是並列選項,而是同一件事的兩個面向。" },
+      { front: "本機檔案存取", back: "讀寫使用者電腦資料夾的能力。Claude.ai 網頁沒有,Cowork 與 CLI 有。決定能否做本機批次維運。" }
     ],
 
     m1_q: [
-      { q: "下列哪一項最能描述「SPA 與純前端的關係」?",
-        opts: ["完全相同的概念", "純前端 ⊂ SPA", "SPA ⊂ 純前端", "兩者完全無關"],
-        ans: _A2, exp: "純前端是「沒有後端」,SPA 是「單一 HTML + JS 動態路由」。SPA 是純前端的子集之一,但純前端不一定要是 SPA。" },
-      { q: "Cowork 模式最適合什麼場景?",
-        opts: ["快速一次性查詢", "素材龐雜、產出物需直接歸檔到資料夾", "純粹的對話與創意發想", "簡單的程式碼問答"],
-        ans: _A1, exp: "Cowork 的核心價值是「給 Claude 廚房鑰匙」,讓它自己去翻檔案、處理、寫回。素材多且需要歸檔流程的工作最受益。" },
-      { q: "Skill 模式的本質是什麼?",
-        opts: ["一種對話技巧", "把規格從對話搬到檔案,可重用的章程", "另一種付費方案", "Claude 的隱藏模式"],
-        ans: _A1, exp: "Skill 把規格從對話搬到檔案。每次精修 SKILL.md 等於設計微型 agent 的章程,降低每次認知對齊的成本。" },
-      { q: "Chat、Project、Cowork、Skill、Code 五者的關係是?",
-        opts: ["五選一,只能用一種", "互斥的競爭模式", "可疊加組合的層次", "依時間順序使用"],
-        ans: _A2, exp: "五種模式不是互斥,而是可以同時組合的層次。最強工作流是 Chat + Skill + Project + Cowork + Code 的混合。" },
-      { q: "下列何者「不是」純前端 SPA 的特徵?",
-        opts: ["所有程式碼在瀏覽器端執行", "單一 HTML 檔案動態切換畫面", "需要 Node.js 伺服器渲染", "可部署到 GitHub Pages"],
-        ans: _A2, exp: "需要 Node.js 後端渲染(例如 Next.js SSR)的網站,雖然可能是單頁應用,但不是「純前端」SPA。" }
+      { q: "下列哪個觀念是「錯的」?",
+        opts: ["Cowork 內建 Code 能力", "Cowork 跟 Code 是並列的兩種工具", "Claude.ai 網頁版的 Code 只能作用在雲端容器", "Cowork 是 Claude Code 的桌面 GUI 版本"],
+        ans: _A1, exp: "Cowork 跟 Code 不是並列工具,而是同一件事的兩個面向——Cowork 內建 Code 能力。其他三項都正確。" },
+      { q: "校正後的工作模式應該拆成哪兩個軸線?",
+        opts: ["創造 vs. 維運", "個人 vs. 團隊", "介面 × 能力", "免費 vs. 付費"],
+        ans: _A2, exp: "介面軸(在哪裡互動)× 能力軸(內建什麼)是正確的二維拆解,避免了「五選一」的偽問題。" },
+      { q: "我要對本機資料夾跑批次維運(例如 spa-consistency-check),最該選哪個介面?",
+        opts: ["Claude.ai 網頁版", "Cowork(Claude Desktop)", "純文字 email", "GitHub Issues"],
+        ans: _A1, exp: "Cowork 內建 Code 能力 + 本機資料夾存取,是本機批次維運的最佳介面。網頁版無法直接寫回本機。" },
+      { q: "下列哪個是「Cowork」的正確描述?",
+        opts: ["Code 的競爭對手", "跑在隔離 VM、內建 Code、可存取授權本機資料夾的桌面 agent", "純對話模式的桌面版", "需要寫程式才能使用"],
+        ans: _A1, exp: "Cowork 跑在 Apple Virtualization Framework 隔離 VM,本機資料夾透過 mount 進入 VM,內建 Code 能力,plan-then-act 模式。" },
+      { q: "判斷該用哪個介面,第一步該問什麼?",
+        opts: ["要付多少錢", "檔案在哪裡", "團隊有多大", "AI 模型是哪個"],
+        ans: _A1, exp: "檔案位置決定介面選擇——在本機就選 Cowork 或 CLI,在對話內就用網頁版。這是校正後的第一步判斷。" }
     ],
 
     // ============ M2 記憶與知識體系 ============
@@ -336,11 +336,11 @@ const dict = {
     m4_nav: "4. Code 執行的角色",
     m4_title: "思考型任務與執行型任務的本質差異",
     m4_overview: "Code 是執行的工具,不是思考的工具。需要「真的做出某個結果」時用它,需要「想清楚某件事」時不用。",
-    m4_highlights: ["思考 vs. 執行", "Skill + Code 絕配", "規模問題用 Code", "100 份法則"],
+    m4_highlights: ["思考 vs. 執行", "Skill + Code 絕配", "規模問題用 Code", "100 份法則", "Code 作用範圍由介面決定"],
     m4_p1: "「該不該用 Code」對應一個更根本的問題:這個任務的本質是「思考」還是「執行」?思考型任務包括理解、解釋、討論、決策、創作——這些用「對話模式」最有效。執行型任務包括計算、轉檔、處理大量資料、產生檔案——這些用「Code 模式」最有效。混淆兩者會出問題:思考型任務硬上 Code = 浪費;執行型任務硬不用 Code = 出錯、燒 token。",
     m4_p2: "必須用 Code 的情境包括:產生二進位檔案(docx、xlsx、pptx、pdf)、精確數值運算與統計分析、批次檔案操作、圖表生成、部署與 Git 操作。強烈建議用 Code 的情境包括:長文件程式化處理、大資料量但只要重點、重複性操作。不該用 Code 的情境包括:純對話與寫作、寫程式碼給使用者拿走(不需執行驗證時)、簡單邏輯推理。判斷的訣竅是問自己:這個任務是「需要想清楚」還是「需要真的做出來」?",
-    m4_p3: "Skill 跟 Code 不是衝突的工具,而是絕配。Code 做髒活、Skill 做精緻產出。例如:Code 負責讀 30 份 PDF、跑詞頻、生統計;Skill(例如 docx)負責把結果包裝成正式報告格式。這樣是分工合作,各司其職。一個更深層的判準是「100 份法則」:如果這個任務有 100 份要處理,會不會崩潰?如果會崩潰,就用 Code;如果不會,就用 Chat + Skill。3 份還能撐,30 份開始痛,100 份必定崩潰——這個簡單的問題能幫你做出 90% 的正確判斷。",
-    m4_wrapup: "Code 是執行的工具,不是思考的工具。殺雞不用牛刀,挖隧道別用牙籤——選對工具是 token 經濟學最具體的展現。當你開始把任務分為「思考型」和「執行型」並對應不同模式,你的工作流效率會立刻提升一個層級。",
+    m4_p3: "Skill 跟 Code 不是衝突的工具,而是絕配。Code 做髒活、Skill 做精緻產出。例如:Code 負責讀 30 份 PDF、跑詞頻、生統計;Skill(例如 docx)負責把結果包裝成正式報告格式。一個更深層的判準是「100 份法則」:如果這個任務有 100 份要處理會不會崩潰?會崩潰就用 Code,不會就用 Chat + Skill。3 份還能撐,30 份開始痛,100 份必定崩潰——這個簡單的問題能幫你做出 90% 的正確判斷。最後一個關鍵校正:Code 是「能力」不是「介面」,它存在於所有介面,但作用範圍由介面決定。Claude.ai 網頁的 Code 只能作用在雲端容器內的上傳檔案;Cowork 的 Code 可以作用在你授權的本機資料夾;CLI 的 Code 完全本機原生。所以「該不該用 Code」跟「該用哪個介面」是兩個獨立問題,不要混為一談。",
+    m4_wrapup: "Code 是執行的工具,不是思考的工具。殺雞不用牛刀,挖隧道別用牙籤——選對工具是 token 經濟學最具體的展現。當你開始把任務分為「思考型」和「執行型」並對應不同模式,並理解「Code 的作用範圍由介面決定」,你的工作流效率會立刻提升一個層級。",
 
     m4_terms: [
       { front: "思考型任務", back: "理解、解釋、決策、創作這類「需要想清楚」的任務。對話模式最有效。" },
@@ -359,9 +359,9 @@ const dict = {
       { q: "「100 份法則」是什麼意思?",
         opts: ["要做 100 份才會被收費", "如果任務有 100 份會不會崩潰,會就用 Code", "Code 最多處理 100 份檔案", "Skill 最多 100 個"],
         ans: _A1, exp: "問自己「這個任務 100 份會不會崩潰」是判斷該不該用 Code 的簡單訣竅。會崩就用 Code,不會就用 Chat+Skill。" },
-      { q: "Skill 跟 Code 的關係是?",
-        opts: ["互相競爭", "Skill 取代 Code", "Code 取代 Skill", "絕配——Code 做髒活,Skill 做精緻產出"],
-        ans: _A3, exp: "Skill 跟 Code 不衝突反而是絕配。例如 Code 跑詞頻,docx skill 包裝成報告。各司其職、分工合作。" },
+      { q: "Code 的「作用範圍」由什麼決定?",
+        opts: ["Code 本身的版本", "介面(網頁版/Cowork/CLI)", "對話長度", "訂閱方案"],
+        ans: _A1, exp: "Code 是「能力」存在於所有介面,但作用範圍由介面決定:網頁版只能作用在雲端容器,Cowork 可以作用在本機 mount 資料夾,CLI 完全本機。" },
       { q: "下列何者「不需要」用 Code?",
         opts: ["生成 .docx 報告", "批次更新 50 個 HTML 檔", "解釋什麼是 Semi-Agent", "跑統計分析並產出圖表"],
         ans: _A2, exp: "「解釋什麼是 Semi-Agent」是純思考型任務,對話模式即可。其他三項都需要實際執行,必須用 Code。" }
@@ -442,7 +442,7 @@ const dict = {
     mlab_title: "決策速查工具",
     mlab_desc: "把 KB 第 9 章「決策速查表」轉化為可互動的判斷工具。輸入你的情境,得到工具推薦。",
     mlab_labs: [
-      { title: "工作模式選擇器", desc: "依任務性質推薦最適合的工作模式組合(Chat / Project / Cowork / Skill / Code)" },
+      { title: "介面 + 能力組合選擇器", desc: "依檔案位置、任務性質、重用頻率,推薦最適合的介面(網頁/Cowork/CLI)與能力組合" },
       { title: "Token 經濟計算器", desc: "估算不同模式下的 token 消耗,幫你決定該投資哪一層結構化" },
       { title: "Code 必要性判斷器", desc: "輸入任務描述,自動判斷該用 Code 還是純對話(基於 100 份法則)" },
       { title: "Skill 開發優先順序", desc: "依痛點頻率、規格穩定性、重用次數,排序你該優先開發哪個 Skill" }
@@ -518,11 +518,11 @@ const dict = {
     // M0
     m0_nav: "0. Executive Summary",
     m0_title: "AI Workflow Methodology",
-    m0_intro: "The value of AI tools lies not only in what they can do, but in how they are organised. When Chat, Project, Cowork, Skill, Code, Memory, and Knowledge Base coexist, the real test for users is judgment rather than features. This methodology integrates scattered tool elements into a workflow system that can be reasoned about, optimised, and evolved. Starting from foundational concepts, it clarifies the distinction between SPAs and frontend-only sites; it then enters the spectrum of five working modes, showing they are not mutually exclusive but layered; it deepens into the four-tier memory and knowledge system, revealing the positions of Context Window, Memory, Project, Skill, and KB; with Token Economics as a shared metric, intuitive guesses become calculable decisions. The role of Code execution clarifies the essential difference between thinking-tasks and doing-tasks. Semi-Agent workflow design reveals why refining SKILL.md equals designing a micro-agent. Finally, with criteria for batch tasks and the development of operational skills, the workflow extends from the creation end to the scale end.",
+    m0_intro: "The value of AI tools lies not only in what they can do, but in how they are organised. When Chat, Project, Cowork, Skill, Code, Memory, and Knowledge Base coexist, the real test for users is judgment rather than features. This methodology integrates scattered tool elements into a workflow system that can be reasoned about, optimised, and evolved. Starting from foundational concepts, it clarifies the distinction between SPAs and frontend-only sites; it then enters the 'Interface × Capability' two-dimensional architecture of working modes, showing that Cowork has Code built in — it is not an option parallel to Code; it deepens into the four-tier memory and knowledge system, revealing the positions of Context Window, Memory, Project, Skill, and KB; with Token Economics as a shared metric, intuitive guesses become calculable decisions. The role of Code execution clarifies the essential difference between thinking-tasks and doing-tasks, plus the critical correction that Code's reach is determined by the interface. Semi-Agent workflow design reveals why refining SKILL.md equals designing a micro-agent. Finally, with criteria for batch tasks and the development of operational skills, the workflow extends from the creation end to the scale end.",
     m0_why: "Why does this methodology matter?",
     m0_why_desc: "Because AI tools are evolving from a single conversational assistant into a layered workflow system. Without methodology, users reinvent the wheel, burn tokens, and make poor decisions on every task. With methodology, users focus on what truly requires thinking and automate the mechanical. The ultimate goal of this system is the Semi-Agent workflow — humans define goals, AI executes autonomously, both parties play their proper roles.",
     m0_modules: [
-      { num: "01", title: "Working Mode Spectrum", desc: "Roles and combination strategies across Chat, Project, Cowork, Skill, and Code" },
+      { num: "01", title: "Working Mode Spectrum", desc: "The 'Interface × Capability' two-dimensional architecture, and the critical correction that Cowork has Code built in" },
       { num: "02", title: "Memory & Knowledge System", desc: "Four-tier division within Context Window: Memory, Project, Skill, KB" },
       { num: "03", title: "Token Economics", desc: "Calculating and weighing one-time, cumulative, and startup costs" },
       { num: "04", title: "Role of Code Execution", desc: "Thinking-tasks vs doing-tasks, and the Skill+Code combination" },
@@ -539,41 +539,41 @@ const dict = {
 
     // ============ M1 ============
     m1_nav: "1. Working Mode Spectrum",
-    m1_title: "The Five-Layer Architecture: Chat, Project, Cowork, Skill, Code",
-    m1_overview: "Five modes are not mutually exclusive options, but layers that can be stacked. The strongest workflow mixes Chat + Skill + Project + Cowork + Code.",
-    m1_highlights: ["Five Layers", "Not Exclusive", "Chat = On the Table", "Cowork = Kitchen Key", "Skill = Constitution"],
-    m1_p1: "Chat is the most basic conversational interface — the user pastes material directly into the chat window. It is like bringing materials to my desk for on-site processing. Suitable for one-off tasks, single-source documents, and rapid iteration. Its strength is predictable token cost; its weakness is that long conversations accumulate context, with token consumption growing fast in later turns.",
-    m1_p2: "Project mode means creating a project and attaching files, instructions, and knowledge bases — all conversations inside auto-load this content. It is like having reference material already on the desk before every conversation. Suitable for ongoing projects, stable specifications, and contexts that need to persist across conversations. Cowork mode hands Claude a folder to scan, read, produce, and write back — like giving me the kitchen key, I go through the fridge, cook, and put things back. Cowork suits tasks with heterogeneous material that needs in-place archiving or deployment.",
-    m1_p3: "Skill mode means writing specifications into SKILL.md, which Claude loads when triggered. Its essence is moving repeatedly-stated specs out of conversation and into a reusable constitution. One-time fixed cost, repeated reuse — the longer the conversation and more iterations, the greater the token saving. Code mode lets Claude execute Python/bash in a Linux environment, handling files, computations, and binary outputs — it is like giving me a real computer, not just a mouth. Suitable for scale, mechanical work, and binary outputs. The real power of these five modes is not standalone use, but combination: Skill regulates output format, Code handles batches, Project provides long-term context, Cowork closes the archiving loop.",
-    m1_wrapup: "The essence of mode selection is placing each thing at the layer best suited for it. Chat handles dialogue, Project provides context, Cowork operates files, Skill encapsulates specs, Code executes computation. Once you see these five as composable building blocks rather than five mutually-exclusive options, your workflow upgrades from a single-point tool to a complete system.",
+    m1_title: "Two-Dimensional Composition: Interface × Capability",
+    m1_overview: "The old framing of Chat / Project / Cowork / Skill / Code as 'five parallel layers' is wrong. The correct view: the interface determines the reach of capabilities, and the capability composition determines the workflow form. Cowork is NOT a tool parallel to Code — it is the desktop GUI version with Code capability built in.",
+    m1_highlights: ["Interface × Capability", "Cowork Has Code Built In", "File Location → Interface", "Not Pick-One-of-Five"],
+    m1_p1: "Working modes should decompose into two axes. The interface axis is where you talk with Claude: Claude.ai web, Claude Desktop (with Cowork mode), Claude Code CLI. The capability axis is what that interface bundles in: conversation, Code execution, local file access, Skill triggering, Project loading, MCP Connectors. Different interfaces bundle different capability sets — Claude.ai web's Code only acts inside the cloud container; Cowork's Code can act on user-authorised local folders; Claude Code CLI runs entirely on your local machine.",
+    m1_p2: "The most common misconception treats 'Cowork' and 'Code' as two parallel tools — but Cowork has Code built in. It is essentially the desktop GUI version of Claude Code, running inside an isolated VM via Apple Virtualization Framework. The local folder you authorise gets mounted into that VM, and Code (Python/bash) operates on the folder directly. In other words, 'Cowork vs Code' is a wrong question — when you use Cowork, you automatically have Code. They are two facets of one thing, not options to choose between.",
+    m1_p3: "The corrected decision flow is simple. Step one: where are the files? Local → choose Cowork or CLI; in-conversation → use the web. Step two: what capabilities does the task need? Confirm your chosen interface bundles them. Step three: add Skill / Project / Connector? Decided by reuse frequency and context needs. This flow upgrades tool choice from a 'pick-one-of-five horizontal selection' to 'interface layer + capability layer vertical stacking', eliminating false dichotomies like 'Cowork or Code'. Running an operational skill (e.g., spa-consistency-check) is a textbook case: it needs local file access + Code batch processing — Cowork does it in one shot, no staging required.",
+    m1_wrapup: "Don't treat tools as five-choose-one — decompose them as Interface × Capability. Cowork is not an option parallel to Code; Cowork has Code built in. The real decision axes are 'where are the files' + 'what capability mix is needed', not 'which mode to use'. Internalise this correction, and your workflow choices upgrade from intuitive guessing to reasoned architectural decisions.",
 
     m1_terms: [
-      { front: "SPA", back: "Single Page Application — one HTML file plus JS dynamic view switching. URL changes but page does not fully reload." },
-      { front: "Frontend-only", back: "All code runs in the browser, no backend server logic. SPA is a subset of frontend-only, but frontend-only is not necessarily SPA." },
-      { front: "Chat Mode", back: "In-conversation processing. The user pastes material into the chat window, Claude processes on-site. Suitable for one-off tasks." },
-      { front: "Project Mode", back: "Project-scope memory. Create a Project with attached files; all conversations auto-load. Suitable for ongoing projects." },
-      { front: "Cowork Mode", back: "File-system access. Claude scans, reads, produces, and writes back inside a designated folder. Suitable for heavy material needing archiving." },
-      { front: "Skill Mode", back: "Spec & workflow encapsulation. Specs go into SKILL.md, auto-loaded on trigger. Essentially the constitution of a micro-agent." },
-      { front: "Code Mode", back: "Program execution environment. Claude runs Python/bash in Linux to handle files, computation, and binary outputs." },
-      { front: "MPA", back: "Multi-Page Application. Each link loads a new HTML, contrasting with SPA." }
+      { front: "Interface Axis", back: "Where you interact with Claude: Claude.ai web, Claude Desktop (Cowork), Claude Code CLI. Interface determines the reach of capabilities." },
+      { front: "Capability Axis", back: "What the interface bundles: conversation, Code execution, local file access, Skill triggering, Project loading, MCP Connectors." },
+      { front: "Cowork Mode", back: "The desktop agent mode in Claude Desktop, with Code capability + local folder access built in. Runs in an isolated VM, plan-then-act flow. Essentially the GUI version of Claude Code." },
+      { front: "Claude.ai Web", back: "Code runs inside the cloud container, only accesses uploaded files and downloads, cannot directly read/write local folders." },
+      { front: "Claude Code CLI", back: "Terminal tool, runs entirely on the user's local machine with native OS permissions. Suited for developers and CI integration." },
+      { front: "Code Capability", back: "The ability to run Python/bash. Exists in every interface, but the scope of action is determined by the interface (cloud container / local mount / fully local)." },
+      { front: "Cowork ≠ Code", back: "A misconception. Cowork has Code capability built in — they are not parallel options but two facets of one thing." },
+      { front: "Local File Access", back: "Ability to read/write user's computer folders. Absent in Claude.ai web; present in Cowork and CLI. Determines whether local batch operations are possible." }
     ],
 
     m1_q: [
-      { q: "Which best describes the relationship between SPA and frontend-only?",
-        opts: ["Identical concepts", "Frontend-only ⊂ SPA", "SPA ⊂ Frontend-only", "Completely unrelated"],
-        ans: _A2, exp: "Frontend-only means no backend. SPA means single HTML + JS dynamic routing. SPA is a subset of frontend-only, but frontend-only does not have to be SPA." },
-      { q: "Which scenario suits Cowork mode best?",
-        opts: ["Quick one-off queries", "Heterogeneous material with output requiring direct archiving to folder", "Pure dialogue and brainstorming", "Simple code Q&A"],
-        ans: _A1, exp: "Cowork's core value is handing Claude the kitchen key to handle files in place. Heavy material that needs archiving workflow benefits most." },
-      { q: "What is the essence of Skill mode?",
-        opts: ["A conversational technique", "Moving specs from conversation to a reusable constitution file", "A paid tier", "Claude's hidden mode"],
-        ans: _A1, exp: "Skill moves specs from conversation to file. Each refinement to SKILL.md equals designing a micro-agent's constitution, reducing per-task alignment cost." },
-      { q: "What is the relationship among Chat, Project, Cowork, Skill, and Code?",
-        opts: ["Choose one only", "Mutually exclusive modes", "Composable layered stack", "Used in time sequence"],
-        ans: _A2, exp: "These five are not mutually exclusive but stackable layers. The strongest workflow combines Chat + Skill + Project + Cowork + Code." },
-      { q: "Which is NOT a characteristic of a pure-frontend SPA?",
-        opts: ["All code runs in the browser", "Single HTML with dynamic view switching", "Requires Node.js server rendering", "Can be deployed to GitHub Pages"],
-        ans: _A2, exp: "Sites requiring Node.js backend rendering (e.g., Next.js SSR), while possibly single-page apps, are not 'pure frontend' SPAs." }
+      { q: "Which view is WRONG?",
+        opts: ["Cowork has Code capability built in", "Cowork and Code are two parallel tools", "Claude.ai web's Code only acts in the cloud container", "Cowork is the desktop GUI version of Claude Code"],
+        ans: _A1, exp: "Cowork and Code are NOT parallel tools but two facets of one thing — Cowork has Code built in. The other three are correct." },
+      { q: "After correction, what two axes should working modes decompose into?",
+        opts: ["Creation vs. Operations", "Personal vs. Team", "Interface × Capability", "Free vs. Paid"],
+        ans: _A2, exp: "Interface axis (where you interact) × Capability axis (what's built in) is the correct two-dimensional decomposition, eliminating the false 'pick-one-of-five' framing." },
+      { q: "I want to run batch operations on a local folder (e.g., spa-consistency-check). Which interface is best?",
+        opts: ["Claude.ai web", "Cowork (Claude Desktop)", "Plain email", "GitHub Issues"],
+        ans: _A1, exp: "Cowork bundles Code capability + local folder access, making it the best interface for local batch operations. The web cannot write back to local files directly." },
+      { q: "Which is the correct description of 'Cowork'?",
+        opts: ["A competitor to Code", "A desktop agent running in an isolated VM, with Code built in, accessing authorised local folders", "The desktop version of pure conversation mode", "Requires coding skills to use"],
+        ans: _A1, exp: "Cowork runs in an isolated VM via Apple Virtualization Framework, local folders mount into the VM, Code is built in, and it follows a plan-then-act flow." },
+      { q: "When deciding which interface to use, what should you ask first?",
+        opts: ["How much does it cost", "Where are the files", "How large is the team", "Which AI model is it"],
+        ans: _A1, exp: "File location determines interface choice — local → Cowork or CLI; in-conversation → web. This is the first question after correction." }
     ],
 
     // ============ M2 ============
@@ -650,11 +650,11 @@ const dict = {
     m4_nav: "4. Role of Code Execution",
     m4_title: "Essential Difference Between Thinking and Doing Tasks",
     m4_overview: "Code is the tool of doing, not thinking. Use it when something must actually be produced; don't use it when you need to think something through.",
-    m4_highlights: ["Thinking vs. Doing", "Skill + Code Pairing", "Scale Problems → Code", "100-File Law"],
+    m4_highlights: ["Thinking vs. Doing", "Skill + Code Pairing", "Scale Problems → Code", "100-File Law", "Reach Depends on Interface"],
     m4_p1: "Whether to use Code maps to a deeper question: is this task's essence 'thinking' or 'doing'? Thinking-tasks include understanding, explaining, discussing, deciding, creating — best handled in conversation mode. Doing-tasks include calculation, file conversion, processing large data, generating files — best handled in Code mode. Confusing these creates problems: thinking-tasks forced into Code = waste; doing-tasks denied Code = errors and burned tokens.",
     m4_p2: "Code is mandatory when: generating binary files (docx, xlsx, pptx, pdf), precise numerical computation and statistics, batch file operations, chart generation, deployment and Git operations. Strongly recommended for: long-document programmatic processing, big data but only need highlights, repetitive operations. Code is NOT for: pure conversation and writing, code-for-the-user-to-take-away (when no execution verification needed), simple logical reasoning. The trick is to ask yourself: does this task 'need to be thought through' or 'need to be actually produced'?",
-    m4_p3: "Skill and Code are not competing tools but a perfect pairing. Code does the dirty work, Skill produces the polished output. Example: Code reads 30 PDFs, runs word frequency, generates statistics; the docx Skill wraps results into a formal report. Division of labour. A deeper criterion is the '100-file law': if this task had 100 items to process, would it collapse? If yes, use Code; if no, use Chat + Skill. Three items: bearable; thirty: painful; one hundred: certain collapse — this simple question yields 90% correct judgments.",
-    m4_wrapup: "Code is the tool of doing, not thinking. Don't kill a chicken with a battle-axe; don't dig a tunnel with a toothpick — choosing the right tool is the most concrete embodiment of token economics. When you start classifying tasks as 'thinking' or 'doing' and applying the corresponding mode, your workflow efficiency jumps a level.",
+    m4_p3: "Skill and Code are not competing tools but a perfect pairing. Code does the dirty work, Skill produces the polished output. Example: Code reads 30 PDFs, runs word frequency, generates statistics; the docx Skill wraps results into a formal report. A deeper criterion is the '100-file law': if this task had 100 items to process, would it collapse? Yes → use Code; no → use Chat + Skill. Three: bearable; thirty: painful; one hundred: certain collapse — this simple question yields 90% correct judgments. One critical final correction: Code is a 'capability' not an 'interface' — it exists in every interface, but its scope of action is determined by the interface. Claude.ai web's Code only acts on uploaded files in the cloud container; Cowork's Code can act on user-authorised local folders; CLI's Code runs fully native on local. So 'should I use Code' and 'which interface' are two independent questions — don't conflate them.",
+    m4_wrapup: "Code is the tool of doing, not thinking. Don't kill a chicken with a battle-axe; don't dig a tunnel with a toothpick — choosing the right tool is the most concrete embodiment of token economics. When you start classifying tasks as 'thinking' or 'doing', and understand 'Code's reach depends on the interface', your workflow efficiency jumps a level.",
 
     m4_terms: [
       { front: "Thinking Tasks", back: "Understanding, explaining, deciding, creating — 'need to be thought through'. Conversation mode is best." },
@@ -673,9 +673,9 @@ const dict = {
       { q: "What is the '100-File Law'?",
         opts: ["You're charged after 100 files", "Ask whether the task collapses at 100 items; if yes, use Code", "Code handles max 100 files", "Skills max at 100"],
         ans: _A1, exp: "Asking 'would this collapse at 100 items?' is the simple trick to decide Code or not. Collapse → Code; no collapse → Chat + Skill." },
-      { q: "What is the relationship between Skill and Code?",
-        opts: ["Competitors", "Skill replaces Code", "Code replaces Skill", "Perfect pairing — Code dirty work, Skill polished output"],
-        ans: _A3, exp: "Skill and Code don't conflict — they're a perfect pairing. Example: Code runs word frequency, docx Skill wraps it as report. Division of labour." },
+      { q: "What determines Code's 'scope of action'?",
+        opts: ["Code's own version", "The interface (web / Cowork / CLI)", "Conversation length", "Subscription tier"],
+        ans: _A1, exp: "Code is a 'capability' present in every interface, but its scope of action is determined by the interface: web acts only in cloud container, Cowork on mounted local folders, CLI fully native." },
       { q: "Which task does NOT need Code?",
         opts: ["Generate a .docx report", "Batch update 50 HTML files", "Explain what Semi-Agent means", "Run statistics and produce charts"],
         ans: _A2, exp: "'Explain Semi-Agent' is a pure thinking-task — conversation mode suffices. The other three require actual execution and must use Code." }
@@ -756,7 +756,7 @@ const dict = {
     mlab_title: "Decision Quick-Reference Tools",
     mlab_desc: "The 'Decision Quick-Reference' chapter from the KB, turned into interactive judgment tools. Input your scenario, get tool recommendations.",
     mlab_labs: [
-      { title: "Working Mode Selector", desc: "Recommends the best mode combination (Chat / Project / Cowork / Skill / Code) based on task nature" },
+      { title: "Interface + Capability Selector", desc: "Recommends the best interface (Web/Cowork/CLI) and capability combination based on file location, task nature, and reuse frequency" },
       { title: "Token Economics Calculator", desc: "Estimates token consumption under different modes to help decide which structural layer to invest in" },
       { title: "Code Necessity Judge", desc: "Input task description, auto-judges whether to use Code or pure conversation (based on 100-file law)" },
       { title: "Skill Development Priority", desc: "Ranks which Skill to develop first based on pain frequency, spec stability, and reuse count" }
@@ -982,49 +982,73 @@ const LinkCard = ({label, url, desc}) => (
   </a>
 );
 
-// ════════ Lab 1: 工作模式選擇器 ════════
+// ════════ Lab 1: 工作模式選擇器（介面 + 能力推薦）════════
 const ModeSelectorLab = ({lang}) => {
+  const [fileLoc, setFileLoc] = useState('');
   const [taskType, setTaskType] = useState('');
   const [reuseFreq, setReuseFreq] = useState('');
-  const [scale, setScale] = useState('');
   const txt = {
-    zh: { title: "工作模式選擇器", q1: "任務性質？", q2: "重用頻率？", q3: "規模大小？",
-      t1: "一次性查詢", t2: "持續性專案", t3: "重複性任務", t4: "批次處理",
+    zh: { title: "介面 + 能力組合選擇器",
+      q1: "檔案在哪裡?", q2: "任務性質?", q3: "重用頻率?",
+      f1: "在對話內(上傳/貼上)", f2: "在本機資料夾", f3: "在 GitHub repo 等遠端",
+      t1: "純對話/思考", t2: "需運算或產出檔案", t3: "批次處理多檔案",
       r1: "只做一次", r2: "做 3-5 次", r3: "做 10 次以上",
-      s1: "< 5 個檔案", s2: "5-20 個檔案", s3: "20+ 個檔案",
-      result: "推薦組合", select: "請選擇" },
-    en: { title: "Working Mode Selector", q1: "Task nature?", q2: "Reuse frequency?", q3: "Scale?",
-      t1: "One-off query", t2: "Ongoing project", t3: "Repetitive task", t4: "Batch processing",
+      result: "推薦組合", interface: "介面", capability: "能力",
+      select: "請選擇",
+      hint_web: "Claude.ai 網頁版", hint_cowork: "Cowork(Claude Desktop)", hint_cli: "Claude Code CLI",
+      cap_chat: "對話", cap_code: "Code", cap_local: "本機檔案", cap_skill: "Skill", cap_proj: "Project" },
+    en: { title: "Interface + Capability Selector",
+      q1: "Where are the files?", q2: "Task nature?", q3: "Reuse frequency?",
+      f1: "In conversation (upload/paste)", f2: "Local folder", f3: "Remote (GitHub repo, etc.)",
+      t1: "Pure conversation/thinking", t2: "Needs computation or file output", t3: "Batch processing multiple files",
       r1: "Once only", r2: "3-5 times", r3: "10+ times",
-      s1: "< 5 files", s2: "5-20 files", s3: "20+ files",
-      result: "Recommended Combo", select: "Please select" }
+      result: "Recommended Combo", interface: "Interface", capability: "Capabilities",
+      select: "Please select",
+      hint_web: "Claude.ai Web", hint_cowork: "Cowork (Claude Desktop)", hint_cli: "Claude Code CLI",
+      cap_chat: "Chat", cap_code: "Code", cap_local: "Local Files", cap_skill: "Skill", cap_proj: "Project" }
   }[lang];
   const recommend = () => {
-    if (!taskType || !reuseFreq || !scale) return null;
-    const parts = ['Chat'];
-    if (reuseFreq === 'high' || taskType === 'project') parts.push('Project');
-    if (reuseFreq !== 'once') parts.push('Skill');
-    if (scale === 'big' || taskType === 'batch') parts.push('Code');
-    if (taskType === 'project' || taskType === 'batch') parts.push('Cowork');
-    return parts.join(' + ');
+    if (!fileLoc || !taskType || !reuseFreq) return null;
+    // 介面決定
+    let iface;
+    if (fileLoc === 'local') iface = reuseFreq === 'high' && taskType === 'batch' ? txt.hint_cli : txt.hint_cowork;
+    else if (fileLoc === 'remote') iface = txt.hint_cowork; // remote 拉下來變本機處理
+    else iface = txt.hint_web;
+    // 能力決定
+    const caps = [txt.cap_chat];
+    if (taskType !== 'thinking') caps.push(txt.cap_code);
+    if (fileLoc === 'local' || fileLoc === 'remote') caps.push(txt.cap_local);
+    if (reuseFreq !== 'once') caps.push(txt.cap_skill);
+    if (reuseFreq === 'high') caps.push(txt.cap_proj);
+    return { iface, caps: caps.join(' + ') };
   };
+  const r = recommend();
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
       <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-2">{txt.q1}</label>
-          <select value={taskType} onChange={e=>setTaskType(e.target.value)}
+          <select value={fileLoc} onChange={e=>setFileLoc(e.target.value)}
             className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
             <option value="">{txt.select}</option>
-            <option value="oneoff">{txt.t1}</option>
-            <option value="project">{txt.t2}</option>
-            <option value="repeat">{txt.t3}</option>
-            <option value="batch">{txt.t4}</option>
+            <option value="chat">{txt.f1}</option>
+            <option value="local">{txt.f2}</option>
+            <option value="remote">{txt.f3}</option>
           </select>
         </div>
         <div>
           <label className="block text-sm font-medium mb-2">{txt.q2}</label>
+          <select value={taskType} onChange={e=>setTaskType(e.target.value)}
+            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+            <option value="">{txt.select}</option>
+            <option value="thinking">{txt.t1}</option>
+            <option value="compute">{txt.t2}</option>
+            <option value="batch">{txt.t3}</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">{txt.q3}</label>
           <select value={reuseFreq} onChange={e=>setReuseFreq(e.target.value)}
             className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
             <option value="">{txt.select}</option>
@@ -1033,20 +1057,19 @@ const ModeSelectorLab = ({lang}) => {
             <option value="high">{txt.r3}</option>
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">{txt.q3}</label>
-          <select value={scale} onChange={e=>setScale(e.target.value)}
-            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">{txt.select}</option>
-            <option value="small">{txt.s1}</option>
-            <option value="mid">{txt.s2}</option>
-            <option value="big">{txt.s3}</option>
-          </select>
-        </div>
-        {recommend() && (
+        {r && (
           <div className="mt-4 p-4 bg-[#004030]/10 dark:bg-[#D8C3A5]/10 rounded-lg border-l-4 border-[#D8C3A5]">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-1">{txt.result}</p>
-            <p className="text-lg font-bold text-[#004030] dark:text-[#D8C3A5]">{recommend()}</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">{txt.result}</p>
+            <div className="space-y-2">
+              <div>
+                <span className="text-xs text-slate-500">{txt.interface}: </span>
+                <span className="text-base font-bold text-[#004030] dark:text-[#D8C3A5]">{r.iface}</span>
+              </div>
+              <div>
+                <span className="text-xs text-slate-500">{txt.capability}: </span>
+                <span className="text-sm font-medium text-[#004030] dark:text-[#D8C3A5]">{r.caps}</span>
+              </div>
+            </div>
           </div>
         )}
       </div>
