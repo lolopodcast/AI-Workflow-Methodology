@@ -149,7 +149,7 @@ const dict = {
   zh: {
     brand: "AIWF",
     title: "AI 協作工作流方法論",
-    subtitle: "Chat, Project, Cowork, Skill, Code 的整合決策架構",
+    subtitle: "Chat， Project， Cowork， Skill， Code 的整合決策架構",
 
     nav_modules: "單元目錄", nav_prev: "上一單元", nav_next: "下一單元", nav_home: "首頁",
     key_terms: "關鍵專有名詞", flip_prompt: "點擊翻轉",
@@ -181,11 +181,17 @@ const dict = {
     group_options: ["G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","G11","G12","Others"],
     analytics_total_time: "總學習時間", analytics_total_clicks: "總互動點擊",
     analytics_overall_acc: "總體測驗答對率",
-    analytics_card_usage: "學習卡使用率",
+    analytics_cards_summary: "學習卡使用",
+    analytics_quiz_label: "模組測驗",
+    analytics_cards_label: "學習卡",
+    analytics_card_read_label: "已讀",
+    analytics_card_shown_label: "已顯示",
+    analytics_card_total_label: "總計",
+    analytics_quiz_correct_label: "答對",
+    analytics_quiz_answered_label: "已填答",
+    analytics_quiz_total_label: "總題數",
     analytics_module: "模組", analytics_time: "停留時間",
     analytics_clicks: "點擊次數", analytics_acc: "答對率",
-    analytics_correct_ans_total: "答對 / 已填答 / 總題數",
-    analytics_cards_read_total: "已讀 / 總卡數",
     analytics_no_data: "尚未測驗", analytics_sec: "秒", analytics_times: "次",
     analytics_progress_title: "整體學習進度",
     analytics_progress_visited: "已瀏覽", analytics_progress_not_visited: "未瀏覽",
@@ -198,22 +204,22 @@ const dict = {
     analytics_wp_clear: "🗑 清除歷程",
     analytics_wp_clear_confirm: "確定要清除所有學習歷程資料嗎？此操作無法復原。",
     analytics_wp_tts_intro: "以下是您的弱點分析。",
-    analytics_wp_tts_module: "模組:{name},答對率{acc}%,建議複習。",
+    analytics_wp_tts_module: "模組：{name}，答對率{acc}%，建議複習。",
     analytics_wp_tts_allpass: "恭喜！所有已測驗模組答對率均達 75% 以上。",
 
     // M0
     m0_nav: "0. 執行概要",
     m0_title: "AI 協作工作流方法論",
-    m0_intro: "AI 工具的價值不只在於「能做什麼」,更在於「該如何被組織」。當 Chat、Project、Cowork、Skill、Code、Memory、KB 同時存在時,真正考驗使用者的是判斷力,而非單一功能。本方法論將分散的工具元素整合為一個可決策、可優化、可演進的工作流體系。從基礎概念出發,釐清 SPA 與純前端的差異;進入工作模式的「介面 × 能力」二維架構,理解 Cowork 內建 Code 能力、不是與 Code 並列的選項;深入記憶與知識體系的四層分工,看見 Context Window、Memory、Project、Skill、KB 各自的位置;再以 Token 經濟學作為共同度量,把直覺的「該用哪個」轉化為可計算的決策。Code 執行的角色釐清思考型與執行型任務的本質差異,以及 Code 作用範圍由介面決定的關鍵校正。Semi-Agent 工作流設計揭示為何精修 SKILL.md 等於設計微型 agent。最後以批次任務的判準與維運型 skill 的開發,完成從「創造端」到「規模端」的完整工作流。",
+    m0_intro: "AI 工具的價值不只在於「能做什麼」，更在於「該如何被組織」。當 Chat、Project、Cowork、Skill、Code、Memory、KB 同時存在時，真正考驗使用者的是判斷力，而非單一功能。本方法論將分散的工具元素整合為一個可決策、可優化、可演進的工作流體系。從基礎概念出發，釐清 SPA 與純前端的差異；進入工作模式的「介面 × 能力」二維架構，理解 Cowork 內建 Code 能力、不是與 Code 並列的選項；深入記憶與知識體系的四層分工，看見 Context Window、Memory、Project、Skill、KB 各自的位置；再以 Token 經濟學作為共同度量，把直覺的「該用哪個」轉化為可計算的決策。Code 執行的角色釐清思考型與執行型任務的本質差異，以及 Code 作用範圍由介面決定的關鍵校正。Semi-Agent 工作流設計揭示為何精修 SKILL.md 等於設計微型 agent。最後以批次任務的判準與維運型 skill 的開發，完成從「創造端」到「規模端」的完整工作流。",
     m0_why: "為什麼這套方法論重要？",
-    m0_why_desc: "因為 AI 工具正在從「單一對話助手」演進為「分層的工作流體系」。沒有方法論,使用者會在每次任務中重新發明輪子、燒掉 token、做出錯誤決策。有方法論,使用者能把精力放在真正需要思考的地方,讓機械性任務自動化。這份體系最終的目標是「Semi-Agent 工作流」——人類定義目標,AI 自主執行,雙方各司其職。",
+    m0_why_desc: "因為 AI 工具正在從「單一對話助手」演進為「分層的工作流體系」。沒有方法論，使用者會在每次任務中重新發明輪子、燒掉 token、做出錯誤決策。有方法論，使用者能把精力放在真正需要思考的地方，讓機械性任務自動化。這份體系最終的目標是「Semi-Agent 工作流」——人類定義目標，AI 自主執行，雙方各司其職。",
     m0_modules: [
-      { num: "01", title: "工作模式光譜", desc: "介面 × 能力的二維架構,Cowork 內建 Code 能力的關鍵校正" },
+      { num: "01", title: "工作模式光譜", desc: "介面 × 能力的二維架構，Cowork 內建 Code 能力的關鍵校正" },
       { num: "02", title: "記憶與知識體系", desc: "Context Window 內的 Memory、Project、Skill、KB 四層分工" },
       { num: "03", title: "Token 經濟學", desc: "一次性成本、累積成本、起手成本的計算與權衡" },
-      { num: "04", title: "Code 執行的角色", desc: "思考型任務與執行型任務的判準,以及 Skill+Code 的組合" },
-      { num: "05", title: "Semi-Agent 工作流", desc: "從工具呼叫到自主執行的光譜,SKILL.md 作為微型 agent 章程" },
-      { num: "06", title: "維運型 Skill 與批次任務", desc: "從創造端到規模端的擴展,spa-consistency-check 案例剖析" }
+      { num: "04", title: "Code 執行的角色", desc: "思考型任務與執行型任務的判準，以及 Skill+Code 的組合" },
+      { num: "05", title: "Semi-Agent 工作流", desc: "從工具呼叫到自主執行的光譜，SKILL.md 作為微型 agent 章程" },
+      { num: "06", title: "維運型 Skill 與批次任務", desc: "從創造端到規模端的擴展，spa-consistency-check 案例剖析" }
     ],
     m0_stats: [
       { val: "5", label: "工作模式層級" },
@@ -226,145 +232,145 @@ const dict = {
     // ============ M1 工作模式光譜 ============
     m1_nav: "1. 工作模式光譜",
     m1_title: "介面 × 能力的二維組合架構",
-    m1_overview: "過去把 Chat / Project / Cowork / Skill / Code 講成「五個並列層次」是錯的。正確的視角是：介面決定能力範圍,能力組合決定工作流型態。Cowork 不是與 Code 並列的工具,而是內建 Code 能力的桌面 GUI 版本。",
+    m1_overview: "過去把 Chat / Project / Cowork / Skill / Code 講成「五個並列層次」是錯的。正確的視角是：介面決定能力範圍，能力組合決定工作流型態。Cowork 不是與 Code 並列的工具，而是內建 Code 能力的桌面 GUI 版本。",
     m1_highlights: ["介面 × 能力", "Cowork 內建 Code", "檔案位置決定介面", "不是五選一"],
-    m1_p1: "工作模式應拆成兩個軸線。介面軸代表你在哪裡跟 Claude 互動:Claude.ai 網頁、Claude Desktop(含 Cowork 模式)、Claude Code CLI。能力軸代表這個介面內建什麼:對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。不同介面內建的能力組合不同——Claude.ai 網頁的 Code 只能作用在雲端容器,Cowork 的 Code 可以作用在你授權的本機資料夾,Claude Code CLI 則完全跑在你本機。",
-    m1_p2: "最常見的誤解是把「Cowork」和「Code」當成並列的兩個工具——其實 Cowork 內建 Code 能力,本質上就是 Claude Code 的桌面 GUI 版本,跑在 Apple Virtualization Framework 隔離的虛擬機上,你授權的本機資料夾被 mount 進這個 VM,Code(Python/bash)就能直接操作那個資料夾。換句話說,「Cowork vs Code」這個問題本身就問錯了——你用 Cowork,就自動有 Code,兩者是同一件事的兩個面向,不是要選一個。",
-    m1_p3: "校正後的判斷流程很簡單。第一步問:檔案在哪裡?在本機就選 Cowork 或 CLI;在對話內就用網頁版。第二步問:任務需要什麼能力?確認你選的介面內建那些能力。第三步:要不要加 Skill、Project、Connector?視重用頻率與脈絡需求而定。這個流程把工具決策從「五選一的水平選擇」改成「介面層 + 能力層的垂直疊加」,避免了過去「Cowork 還是 Code」這種偽問題。維運型 skill(如 spa-consistency-check)的執行就是典型案例:它需要本機檔案存取 + Code 批次處理,在 Cowork 環境一次到位,不需要分階段。",
-    m1_wrapup: "不要把工具當成五選一,要拆成介面 × 能力二維。Cowork 不是與 Code 並列的選項——Cowork 內建 Code 能力。真正的決策軸線是「檔案在哪裡 + 需要什麼能力組合」,而不是「該用哪個模式」。理解這個校正,你的工作流選擇就會從直覺猜測升級為可推理的架構決策。",
+    m1_p1: "工作模式應拆成兩個軸線。介面軸代表你在哪裡跟 Claude 互動：Claude.ai 網頁、Claude Desktop（含 Cowork 模式）、Claude Code CLI。能力軸代表這個介面內建什麼：對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。不同介面內建的能力組合不同——Claude.ai 網頁的 Code 只能作用在雲端容器，Cowork 的 Code 可以作用在你授權的本機資料夾，Claude Code CLI 則完全跑在你本機。",
+    m1_p2: "最常見的誤解是把「Cowork」和「Code」當成並列的兩個工具——其實 Cowork 內建 Code 能力，本質上就是 Claude Code 的桌面 GUI 版本，跑在 Apple Virtualization Framework 隔離的虛擬機上，你授權的本機資料夾被 mount 進這個 VM，Code（Python/bash）就能直接操作那個資料夾。換句話說，「Cowork vs Code」這個問題本身就問錯了——你用 Cowork，就自動有 Code，兩者是同一件事的兩個面向，不是要選一個。",
+    m1_p3: "校正後的判斷流程很簡單。第一步問：檔案在哪裡？在本機就選 Cowork 或 CLI；在對話內就用網頁版。第二步問：任務需要什麼能力？確認你選的介面內建那些能力。第三步：要不要加 Skill、Project、Connector？視重用頻率與脈絡需求而定。這個流程把工具決策從「五選一的水平選擇」改成「介面層 + 能力層的垂直疊加」，避免了過去「Cowork 還是 Code」這種偽問題。維運型 skill（如 spa-consistency-check）的執行就是典型案例：它需要本機檔案存取 + Code 批次處理，在 Cowork 環境一次到位，不需要分階段。",
+    m1_wrapup: "不要把工具當成五選一，要拆成介面 × 能力二維。Cowork 不是與 Code 並列的選項——Cowork 內建 Code 能力。真正的決策軸線是「檔案在哪裡 + 需要什麼能力組合」，而不是「該用哪個模式」。理解這個校正，你的工作流選擇就會從直覺猜測升級為可推理的架構決策。",
 
     m1_terms: [
-      { front: "介面軸", back: "你在哪裡跟 Claude 互動:Claude.ai 網頁、Claude Desktop(Cowork)、Claude Code CLI。介面決定能力的觸及範圍。" },
-      { front: "能力軸", back: "介面內建什麼:對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。" },
-      { front: "Cowork 模式", back: "Claude Desktop 的桌面 agent 模式,內建 Code 能力 + 本機資料夾存取。跑在隔離 VM,plan-then-act 模式。本質是 Claude Code 的 GUI 版本。" },
-      { front: "Claude.ai 網頁", back: "Code 跑在雲端容器內,只能存取上傳檔案與下載產出物,無法直接讀寫本機資料夾。" },
-      { front: "Claude Code CLI", back: "終端機工具,完全跑在使用者本機,原生作業系統權限,適合開發者與 CI 整合。" },
-      { front: "Code 能力", back: "跑 Python/bash 的能力。存在於所有介面,但作用範圍由介面決定(雲端容器 / 本機 mount / 完全本機)。" },
-      { front: "Cowork ≠ Code", back: "錯誤觀念。Cowork 內建 Code 能力,兩者不是並列選項,而是同一件事的兩個面向。" },
-      { front: "本機檔案存取", back: "讀寫使用者電腦資料夾的能力。Claude.ai 網頁沒有,Cowork 與 CLI 有。決定能否做本機批次維運。" }
+      { front: "介面軸", back: "你在哪裡跟 Claude 互動：Claude.ai 網頁、Claude Desktop（Cowork）、Claude Code CLI。介面決定能力的觸及範圍。" },
+      { front: "能力軸", back: "介面內建什麼：對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。" },
+      { front: "Cowork 模式", back: "Claude Desktop 的桌面 agent 模式，內建 Code 能力 + 本機資料夾存取。跑在隔離 VM，plan-then-act 模式。本質是 Claude Code 的 GUI 版本。" },
+      { front: "Claude.ai 網頁", back: "Code 跑在雲端容器內，只能存取上傳檔案與下載產出物，無法直接讀寫本機資料夾。" },
+      { front: "Claude Code CLI", back: "終端機工具，完全跑在使用者本機，原生作業系統權限，適合開發者與 CI 整合。" },
+      { front: "Code 能力", back: "跑 Python/bash 的能力。存在於所有介面，但作用範圍由介面決定（雲端容器 / 本機 mount / 完全本機）。" },
+      { front: "Cowork ≠ Code", back: "錯誤觀念。Cowork 內建 Code 能力，兩者不是並列選項，而是同一件事的兩個面向。" },
+      { front: "本機檔案存取", back: "讀寫使用者電腦資料夾的能力。Claude.ai 網頁沒有，Cowork 與 CLI 有。決定能否做本機批次維運。" }
     ],
 
     m1_q: [
-      { q: "下列哪個觀念是「錯的」?",
+      { q: "下列哪個觀念是「錯的」？",
         opts: ["Cowork 內建 Code 能力", "Cowork 跟 Code 是並列的兩種工具", "Claude.ai 網頁版的 Code 只能作用在雲端容器", "Cowork 是 Claude Code 的桌面 GUI 版本"],
-        ans: _A1, exp: "Cowork 跟 Code 不是並列工具,而是同一件事的兩個面向——Cowork 內建 Code 能力。其他三項都正確。" },
-      { q: "校正後的工作模式應該拆成哪兩個軸線?",
+        ans: _A1, exp: "Cowork 跟 Code 不是並列工具，而是同一件事的兩個面向——Cowork 內建 Code 能力。其他三項都正確。" },
+      { q: "校正後的工作模式應該拆成哪兩個軸線？",
         opts: ["創造 vs. 維運", "個人 vs. 團隊", "介面 × 能力", "免費 vs. 付費"],
-        ans: _A2, exp: "介面軸(在哪裡互動)× 能力軸(內建什麼)是正確的二維拆解,避免了「五選一」的偽問題。" },
-      { q: "我要對本機資料夾跑批次維運(例如 spa-consistency-check),最該選哪個介面?",
+        ans: _A2, exp: "介面軸（在哪裡互動）× 能力軸（內建什麼）是正確的二維拆解，避免了「五選一」的偽問題。" },
+      { q: "我要對本機資料夾跑批次維運（例如 spa-consistency-check），最該選哪個介面？",
         opts: ["Claude.ai 網頁版", "Cowork(Claude Desktop)", "純文字 email", "GitHub Issues"],
-        ans: _A1, exp: "Cowork 內建 Code 能力 + 本機資料夾存取,是本機批次維運的最佳介面。網頁版無法直接寫回本機。" },
-      { q: "下列哪個是「Cowork」的正確描述?",
+        ans: _A1, exp: "Cowork 內建 Code 能力 + 本機資料夾存取，是本機批次維運的最佳介面。網頁版無法直接寫回本機。" },
+      { q: "下列哪個是「Cowork」的正確描述？",
         opts: ["Code 的競爭對手", "跑在隔離 VM、內建 Code、可存取授權本機資料夾的桌面 agent", "純對話模式的桌面版", "需要寫程式才能使用"],
-        ans: _A1, exp: "Cowork 跑在 Apple Virtualization Framework 隔離 VM,本機資料夾透過 mount 進入 VM,內建 Code 能力,plan-then-act 模式。" },
-      { q: "判斷該用哪個介面,第一步該問什麼?",
+        ans: _A1, exp: "Cowork 跑在 Apple Virtualization Framework 隔離 VM，本機資料夾透過 mount 進入 VM，內建 Code 能力，plan-then-act 模式。" },
+      { q: "判斷該用哪個介面，第一步該問什麼？",
         opts: ["要付多少錢", "檔案在哪裡", "團隊有多大", "AI 模型是哪個"],
-        ans: _A1, exp: "檔案位置決定介面選擇——在本機就選 Cowork 或 CLI,在對話內就用網頁版。這是校正後的第一步判斷。" }
+        ans: _A1, exp: "檔案位置決定介面選擇——在本機就選 Cowork 或 CLI，在對話內就用網頁版。這是校正後的第一步判斷。" }
     ],
 
     // ============ M2 記憶與知識體系 ============
     m2_nav: "2. 記憶與知識體系",
     m2_title: "Context Window 內的四層分工",
-    m2_overview: "Memory 管你是誰、Project 管任務範圍、Skill 管執行規格、KB 管知識內容。四者分工互補,共同存在於 Context Window 這個容器中。",
+    m2_overview: "Memory 管你是誰、Project 管任務範圍、Skill 管執行規格、KB 管知識內容。四者分工互補，共同存在於 Context Window 這個容器中。",
     m2_highlights: ["Context 是容器", "Memory 個人記憶", "Project 任務脈絡", "Skill 執行章程", "KB 知識資產"],
-    m2_p1: "Context Window 是「Claude 這次對話能看到的所有文字」的總空間。很多人誤以為 Memory 等於 Context Window,其實 Memory 只是 Context Window 內的一個區塊。一個完整的 Context Window 包含:System Prompt、Memory(個人記憶)、Project Files(專案脈絡)、User Preferences(使用偏好)、Skill 內容(觸發時載入)、本次對話歷史、工具呼叫結果。這一坨全部加起來,不能超過模型的上限。理解這個結構後,你會發現「為什麼長對話會變慢、變不準」——因為 context 持續累積、擠壓其他區塊的空間。",
-    m2_p2: "四層記憶各司其職。Memory 是「跨對話延續、記住你這個人的長期樣貌」,由系統自動維護,內容是濃縮摘要而非逐字稿。Project 是「記住這個任務範圍的固定脈絡」,每次對話自動載入,起手就有完整背景。Skill 是「把執行規格與流程封裝為可觸發的章程」,一次性固定成本、多次重用。KB 是「把外部材料萃取結構化的長期資產」,比原始材料精簡,跨平台可攜耐久。這四者疊起來才是完整的記憶與執行體系,互相補位、不是互相取代。",
-    m2_p3: "為什麼這個分層重要?因為每一層的 token 經濟特性不同。Memory 是「免費背景」但不能塞太多細節,否則會稀釋掉真正重要的個人資訊。Project 「起手稍貴但對話省力」,適合穩定脈絡。Skill 「一次性成本換無限重用紅利」。KB「投資未來,換取後續無數次的省力與精準」。當你誤把 Project 當 Memory 用,或把 Skill 當 KB 用,效率就會大打折扣。正確的分層,讓每種記憶放在最適合它的位置。",
-    m2_wrapup: "Memory、Project、Skill、KB 不是「都記住你的東西」的同義詞,而是四種不同性質的記憶機制。理解它們的分工,你就能精準決定:這個資訊該放在哪一層?塞錯地方不只浪費 token,還會降低 AI 的判斷品質。",
+    m2_p1: "Context Window 是「Claude 這次對話能看到的所有文字」的總空間。很多人誤以為 Memory 等於 Context Window，其實 Memory 只是 Context Window 內的一個區塊。一個完整的 Context Window 包含：System Prompt、Memory（個人記憶）、Project Files（專案脈絡）、User Preferences（使用偏好）、Skill 內容（觸發時載入）、本次對話歷史、工具呼叫結果。這一坨全部加起來，不能超過模型的上限。理解這個結構後，你會發現「為什麼長對話會變慢、變不準」——因為 context 持續累積、擠壓其他區塊的空間。",
+    m2_p2: "四層記憶各司其職。Memory 是「跨對話延續、記住你這個人的長期樣貌」，由系統自動維護，內容是濃縮摘要而非逐字稿。Project 是「記住這個任務範圍的固定脈絡」，每次對話自動載入，起手就有完整背景。Skill 是「把執行規格與流程封裝為可觸發的章程」，一次性固定成本、多次重用。KB 是「把外部材料萃取結構化的長期資產」，比原始材料精簡，跨平台可攜耐久。這四者疊起來才是完整的記憶與執行體系，互相補位、不是互相取代。",
+    m2_p3: "為什麼這個分層重要？因為每一層的 token 經濟特性不同。Memory 是「免費背景」但不能塞太多細節，否則會稀釋掉真正重要的個人資訊。Project 「起手稍貴但對話省力」，適合穩定脈絡。Skill 「一次性成本換無限重用紅利」。KB「投資未來，換取後續無數次的省力與精準」。當你誤把 Project 當 Memory 用，或把 Skill 當 KB 用，效率就會大打折扣。正確的分層，讓每種記憶放在最適合它的位置。",
+    m2_wrapup: "Memory、Project、Skill、KB 不是「都記住你的東西」的同義詞，而是四種不同性質的記憶機制。理解它們的分工，你就能精準決定：這個資訊該放在哪一層？塞錯地方不只浪費 token，還會降低 AI 的判斷品質。",
 
     m2_terms: [
       { front: "Context Window", back: "Claude 這次對話能看到的所有文字的總空間。包含 System Prompt、Memory、Project、Skill、對話歷史等所有區塊。" },
-      { front: "Memory", back: "跨對話延續、記住「你這個人」的長期樣貌。由系統自動維護,內容是濃縮摘要不是逐字稿。" },
-      { front: "Project", back: "記住「這個任務範圍」的固定脈絡。掛上的檔案、指令、知識庫,每次對話自動載入。" },
-      { front: "Skill", back: "把執行規格與流程封裝為可觸發的章程。一次性固定成本、多次重用,本質是微型 agent 章程。" },
+      { front: "Memory", back: "跨對話延續、記住「你這個人」的長期樣貌。由系統自動維護，內容是濃縮摘要不是逐字稿。" },
+      { front: "Project", back: "記住「這個任務範圍」的固定脈絡。掛上的檔案、指令、知識庫，每次對話自動載入。" },
+      { front: "Skill", back: "把執行規格與流程封裝為可觸發的章程。一次性固定成本、多次重用，本質是微型 agent 章程。" },
       { front: "Knowledge Base", back: "把外部材料萃取結構化的長期資產。比原始材料精簡、跨平台可攜耐久。" },
-      { front: "Parametric Knowledge", back: "模型訓練時學到的內建知識。存在神經網路權重裡,無法直接編輯或新增。" },
+      { front: "Parametric Knowledge", back: "模型訓練時學到的內建知識。存在神經網路權重裡，無法直接編輯或新增。" },
       { front: "External Knowledge", back: "使用者提供給 AI 的、原本不知道的內容。存在 Context Window 或可被檢索的位置。" },
-      { front: "元知識 KB", back: "處理「如何使用工具的方法論」的 KB。生命週期極長,會影響所有未來決策。" }
+      { front: "元知識 KB", back: "處理「如何使用工具的方法論」的 KB。生命週期極長，會影響所有未來決策。" }
     ],
 
     m2_q: [
-      { q: "Memory 跟 Context Window 的關係是什麼?",
+      { q: "Memory 跟 Context Window 的關係是什麼？",
         opts: ["完全相同", "Memory ⊂ Context Window", "Context Window ⊂ Memory", "兩者無關"],
-        ans: _A1, exp: "Context Window 是容器,Memory 是裡面的其中一個區塊。Context Window 還包含 System Prompt、Project、Skill、對話歷史等其他內容。" },
-      { q: "下列哪一項最適合放在 Memory 而不是 Project?",
+        ans: _A1, exp: "Context Window 是容器，Memory 是裡面的其中一個區塊。Context Window 還包含 System Prompt、Project、Skill、對話歷史等其他內容。" },
+      { q: "下列哪一項最適合放在 Memory 而不是 Project？",
         opts: ["某門課的教學大綱", "你的長期工作背景與偏好", "某個專案的程式碼", "一份特定 PDF 的內容"],
-        ans: _A1, exp: "Memory 適合放「關於你這個人」的長期樣貌,不適合放任務細節。任務細節該放 Project。" },
-      { q: "Skill 跟 KB 最主要的差異是?",
+        ans: _A1, exp: "Memory 適合放「關於你這個人」的長期樣貌，不適合放任務細節。任務細節該放 Project。" },
+      { q: "Skill 跟 KB 最主要的差異是？",
         opts: ["Skill 比較貴", "Skill 封裝執行流程、KB 封裝知識內容", "兩者完全相同", "KB 比較新潮"],
-        ans: _A1, exp: "Skill 是「怎麼做」的章程,KB 是「知道什麼」的資產。兩者性質不同、互相補位。" },
-      { q: "「元知識 KB」與一般領域 KB 的差別?",
-        opts: ["沒有差別", "元知識處理方法論,生命週期更長", "元知識比較短", "元知識只能給 AI 看"],
-        ans: _A1, exp: "元知識 KB 處理「如何使用工具」的方法論,會影響所有未來決策,比領域 KB 的生命週期更長。" }
+        ans: _A1, exp: "Skill 是「怎麼做」的章程，KB 是「知道什麼」的資產。兩者性質不同、互相補位。" },
+      { q: "「元知識 KB」與一般領域 KB 的差別？",
+        opts: ["沒有差別", "元知識處理方法論，生命週期更長", "元知識比較短", "元知識只能給 AI 看"],
+        ans: _A1, exp: "元知識 KB 處理「如何使用工具」的方法論，會影響所有未來決策，比領域 KB 的生命週期更長。" }
     ],
 
     // ============ M3 Token 經濟學 ============
     m3_nav: "3. Token 經濟學",
     m3_title: "一次性成本、累積成本、起手成本的權衡",
-    m3_overview: "看單次成本會誤判,要看任務生命週期的總成本。投資結構化(Skill、KB)= 用一次成本換無限重用紅利。",
+    m3_overview: "看單次成本會誤判，要看任務生命週期的總成本。投資結構化（Skill、KB）= 用一次成本換無限重用紅利。",
     m3_highlights: ["三種成本類型", "生命週期視角", "反直覺真相", "投資 vs. 即用"],
-    m3_p1: "Token 成本可分為三種類型。一次性成本(One-time)指的是讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。累積成本(Cumulative)指的是對話歷史越長吃越多、每次重講規格的成本。起手成本(Startup)指的是 Project 載入、Memory 注入這類「每次對話開頭就有」的成本。三種成本的時間分布不同,決定了它們的最佳使用情境。",
-    m3_p2: "一個反直覺的真相:Skill 通常省 token,不是耗 token。因為它取代了「每次都要對齊規格」的累積成本。同樣地,Code 通常省 token,不是耗 token——大檔案不必進 context。Project 起手貴,但長期省——適合穩定脈絡、不適合一次性任務。看單次成本會誤判,要看任務生命週期的總成本。一個 SKILL.md 讀一次 5000 token,但替你省下後續 20 輪對話中每輪 2000 token 的規格對齊,總帳是大賺。",
-    m3_p3: "Token 經濟學的最高境界是「結構化投資」。把規格寫進 Skill、把材料整理成 KB、把任務交給 Code、把脈絡放進 Project——這些都是用一次性投資換取後續無數次的省力與精準。當你開始用「生命週期總成本」而非「單次成本」來判斷,你的工作流就會自然往最高效率的方向演化。終極判準是:這個投資的回收期是多長?如果同類任務會做 3 次以上,投資 Skill 或 KB 幾乎一定划算;只做一次,就不必。",
-    m3_wrapup: "Token 經濟學不是「省錢」的小聰明,而是「設計工作流」的核心邏輯。每個決策——用 Chat 還是 Project、用 Skill 還是即時對話、用 Code 還是肉眼處理——背後都是 token 經濟學在運作。理解它,你的決策就會從直覺升級為計算。",
+    m3_p1: "Token 成本可分為三種類型。一次性成本（One-time）指的是讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。累積成本（Cumulative）指的是對話歷史越長吃越多、每次重講規格的成本。起手成本（Startup）指的是 Project 載入、Memory 注入這類「每次對話開頭就有」的成本。三種成本的時間分布不同，決定了它們的最佳使用情境。",
+    m3_p2: "一個反直覺的真相：Skill 通常省 token，不是耗 token。因為它取代了「每次都要對齊規格」的累積成本。同樣地，Code 通常省 token，不是耗 token——大檔案不必進 context。Project 起手貴，但長期省——適合穩定脈絡、不適合一次性任務。看單次成本會誤判，要看任務生命週期的總成本。一個 SKILL.md 讀一次 5000 token，但替你省下後續 20 輪對話中每輪 2000 token 的規格對齊，總帳是大賺。",
+    m3_p3: "Token 經濟學的最高境界是「結構化投資」。把規格寫進 Skill、把材料整理成 KB、把任務交給 Code、把脈絡放進 Project——這些都是用一次性投資換取後續無數次的省力與精準。當你開始用「生命週期總成本」而非「單次成本」來判斷，你的工作流就會自然往最高效率的方向演化。終極判準是：這個投資的回收期是多長？如果同類任務會做 3 次以上，投資 Skill 或 KB 幾乎一定划算；只做一次，就不必。",
+    m3_wrapup: "Token 經濟學不是「省錢」的小聰明，而是「設計工作流」的核心邏輯。每個決策——用 Chat 還是 Project、用 Skill 還是即時對話、用 Code 還是肉眼處理——背後都是 token 經濟學在運作。理解它，你的決策就會從直覺升級為計算。",
 
     m3_terms: [
       { front: "一次性成本", back: "讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。投資型支出。" },
       { front: "累積成本", back: "對話歷史越長吃越多、每次重講規格的成本。長對話的隱性成本來源。" },
       { front: "起手成本", back: "Project 載入、Memory 注入這類「每次對話開頭就有」的成本。" },
-      { front: "Skill 經濟學", back: "Skill 通常省 token 不是耗 token,因為它取代了每次對齊規格的累積成本。" },
-      { front: "Code 經濟學", back: "Code 通常省 token,因為大檔案不必進 context,只有結果回到對話。" },
-      { front: "生命週期總成本", back: "把所有 token 支出加總,看整個任務週期的成本。比單次成本更能反映真實效率。" }
+      { front: "Skill 經濟學", back: "Skill 通常省 token 不是耗 token，因為它取代了每次對齊規格的累積成本。" },
+      { front: "Code 經濟學", back: "Code 通常省 token，因為大檔案不必進 context，只有結果回到對話。" },
+      { front: "生命週期總成本", back: "把所有 token 支出加總，看整個任務週期的成本。比單次成本更能反映真實效率。" }
     ],
 
     m3_q: [
-      { q: "「Skill 通常省 token」的核心理由是?",
+      { q: "「Skill 通常省 token」的核心理由是？",
         opts: ["Skill 比較便宜", "它取代了每次對齊規格的累積成本", "它縮短了對話", "它跳過了系統檢查"],
-        ans: _A1, exp: "Skill 是一次性讀取,但替你省下每次都要重新講規格的累積成本。對話越長、修改越多輪,省 token 效益越明顯。" },
-      { q: "為什麼「看單次成本會誤判」?",
+        ans: _A1, exp: "Skill 是一次性讀取，但替你省下每次都要重新講規格的累積成本。對話越長、修改越多輪，省 token 效益越明顯。" },
+      { q: "為什麼「看單次成本會誤判」？",
         opts: ["單次成本不準", "因為要看生命週期總成本", "因為 token 計算有誤", "因為 Anthropic 隱藏資訊"],
-        ans: _A1, exp: "一次性投資(Skill、KB)單次看很貴,但生命週期內被重用多次,總帳反而省。要用生命週期視角才能看清。" },
-      { q: "Project 的 token 特性是?",
-        opts: ["完全免費", "起手成本中到高,累積成本低", "純粹只是浪費", "等於 Memory"],
-        ans: _A1, exp: "Project 每次對話起手就載入專案內容,起手成本較高;但對話中不用重複講背景,累積成本低。適合穩定脈絡。" },
-      { q: "下列何者「不是」結構化投資?",
+        ans: _A1, exp: "一次性投資（Skill、KB）單次看很貴，但生命週期內被重用多次，總帳反而省。要用生命週期視角才能看清。" },
+      { q: "Project 的 token 特性是？",
+        opts: ["完全免費", "起手成本中到高，累積成本低", "純粹只是浪費", "等於 Memory"],
+        ans: _A1, exp: "Project 每次對話起手就載入專案內容，起手成本較高；但對話中不用重複講背景，累積成本低。適合穩定脈絡。" },
+      { q: "下列何者「不是」結構化投資？",
         opts: ["把規格寫進 Skill", "把材料整理成 KB", "把任務交給 Code", "在每次對話重講需求"],
-        ans: _A3, exp: "每次重講需求是典型的「累積成本」,反而是結構化投資要避免的。前三項都是用一次投資換重用紅利。" }
+        ans: _A3, exp: "每次重講需求是典型的「累積成本」，反而是結構化投資要避免的。前三項都是用一次投資換重用紅利。" }
     ],
 
     // ============ M4 Code 執行的角色 ============
     m4_nav: "4. Code 執行的角色",
     m4_title: "思考型任務與執行型任務的本質差異",
-    m4_overview: "Code 是執行的工具,不是思考的工具。需要「真的做出某個結果」時用它,需要「想清楚某件事」時不用。",
+    m4_overview: "Code 是執行的工具，不是思考的工具。需要「真的做出某個結果」時用它，需要「想清楚某件事」時不用。",
     m4_highlights: ["思考 vs. 執行", "Skill + Code 絕配", "規模問題用 Code", "100 份法則", "Code 作用範圍由介面決定"],
-    m4_p1: "「該不該用 Code」對應一個更根本的問題:這個任務的本質是「思考」還是「執行」?思考型任務包括理解、解釋、討論、決策、創作——這些用「對話模式」最有效。執行型任務包括計算、轉檔、處理大量資料、產生檔案——這些用「Code 模式」最有效。混淆兩者會出問題:思考型任務硬上 Code = 浪費;執行型任務硬不用 Code = 出錯、燒 token。",
-    m4_p2: "必須用 Code 的情境包括:產生二進位檔案(docx、xlsx、pptx、pdf)、精確數值運算與統計分析、批次檔案操作、圖表生成、部署與 Git 操作。強烈建議用 Code 的情境包括:長文件程式化處理、大資料量但只要重點、重複性操作。不該用 Code 的情境包括:純對話與寫作、寫程式碼給使用者拿走(不需執行驗證時)、簡單邏輯推理。判斷的訣竅是問自己:這個任務是「需要想清楚」還是「需要真的做出來」?",
-    m4_p3: "Skill 跟 Code 不是衝突的工具,而是絕配。Code 做髒活、Skill 做精緻產出。例如:Code 負責讀 30 份 PDF、跑詞頻、生統計;Skill(例如 docx)負責把結果包裝成正式報告格式。一個更深層的判準是「100 份法則」:如果這個任務有 100 份要處理會不會崩潰?會崩潰就用 Code,不會就用 Chat + Skill。3 份還能撐,30 份開始痛,100 份必定崩潰——這個簡單的問題能幫你做出 90% 的正確判斷。最後一個關鍵校正:Code 是「能力」不是「介面」,它存在於所有介面,但作用範圍由介面決定。Claude.ai 網頁的 Code 只能作用在雲端容器內的上傳檔案;Cowork 的 Code 可以作用在你授權的本機資料夾;CLI 的 Code 完全本機原生。所以「該不該用 Code」跟「該用哪個介面」是兩個獨立問題,不要混為一談。",
-    m4_wrapup: "Code 是執行的工具,不是思考的工具。殺雞不用牛刀,挖隧道別用牙籤——選對工具是 token 經濟學最具體的展現。當你開始把任務分為「思考型」和「執行型」並對應不同模式,並理解「Code 的作用範圍由介面決定」,你的工作流效率會立刻提升一個層級。",
+    m4_p1: "「該不該用 Code」對應一個更根本的問題：這個任務的本質是「思考」還是「執行」？思考型任務包括理解、解釋、討論、決策、創作——這些用「對話模式」最有效。執行型任務包括計算、轉檔、處理大量資料、產生檔案——這些用「Code 模式」最有效。混淆兩者會出問題：思考型任務硬上 Code = 浪費；執行型任務硬不用 Code = 出錯、燒 token。",
+    m4_p2: "必須用 Code 的情境包括：產生二進位檔案（docx、xlsx、pptx、pdf）、精確數值運算與統計分析、批次檔案操作、圖表生成、部署與 Git 操作。強烈建議用 Code 的情境包括：長文件程式化處理、大資料量但只要重點、重複性操作。不該用 Code 的情境包括：純對話與寫作、寫程式碼給使用者拿走（不需執行驗證時）、簡單邏輯推理。判斷的訣竅是問自己：這個任務是「需要想清楚」還是「需要真的做出來」？",
+    m4_p3: "Skill 跟 Code 不是衝突的工具，而是絕配。Code 做髒活、Skill 做精緻產出。例如：Code 負責讀 30 份 PDF、跑詞頻、生統計；Skill（例如 docx）負責把結果包裝成正式報告格式。一個更深層的判準是「100 份法則」：如果這個任務有 100 份要處理會不會崩潰？會崩潰就用 Code，不會就用 Chat + Skill。3 份還能撐，30 份開始痛，100 份必定崩潰——這個簡單的問題能幫你做出 90% 的正確判斷。最後一個關鍵校正：Code 是「能力」不是「介面」，它存在於所有介面，但作用範圍由介面決定。Claude.ai 網頁的 Code 只能作用在雲端容器內的上傳檔案；Cowork 的 Code 可以作用在你授權的本機資料夾；CLI 的 Code 完全本機原生。所以「該不該用 Code」跟「該用哪個介面」是兩個獨立問題，不要混為一談。",
+    m4_wrapup: "Code 是執行的工具，不是思考的工具。殺雞不用牛刀，挖隧道別用牙籤——選對工具是 token 經濟學最具體的展現。當你開始把任務分為「思考型」和「執行型」並對應不同模式，並理解「Code 的作用範圍由介面決定」，你的工作流效率會立刻提升一個層級。",
 
     m4_terms: [
       { front: "思考型任務", back: "理解、解釋、決策、創作這類「需要想清楚」的任務。對話模式最有效。" },
       { front: "執行型任務", back: "計算、轉檔、批次、產檔這類「需要真的做出來」的任務。Code 模式最有效。" },
-      { front: "Skill + Code 組合", back: "Code 做髒活、Skill 做精緻產出。兩者分工合作,是 semi-agent 工作流的核心配置。" },
-      { front: "100 份法則", back: "如果這個任務有 100 份要處理會不會崩潰?會崩潰就用 Code,不會就用 Chat+Skill。" },
-      { front: "二進位產出", back: "docx、xlsx、pptx、pdf 這類非純文字檔案。必須透過 Code 生成,無法用對話直接產出。" },
+      { front: "Skill + Code 組合", back: "Code 做髒活、Skill 做精緻產出。兩者分工合作，是 semi-agent 工作流的核心配置。" },
+      { front: "100 份法則", back: "如果這個任務有 100 份要處理會不會崩潰？會崩潰就用 Code，不會就用 Chat+Skill。" },
+      { front: "二進位產出", back: "docx、xlsx、pptx、pdf 這類非純文字檔案。必須透過 Code 生成，無法用對話直接產出。" },
       { front: "規模密集型", back: "需要重複、檢查、批次處理的任務。Code 的主場。" },
       { front: "腦力密集型", back: "需要創造、判斷、設計的任務。Chat + Skill + Project 的主場。" }
     ],
 
     m4_q: [
-      { q: "下列哪個任務最適合用 Code?",
+      { q: "下列哪個任務最適合用 Code？",
         opts: ["寫一篇 500 字的文章", "解釋什麼是 React", "批次處理 50 個 CSV 檔案", "討論職涯方向"],
-        ans: _A2, exp: "批次處理大量檔案是典型的執行型任務,Code 是最佳工具。其他三項都是思考型,對話模式更適合。" },
-      { q: "「100 份法則」是什麼意思?",
-        opts: ["要做 100 份才會被收費", "如果任務有 100 份會不會崩潰,會就用 Code", "Code 最多處理 100 份檔案", "Skill 最多 100 個"],
-        ans: _A1, exp: "問自己「這個任務 100 份會不會崩潰」是判斷該不該用 Code 的簡單訣竅。會崩就用 Code,不會就用 Chat+Skill。" },
-      { q: "Code 的「作用範圍」由什麼決定?",
-        opts: ["Code 本身的版本", "介面(網頁版/Cowork/CLI)", "對話長度", "訂閱方案"],
-        ans: _A1, exp: "Code 是「能力」存在於所有介面,但作用範圍由介面決定:網頁版只能作用在雲端容器,Cowork 可以作用在本機 mount 資料夾,CLI 完全本機。" },
-      { q: "下列何者「不需要」用 Code?",
+        ans: _A2, exp: "批次處理大量檔案是典型的執行型任務，Code 是最佳工具。其他三項都是思考型，對話模式更適合。" },
+      { q: "「100 份法則」是什麼意思？",
+        opts: ["要做 100 份才會被收費", "如果任務有 100 份會不會崩潰，會就用 Code", "Code 最多處理 100 份檔案", "Skill 最多 100 個"],
+        ans: _A1, exp: "問自己「這個任務 100 份會不會崩潰」是判斷該不該用 Code 的簡單訣竅。會崩就用 Code，不會就用 Chat+Skill。" },
+      { q: "Code 的「作用範圍」由什麼決定？",
+        opts: ["Code 本身的版本", "介面（網頁版/Cowork/CLI）", "對話長度", "訂閱方案"],
+        ans: _A1, exp: "Code 是「能力」存在於所有介面，但作用範圍由介面決定：網頁版只能作用在雲端容器，Cowork 可以作用在本機 mount 資料夾，CLI 完全本機。" },
+      { q: "下列何者「不需要」用 Code？",
         opts: ["生成 .docx 報告", "批次更新 50 個 HTML 檔", "解釋什麼是 Semi-Agent", "跑統計分析並產出圖表"],
-        ans: _A2, exp: "「解釋什麼是 Semi-Agent」是純思考型任務,對話模式即可。其他三項都需要實際執行,必須用 Code。" }
+        ans: _A2, exp: "「解釋什麼是 Semi-Agent」是純思考型任務，對話模式即可。其他三項都需要實際執行，必須用 Code。" }
     ],
 
     // ============ M5 Semi-Agent 工作流 ============
@@ -372,86 +378,86 @@ const dict = {
     m5_title: "從工具呼叫到自主執行的光譜",
     m5_overview: "Semi-Agent 是「人類定義目標 + AI 自主執行流程」的甜蜜點。SKILL.md 本質上是微型 agent 的章程。",
     m5_highlights: ["Agent 光譜", "Level 2 甜蜜點", "向內自主", "Skill 是章程"],
-    m5_p1: "Agent 光譜從淺到深可分為五層。Level 0 純對話工具——你問一句我答一句,所有決策都在使用者身上。Level 1 工具呼叫——AI 會主動搜尋、讀檔、執行程式碼,但每一步仍是「你下指令、我執行單一動作」。Level 2 Semi-Agent——AI 能讀 Skill 內化規格與流程,自己決定多步驟工作的順序,在使用者定義的任務範圍內有局部自主性。Level 3 Agent——AI 有持續目標,自己排定子任務,會主動回報或發起對話。Level 4 Autonomous Agent——長時間運行、跨多個目標、自己管理優先順序。",
-    m5_p2: "Semi-Agent 的關鍵特徵是「向內自主、向外受控」。向內:AI 在任務內部多步驟自主執行——讀 SKILL.md、掃描資料夾、生成產出物、寫回資料夾,這一連串不需要使用者一步步指令。向外:任務的啟動與終止由使用者掌握——你說「做 SPA」AI 才做、做完就停。這種「半自主」的特性,既保留使用者的控制權,又釋放 AI 的執行能力,是目前最實用的工作流型態。判斷你的工作流位於哪個 Level,可以問:AI 有沒有在做你沒明確下指令、但任務需要的事?",
-    m5_p3: "SKILL.md 本質上是「微型 agent 的章程」。每次精修 SKILL.md,等於訓練這個 semi-agent 行為更穩定、更不需要使用者介入。換個角度看,你不是在「使用」AI,而是在「設計」一個小型 agent 系統。要從 Semi-Agent 推進到 Level 3 Agent,還需要三樣東西:觸發機制(webhook、定時、檔案變更偵測)讓任務自動啟動、跨任務記憶(執行狀態、未完成清單)、自主邊界判斷(哪些情況該自主、哪些該停下來問)。這些 Claude Code 或自建 agent 架構可以做到,但 Chat + Skill + Cowork 刻意停在 Semi-Agent 是有道理的——保留控制權,避免 AI 自作主張。",
-    m5_wrapup: "你不只是 AI 的使用者,你是 AI 工作流的設計者。每一份 SKILL.md 都是微型 agent 的章程,每一次工具組合都是工作流架構決策。Semi-Agent 不是技術名詞,而是一個讓人類與 AI 各司其職的設計哲學。",
+    m5_p1: "Agent 光譜從淺到深可分為五層。Level 0 純對話工具——你問一句我答一句，所有決策都在使用者身上。Level 1 工具呼叫——AI 會主動搜尋、讀檔、執行程式碼，但每一步仍是「你下指令、我執行單一動作」。Level 2 Semi-Agent——AI 能讀 Skill 內化規格與流程，自己決定多步驟工作的順序，在使用者定義的任務範圍內有局部自主性。Level 3 Agent——AI 有持續目標，自己排定子任務，會主動回報或發起對話。Level 4 Autonomous Agent——長時間運行、跨多個目標、自己管理優先順序。",
+    m5_p2: "Semi-Agent 的關鍵特徵是「向內自主、向外受控」。向內：AI 在任務內部多步驟自主執行——讀 SKILL.md、掃描資料夾、生成產出物、寫回資料夾，這一連串不需要使用者一步步指令。向外：任務的啟動與終止由使用者掌握——你說「做 SPA」AI 才做、做完就停。這種「半自主」的特性，既保留使用者的控制權，又釋放 AI 的執行能力，是目前最實用的工作流型態。判斷你的工作流位於哪個 Level，可以問：AI 有沒有在做你沒明確下指令、但任務需要的事？",
+    m5_p3: "SKILL.md 本質上是「微型 agent 的章程」。每次精修 SKILL.md，等於訓練這個 semi-agent 行為更穩定、更不需要使用者介入。換個角度看，你不是在「使用」AI，而是在「設計」一個小型 agent 系統。要從 Semi-Agent 推進到 Level 3 Agent，還需要三樣東西：觸發機制（webhook、定時、檔案變更偵測）讓任務自動啟動、跨任務記憶（執行狀態、未完成清單）、自主邊界判斷（哪些情況該自主、哪些該停下來問）。這些 Claude Code 或自建 agent 架構可以做到，但 Chat + Skill + Cowork 刻意停在 Semi-Agent 是有道理的——保留控制權，避免 AI 自作主張。",
+    m5_wrapup: "你不只是 AI 的使用者，你是 AI 工作流的設計者。每一份 SKILL.md 都是微型 agent 的章程，每一次工具組合都是工作流架構決策。Semi-Agent 不是技術名詞，而是一個讓人類與 AI 各司其職的設計哲學。",
 
     m5_terms: [
       { front: "Agent 光譜", back: "從 Level 0 純對話到 Level 4 Autonomous Agent 的五層分級。Semi-Agent 在 Level 2。" },
-      { front: "Semi-Agent", back: "Level 2,任務內部多步驟自主,任務範圍由使用者定義。向內自主、向外受控。" },
-      { front: "向內自主", back: "AI 在任務內部多步驟自主執行,不需使用者一步步指令。" },
-      { front: "向外受控", back: "任務的啟動與終止由使用者掌握,AI 不自己跨任務。" },
+      { front: "Semi-Agent", back: "Level 2，任務內部多步驟自主，任務範圍由使用者定義。向內自主、向外受控。" },
+      { front: "向內自主", back: "AI 在任務內部多步驟自主執行，不需使用者一步步指令。" },
+      { front: "向外受控", back: "任務的啟動與終止由使用者掌握，AI 不自己跨任務。" },
       { front: "SKILL.md 章程", back: "每次精修 SKILL.md 等於訓練微型 agent 行為更穩定。SKILL.md 是 semi-agent 的 constitution。" },
       { front: "Level 3 Agent", back: "持續目標、自排子任務、會主動發起。需要觸發機制、跨任務記憶、自主邊界判斷。" },
-      { front: "甜蜜點", back: "Semi-Agent 是目前最實用的甜蜜點——既釋放 AI 執行能力,又保留使用者控制權。" }
+      { front: "甜蜜點", back: "Semi-Agent 是目前最實用的甜蜜點——既釋放 AI 執行能力，又保留使用者控制權。" }
     ],
 
     m5_q: [
-      { q: "Semi-Agent 在 Agent 光譜的哪個位置?",
+      { q: "Semi-Agent 在 Agent 光譜的哪個位置？",
         opts: ["Level 0", "Level 1", "Level 2", "Level 4"],
         ans: _A2, exp: "Level 0 純對話、Level 1 工具呼叫、Level 2 Semi-Agent、Level 3 Agent、Level 4 Autonomous Agent。Semi-Agent 是 Level 2。" },
-      { q: "Semi-Agent 的關鍵特徵是?",
+      { q: "Semi-Agent 的關鍵特徵是？",
         opts: ["完全自主", "完全受控", "向內自主、向外受控", "完全隨機"],
-        ans: _A2, exp: "Semi-Agent 在任務內部多步驟自主(向內),但任務的啟動終止由使用者掌握(向外)。這是它的核心特徵。" },
-      { q: "SKILL.md 的本質是?",
+        ans: _A2, exp: "Semi-Agent 在任務內部多步驟自主（向內），但任務的啟動終止由使用者掌握（向外）。這是它的核心特徵。" },
+      { q: "SKILL.md 的本質是？",
         opts: ["一份說明文件", "微型 agent 的章程", "AI 的程式碼", "對話的腳本"],
-        ans: _A1, exp: "SKILL.md 是 semi-agent 的 constitution——每次精修等於訓練 agent 行為更穩定,降低使用者介入需求。" },
-      { q: "要從 Semi-Agent 推進到 Level 3 Agent,「不」需要下列哪一項?",
+        ans: _A1, exp: "SKILL.md 是 semi-agent 的 constitution——每次精修等於訓練 agent 行為更穩定，降低使用者介入需求。" },
+      { q: "要從 Semi-Agent 推進到 Level 3 Agent，「不」需要下列哪一項？",
         opts: ["觸發機制", "跨任務記憶", "自主邊界判斷", "更大的 context window"],
-        ans: _A3, exp: "推進到 Level 3 需要觸發機制、跨任務記憶、邊界判斷。Context window 大小不是關鍵,關鍵是「能否自主啟動和管理任務」。" }
+        ans: _A3, exp: "推進到 Level 3 需要觸發機制、跨任務記憶、邊界判斷。Context window 大小不是關鍵，關鍵是「能否自主啟動和管理任務」。" }
     ],
 
     // ============ M6 維運型 Skill 與批次任務 ============
     m6_nav: "6. 維運型 Skill 與批次任務",
     m6_title: "從創造端到規模端的完整工作流",
-    m6_overview: "AI 協作工作流不只要優化「創造」,也要優化「規模」。維運型 skill 是 semi-agent 工作流的另一半,讓系統有自我修復能力。",
+    m6_overview: "AI 協作工作流不只要優化「創造」，也要優化「規模」。維運型 skill 是 semi-agent 工作流的另一半，讓系統有自我修復能力。",
     m6_highlights: ["創造 vs. 維運", "批次任務判準", "spa-consistency-check", "自我修復系統"],
-    m6_p1: "目前大多數 skill 都集中在「創造端」——把無變成有、把素材變成產出物。例如 note-to-kb 把筆記變 KB、kb-to-quiz 把 KB 變測驗、interactive-learning-spa 把規格變 SPA。但工作不只是「創造」,還有「維護現有產出物」——當規範更新後,舊的產出物該怎麼跟上?當資料夾結構漂移時,該如何稽核?這些「維護、檢查、批次更新」的工作,就是「維運型 skill」要解決的。",
-    m6_p2: "創造型與維運型 skill 在五個構面上有本質差異。輸入:創造型是原始素材,維運型是現有產出物。輸出:創造型是新的產出物,維運型是報告 + 修正後的檔案。任務本質:創造型是思考型(理解、設計),維運型是執行型(掃描、比對、修改)。是否需要 Code:創造型通常不需要,維運型通常必要。觸發頻率:創造型是每次新任務,維運型是每次規範更新或定期稽核。創造型 skill 解決「重新發明輪子」的痛,維運型 skill 解決「機械性重複勞動」的痛。",
-    m6_p3: "spa-consistency-check 是維運型 skill 的典型案例。它掃描指定資料夾中的所有 SPA HTML 檔案,依照 interactive-learning-spa 最新規範進行一致性檢查,產出 Markdown 報告,並以「逐項互動式修補」模式協助使用者更新不合規檔案。當你同時擁有創造型(produces SPA)與維運型(maintains SPA)skill 後,工作流會出現有趣的特性——它有自我修復能力。改了規範 → 跑 consistency-check 找不合規檔案 → 跑 batch-update 批次修補 → 整個系統自動跟上最新標準。這就從 Level 2 Semi-Agent 往 Level 3 Agent 推進了一小步。",
-    m6_wrapup: "AI 協作工作流的完整型態需要兩端優化:創造端 + 維運端。創造型 skill 解決「從 0 到 1」的問題,維運型 skill 解決「從 1 到 N 的一致性」問題。當兩端都建立後,你的 semi-agent 工作流會接近全自動——而起點往往就是第一個維運型 skill 的開發。",
+    m6_p1: "目前大多數 skill 都集中在「創造端」——把無變成有、把素材變成產出物。例如 note-to-kb 把筆記變 KB、kb-to-quiz 把 KB 變測驗、interactive-learning-spa 把規格變 SPA。但工作不只是「創造」，還有「維護現有產出物」——當規範更新後，舊的產出物該怎麼跟上？當資料夾結構漂移時，該如何稽核？這些「維護、檢查、批次更新」的工作，就是「維運型 skill」要解決的。",
+    m6_p2: "創造型與維運型 skill 在五個構面上有本質差異。輸入：創造型是原始素材，維運型是現有產出物。輸出：創造型是新的產出物，維運型是報告 + 修正後的檔案。任務本質：創造型是思考型（理解、設計），維運型是執行型（掃描、比對、修改）。是否需要 Code：創造型通常不需要，維運型通常必要。觸發頻率：創造型是每次新任務，維運型是每次規範更新或定期稽核。創造型 skill 解決「重新發明輪子」的痛，維運型 skill 解決「機械性重複勞動」的痛。",
+    m6_p3: "spa-consistency-check 是維運型 skill 的典型案例。它掃描指定資料夾中的所有 SPA HTML 檔案，依照 interactive-learning-spa 最新規範進行一致性檢查，產出 Markdown 報告，並以「逐項互動式修補」模式協助使用者更新不合規檔案。當你同時擁有創造型（produces SPA）與維運型（maintains SPA）skill 後，工作流會出現有趣的特性——它有自我修復能力。改了規範 → 跑 consistency-check 找不合規檔案 → 跑 batch-update 批次修補 → 整個系統自動跟上最新標準。這就從 Level 2 Semi-Agent 往 Level 3 Agent 推進了一小步。",
+    m6_wrapup: "AI 協作工作流的完整型態需要兩端優化：創造端 + 維運端。創造型 skill 解決「從 0 到 1」的問題，維運型 skill 解決「從 1 到 N 的一致性」問題。當兩端都建立後，你的 semi-agent 工作流會接近全自動——而起點往往就是第一個維運型 skill 的開發。",
 
     m6_terms: [
       { front: "創造型 Skill", back: "從原始素材產出新的產出物。例如 note-to-kb、kb-to-quiz、interactive-learning-spa。" },
       { front: "維運型 Skill", back: "維護現有產出物的一致性。例如 spa-consistency-check、spa-batch-update。" },
-      { front: "100 份崩潰法則", back: "如果這個任務 100 份會不會崩潰?會崩潰就用 Code,不會就用 Chat+Skill。" },
-      { front: "spa-consistency-check", back: "掃描資料夾中所有 SPA 並依規範一致性檢查,產出 Markdown 報告,支援逐項互動式修補。" },
-      { front: "自我修復系統", back: "創造型 + 維運型 skill 同時存在時,系統能自動追上最新規範,接近 Level 3 Agent。" },
-      { front: "規模密集型任務", back: "需要重複、檢查、批次處理的任務,屬於 Code 的主場,維運型 skill 的應用場域。" },
-      { front: "腦力密集型任務", back: "需要創造、判斷、設計的任務,屬於 Chat + Skill 的主場,創造型 skill 的應用場域。" }
+      { front: "100 份崩潰法則", back: "如果這個任務 100 份會不會崩潰？會崩潰就用 Code，不會就用 Chat+Skill。" },
+      { front: "spa-consistency-check", back: "掃描資料夾中所有 SPA 並依規範一致性檢查，產出 Markdown 報告，支援逐項互動式修補。" },
+      { front: "自我修復系統", back: "創造型 + 維運型 skill 同時存在時，系統能自動追上最新規範，接近 Level 3 Agent。" },
+      { front: "規模密集型任務", back: "需要重複、檢查、批次處理的任務，屬於 Code 的主場，維運型 skill 的應用場域。" },
+      { front: "腦力密集型任務", back: "需要創造、判斷、設計的任務，屬於 Chat + Skill 的主場，創造型 skill 的應用場域。" }
     ],
 
     m6_q: [
-      { q: "創造型 skill 跟維運型 skill 最主要的差異是?",
-        opts: ["創造型比較貴", "創造型解決從 0 到 1,維運型解決從 1 到 N 的一致性", "兩者沒有差異", "維運型比較新"],
-        ans: _A1, exp: "創造型 skill 把無變成有,維運型 skill 維護現有產出物的一致性。兩者解決的痛點不同。" },
-      { q: "spa-consistency-check 的主要功能是?",
+      { q: "創造型 skill 跟維運型 skill 最主要的差異是？",
+        opts: ["創造型比較貴", "創造型解決從 0 到 1，維運型解決從 1 到 N 的一致性", "兩者沒有差異", "維運型比較新"],
+        ans: _A1, exp: "創造型 skill 把無變成有，維運型 skill 維護現有產出物的一致性。兩者解決的痛點不同。" },
+      { q: "spa-consistency-check 的主要功能是？",
         opts: ["生成新的 SPA", "掃描現有 SPA 並依規範檢查、互動式修補", "翻譯 SPA 為多語言", "部署 SPA 到 GitHub"],
-        ans: _A1, exp: "spa-consistency-check 是維運型 skill,掃描現有 SPA、依規範檢查、產出報告,並逐項互動式修補不合規檔案。" },
-      { q: "「自我修復系統」需要什麼條件?",
+        ans: _A1, exp: "spa-consistency-check 是維運型 skill，掃描現有 SPA、依規範檢查、產出報告，並逐項互動式修補不合規檔案。" },
+      { q: "「自我修復系統」需要什麼條件？",
         opts: ["只要創造型 skill", "只要維運型 skill", "創造型 + 維運型 skill 同時存在", "只要 Code"],
-        ans: _A2, exp: "兩端 skill 同時存在,系統才能自動追上規範變化——改規範 → 找不合規 → 批次修補,這是自我修復的基本鏈條。" },
-      { q: "下列何者「不是」維運型 skill 的特徵?",
+        ans: _A2, exp: "兩端 skill 同時存在，系統才能自動追上規範變化——改規範 → 找不合規 → 批次修補，這是自我修復的基本鏈條。" },
+      { q: "下列何者「不是」維運型 skill 的特徵？",
         opts: ["輸入是現有產出物", "通常需要 Code", "從 0 創造新內容", "解決機械性重複勞動"],
-        ans: _A2, exp: "「從 0 創造新內容」是創造型 skill 的特徵。維運型 skill 的輸入是現有產出物,目的是維護而非創造。" }
+        ans: _A2, exp: "「從 0 創造新內容」是創造型 skill 的特徵。維運型 skill 的輸入是現有產出物，目的是維護而非創造。" }
     ],
 
     // ============ M{N+1} 互動實驗室 ============
     mlab_nav: "7. 互動實驗室",
     mlab_title: "決策速查工具",
-    mlab_desc: "把 KB 第 9 章「決策速查表」轉化為可互動的判斷工具。輸入你的情境,得到工具推薦。",
+    mlab_desc: "把 KB 第 9 章「決策速查表」轉化為可互動的判斷工具。輸入你的情境，得到工具推薦。",
     mlab_labs: [
-      { title: "介面 + 能力組合選擇器", desc: "依檔案位置、任務性質、重用頻率,推薦最適合的介面(網頁/Cowork/CLI)與能力組合" },
-      { title: "Token 經濟計算器", desc: "估算不同模式下的 token 消耗,幫你決定該投資哪一層結構化" },
-      { title: "Code 必要性判斷器", desc: "輸入任務描述,自動判斷該用 Code 還是純對話(基於 100 份法則)" },
-      { title: "Skill 開發優先順序", desc: "依痛點頻率、規格穩定性、重用次數,排序你該優先開發哪個 Skill" }
+      { title: "介面 + 能力組合選擇器", desc: "依檔案位置、任務性質、重用頻率，推薦最適合的介面（網頁/Cowork/CLI）與能力組合" },
+      { title: "Token 經濟計算器", desc: "估算不同模式下的 token 消耗，幫你決定該投資哪一層結構化" },
+      { title: "Code 必要性判斷器", desc: "輸入任務描述，自動判斷該用 Code 還是純對話（基於 100 份法則）" },
+      { title: "Skill 開發優先順序", desc: "依痛點頻率、規格穩定性、重用次數，排序你該優先開發哪個 Skill" }
     ],
 
     // ============ M{N+2} 外部學習資源 ============
     mres_nav: "8. 外部學習資源",
     mres_title: "延伸學習與工具",
-    mres_desc: "本方法論的延伸資源,包含 Anthropic 官方文件、Skill 開發指南、Claude 產品說明等。",
+    mres_desc: "本方法論的延伸資源，包含 Anthropic 官方文件、Skill 開發指南、Claude 產品說明等。",
 
     // Footer
     date: "Version 2026.05.23",
@@ -495,11 +501,17 @@ const dict = {
     group_options: ["G1","G2","G3","G4","G5","G6","G7","G8","G9","G10","G11","G12","Others"],
     analytics_total_time: "Total Study Time", analytics_total_clicks: "Total Interactions",
     analytics_overall_acc: "Overall Quiz Accuracy",
-    analytics_card_usage: "Flashcard Usage",
+    analytics_cards_summary: "Flashcard Usage",
+    analytics_quiz_label: "Quiz",
+    analytics_cards_label: "Flashcards",
+    analytics_card_read_label: "Read",
+    analytics_card_shown_label: "Shown",
+    analytics_card_total_label: "Total",
+    analytics_quiz_correct_label: "Correct",
+    analytics_quiz_answered_label: "Answered",
+    analytics_quiz_total_label: "Total",
     analytics_module: "Module", analytics_time: "Time Spent",
     analytics_clicks: "Clicks", analytics_acc: "Accuracy",
-    analytics_correct_ans_total: "Correct / Answered / Total",
-    analytics_cards_read_total: "Read / Total",
     analytics_no_data: "Not yet attempted", analytics_sec: "s", analytics_times: "x",
     analytics_progress_title: "Overall Learning Progress",
     analytics_progress_visited: "Visited", analytics_progress_not_visited: "Not Visited",
@@ -777,11 +789,12 @@ const dict = {
 };
 
 // ════════ FlipCardDeck ════════
-const FlipCardDeck = ({ terms, t, moduleId, onCardRead }) => {
+const FlipCardDeck = ({ terms, t, moduleId, onCardRead, initialRead, initialShown }) => {
   const [groupIdx, setGroupIdx] = useState(0);
   const [flipped, setFlipped] = useState({});
-  const [readSet, setReadSet] = useState(new Set());
-  const [shownSet, setShownSet] = useState(new Set());
+  // 從 analytics 還原已讀/已顯示的原始 index(切換 module 不再歸零)
+  const [readSet, setReadSet] = useState(() => new Set(initialRead || []));
+  const [shownSet, setShownSet] = useState(() => new Set(initialShown || []));
 
   const [shuffledOrder] = useState(() =>
     [...Array(terms.length).keys()].sort(() => Math.random() - 0.5)
@@ -795,14 +808,18 @@ const FlipCardDeck = ({ terms, t, moduleId, onCardRead }) => {
   useEffect(() => {
     const newShown = new Set(shownSet);
     currentCardIndices.forEach(idx => newShown.add(idx));
-    if (newShown.size !== shownSet.size) setShownSet(newShown);
+    if (newShown.size !== shownSet.size) {
+      setShownSet(newShown);
+      // 即時同步到 analytics,讓 M9 能立刻看到「已顯示」更新
+      if (onCardRead) onCardRead(moduleId, [...readSet], [...newShown], terms.length);
+    }
   }, [groupIdx]);
 
   const handleFlip = (origIdx) => {
     setFlipped(f => ({ ...f, [origIdx]: !f[origIdx] }));
     if (!readSet.has(origIdx)) {
       const newRead = new Set(readSet); newRead.add(origIdx); setReadSet(newRead);
-      if (onCardRead) onCardRead(moduleId, newRead.size, shownSet.size, terms.length);
+      if (onCardRead) onCardRead(moduleId, [...newRead], [...shownSet], terms.length);
     }
   };
 
@@ -885,17 +902,24 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
   const handleGroupSubmit = () => {
     const allDone = currentIndices.every((_, i) => selected[currentStart + i] !== undefined);
     if (!allDone) return;
-    setSubmitted(s => ({ ...s, [groupIdx]: true }));
-    if (groupIdx === totalGroups - 1 || Object.keys(submitted).length + 1 === totalGroups) {
-      const wrongQs = [];
-      let correct = 0;
-      quizIndices.forEach((qIdx, qi) => {
-        if (selected[qi] === undefined) return;
-        if (shuffledMaps[qi][selected[qi]] === _d(questions[qIdx].ans)) correct++;
-        else wrongQs.push(questions[qIdx].q);
-      });
-      onQuizSubmit(moduleId, correct, quizIndices.length, wrongQs, moduleName);
-    }
+    const newSubmitted = { ...submitted, [groupIdx]: true };
+    setSubmitted(newSubmitted);
+
+    // 每次 group submit 都計算「目前累積」並回報,讓 M9 即時反映
+    const wrongQs = [];
+    let correct = 0;
+    let answered = 0;
+    quizIndices.forEach((qIdx, qi) => {
+      const grpOfQi = Math.floor(qi / groupSize);
+      // 只計算已 submit 的組別
+      if (!newSubmitted[grpOfQi]) return;
+      if (selected[qi] === undefined) return;
+      answered++;
+      if (shuffledMaps[qi][selected[qi]] === _d(questions[qIdx].ans)) correct++;
+      else wrongQs.push(questions[qIdx].q);
+    });
+    // 第二個參數從「總題數」改為「已填答數」,符合 M9 表頭「答對/已填答/總題數」語意
+    onQuizSubmit(moduleId, correct, answered, wrongQs, moduleName);
   };
 
   return (
@@ -1243,12 +1267,31 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [ttsState, setTtsState] = useState('idle');
   const [studentInfo, setStudentInfo] = useState(() => loadLS(LS_STU, { group:'', dept:'', id:'', nameEn:'', nameZh:'' }));
-  const [analytics, setAnalytics] = useState(() => loadLS(LS_KEY, {
-    time: Array(TOTAL).fill(0), clicks: Array(TOTAL).fill(0),
-    quizCorrect: Array(TOTAL).fill(0), quizTotal: Array(TOTAL).fill(0),
-    cardsRead: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
-    wrongTopics: {}
-  }));
+  const [analytics, setAnalytics] = useState(() => {
+    // 預設空 schema
+    const empty = {
+      time: Array(TOTAL).fill(0), clicks: Array(TOTAL).fill(0),
+      quizCorrect: Array(TOTAL).fill(0), quizTotal: Array(TOTAL).fill(0),
+      cardsRead: Array(TOTAL).fill(0), cardsShown: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
+      // 用 object map 持久化已讀/已顯示的原始 index,讓 FlipCardDeck 重新掛載時能還原進度
+      cardsReadIdx: {}, cardsShownIdx: {},
+      wrongTopics: {}
+    };
+    const loaded = loadLS(LS_KEY, null);
+    if (!loaded) return empty;
+    // Schema migration:對舊版 localStorage 補齊缺失欄位,避免 [...undefined] crash
+    Object.keys(empty).forEach(k => {
+      if (loaded[k] === undefined) loaded[k] = empty[k];
+    });
+    // 額外保險:若陣列長度與 TOTAL 不符(例如曾經改過模組數),也要重設為當前 TOTAL
+    ['time','clicks','quizCorrect','quizTotal','cardsRead','cardsShown','cardsTotal'].forEach(k => {
+      if (!Array.isArray(loaded[k]) || loaded[k].length !== TOTAL) loaded[k] = empty[k];
+    });
+    ['wrongTopics','cardsReadIdx','cardsShownIdx'].forEach(k => {
+      if (typeof loaded[k] !== 'object' || loaded[k] === null) loaded[k] = {};
+    });
+    return loaded;
+  });
   const menuRef = useRef(null);
   const t = dict[lang];
 
@@ -1269,7 +1312,8 @@ function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       setAnalytics(a => {
-        const newTime = [...a.time]; newTime[module] = (newTime[module] || 0) + 1;
+        const newTime = [...(a.time || Array(TOTAL).fill(0))];
+        newTime[module] = (newTime[module] || 0) + 1;
         return { ...a, time: newTime };
       });
     }, 1000);
@@ -1280,7 +1324,8 @@ function App() {
   useEffect(() => {
     const handler = () => {
       setAnalytics(a => {
-        const newClicks = [...a.clicks]; newClicks[module] = (newClicks[module] || 0) + 1;
+        const newClicks = [...(a.clicks || Array(TOTAL).fill(0))];
+        newClicks[module] = (newClicks[module] || 0) + 1;
         return { ...a, clicks: newClicks };
       });
     };
@@ -1300,18 +1345,24 @@ function App() {
   // Quiz handler (= 覆蓋)
   const handleQuizSubmit = (mid, correct, total, wrongQs, moduleName) => {
     setAnalytics(a => {
-      const qc = [...a.quizCorrect], qt = [...a.quizTotal];
+      const qc = [...(a.quizCorrect || Array(TOTAL).fill(0))];
+      const qt = [...(a.quizTotal || Array(TOTAL).fill(0))];
       qc[mid] = correct; qt[mid] = total;
-      const wt = { ...a.wrongTopics }; wt[mid] = wrongQs || [];
+      const wt = { ...(a.wrongTopics || {}) }; wt[mid] = wrongQs || [];
       return { ...a, quizCorrect: qc, quizTotal: qt, wrongTopics: wt };
     });
   };
 
-  const handleCardRead = (mid, readCount, shownCount, totalCount) => {
+  const handleCardRead = (mid, readArr, shownArr, totalCount) => {
     setAnalytics(a => {
-      const cr = [...a.cardsRead], ct = [...a.cardsTotal];
-      cr[mid] = readCount; ct[mid] = totalCount;
-      return { ...a, cardsRead: cr, cardsTotal: ct };
+      const cr = [...(a.cardsRead || Array(TOTAL).fill(0))];
+      const cs = [...(a.cardsShown || Array(TOTAL).fill(0))];
+      const ct = [...(a.cardsTotal || Array(TOTAL).fill(0))];
+      const cri = { ...(a.cardsReadIdx || {}) };
+      const csi = { ...(a.cardsShownIdx || {}) };
+      cr[mid] = readArr.length; cs[mid] = shownArr.length; ct[mid] = totalCount;
+      cri[mid] = readArr; csi[mid] = shownArr;
+      return { ...a, cardsRead: cr, cardsShown: cs, cardsTotal: ct, cardsReadIdx: cri, cardsShownIdx: csi };
     });
   };
 
@@ -1385,18 +1436,31 @@ function App() {
   const exportCSV = () => {
     if (!allInfoFilled) return;
     const BOM = '\uFEFF';
-    let csv = BOM + 'Module,Time(s),Clicks,Correct,Answered,Total,CardsRead,CardsTotal,WrongQuestions\n';
+    // 欄位 header 依當前語言切換,且每個數字獨立分欄(避免 Excel 把 "3/5/8" 誤判為日期)
+    const headers = lang === 'zh'
+      ? ['模組','停留時間(秒)','點擊次數','學習卡_已讀','學習卡_已顯示','學習卡_總計','測驗_答對','測驗_已填答','測驗_總題數','答錯題目']
+      : ['Module','Time(s)','Clicks','Cards_Read','Cards_Shown','Cards_Total','Quiz_Correct','Quiz_Answered','Quiz_Total','Wrong_Questions'];
+    let csv = BOM + headers.join(',') + '\n';
     for (let i = 0; i < TOTAL; i++) {
       const wq = (analytics.wrongTopics[i]||[]).join(' | ').replace(/"/g, '""');
       const mName = ml[i].title.replace(/,/g, ' ');
-      csv += `"${mName}",${analytics.time[i]||0},${analytics.clicks[i]||0},${analytics.quizCorrect[i]||0},${analytics.quizTotal[i]||0},${(i>=1&&i<=NUM_LEARN)?(t[`m${i}_q`]?.length||0):0},${analytics.cardsRead[i]||0},${analytics.cardsTotal[i]||0},"${wq}"\n`;
+      const isLearn = i >= 1 && i <= NUM_LEARN;
+      const cardTot = isLearn ? (t[`m${i}_terms`]?.length || 0) : '';
+      const quizTot = isLearn ? (t[`m${i}_q`]?.length || 0) : '';
+      // 學習卡 / 測驗欄位:M0、M7-9 留空(該模組沒有學習卡或測驗)
+      const cardRead = isLearn ? (analytics.cardsRead[i]||0) : '';
+      const cardShown = isLearn ? (analytics.cardsShown[i]||0) : '';
+      const quizCorrect = isLearn ? (analytics.quizCorrect[i]||0) : '';
+      const quizAnswered = isLearn ? (analytics.quizTotal[i]||0) : '';
+      csv += `"${mName}",${analytics.time[i]||0},${analytics.clicks[i]||0},${cardRead},${cardShown},${cardTot},${quizCorrect},${quizAnswered},${quizTot},"${wq}"\n`;
     }
     const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     const date = new Date();
     const ymd = `${date.getFullYear()}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}`;
-    const fn = `${dict.zh.brand}.${dict.zh.title}_${studentInfo.nameEn} ${studentInfo.nameZh}_${ymd}.csv`;
+    // 檔名依當前語言取對應 brand 與 title
+    const fn = `${t.brand}.${t.title}_${studentInfo.nameEn} ${studentInfo.nameZh}_${ymd}.csv`;
     a.href = url; a.download = fn; a.click();
     URL.revokeObjectURL(url);
   };
@@ -1406,7 +1470,8 @@ function App() {
       setAnalytics({
         time: Array(TOTAL).fill(0), clicks: Array(TOTAL).fill(0),
         quizCorrect: Array(TOTAL).fill(0), quizTotal: Array(TOTAL).fill(0),
-        cardsRead: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
+        cardsRead: Array(TOTAL).fill(0), cardsShown: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
+        cardsReadIdx: {}, cardsShownIdx: {},
         wrongTopics: {}
       });
     }
@@ -1514,7 +1579,15 @@ function App() {
           </div>
 
           {/* FlipCards */}
-          <FlipCardDeck key={`cards-${module}`} terms={t[`${mk}_terms`]} t={t} moduleId={module} onCardRead={handleCardRead} />
+          <FlipCardDeck
+            key={`cards-${module}`}
+            terms={t[`${mk}_terms`]}
+            t={t}
+            moduleId={module}
+            onCardRead={handleCardRead}
+            initialRead={analytics.cardsReadIdx?.[module] || []}
+            initialShown={analytics.cardsShownIdx?.[module] || []}
+          />
 
           {/* Wrap-up */}
           <div className="bg-slate-100 dark:bg-slate-800 rounded-xl p-5">
@@ -1575,8 +1648,12 @@ function App() {
       const totalAnswered = analytics.quizTotal.reduce((a,b)=>a+b,0);
       const overallAcc = totalAnswered>0 ? Math.round(totalCorrect/totalAnswered*100) : 0;
       const totalCardsRead = analytics.cardsRead.reduce((a,b)=>a+b,0);
-      const totalCardsTotal = analytics.cardsTotal.reduce((a,b)=>a+b,0);
-      const cardUsage = totalCardsTotal>0 ? Math.round(totalCardsRead/totalCardsTotal*100) : 0;
+      const totalCardsShown = analytics.cardsShown.reduce((a,b)=>a+b,0);
+      // 總卡數從 dict 算(M1-NUM_LEARN 各模組 terms 長度加總),不依賴 state
+      let totalCardsTotal = 0;
+      for (let i = 1; i <= NUM_LEARN; i++) {
+        totalCardsTotal += (t[`m${i}_terms`]?.length || 0);
+      }
       const weakPoints = [];
       for (let i=1; i<=NUM_LEARN; i++) {
         if (analytics.quizTotal[i]>0) {
@@ -1606,8 +1683,9 @@ function App() {
               <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{overallAcc}%</p>
             </div>
             <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 text-center">
-              <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">{t.analytics_card_usage}</p>
-              <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{cardUsage}%</p>
+              <p className="text-xs uppercase tracking-wider text-slate-500 mb-1">{t.analytics_cards_label}</p>
+              <p className="text-2xl font-serif font-black text-[#004030] dark:text-[#D8C3A5]">{totalCardsRead}/{totalCardsShown}/{totalCardsTotal}</p>
+              <p className="text-[10px] text-slate-400 mt-1">{t.analytics_card_read_label}/{t.analytics_card_shown_label}/{t.analytics_card_total_label}</p>
             </div>
           </div>
 
@@ -1673,21 +1751,37 @@ function App() {
                   <th className="p-2">{t.analytics_module}</th>
                   <th className="p-2">{t.analytics_time}</th>
                   <th className="p-2">{t.analytics_clicks}</th>
-                  <th className="p-2">{t.analytics_card_usage}</th>
-                  <th className="p-2">{t.analytics_correct_ans_total}</th>
+                  <th className="p-2">
+                    <div>{t.analytics_cards_label}</div>
+                    <div className="text-[10px] font-normal normal-case">{t.analytics_card_read_label}/{t.analytics_card_shown_label}/{t.analytics_card_total_label}</div>
+                  </th>
+                  <th className="p-2">
+                    <div>{t.analytics_quiz_label}</div>
+                    <div className="text-[10px] font-normal normal-case">{t.analytics_quiz_correct_label}/{t.analytics_quiz_answered_label}/{t.analytics_quiz_total_label}</div>
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {ml.slice(1).map((m,i)=>{
                   const idx = i+1;
-                  const tot = (idx>=1&&idx<=NUM_LEARN) ? (t[`m${idx}_q`]?.length||0) : 0;
+                  const isLearn = idx >= 1 && idx <= NUM_LEARN;
+                  const cardTot = isLearn ? (t[`m${idx}_terms`]?.length || 0) : 0;
+                  const quizTot = isLearn ? (t[`m${idx}_q`]?.length || 0) : 0;
                   return (
                     <tr key={idx} className="border-b border-slate-100 dark:border-slate-700/50">
                       <td className="p-2">{m.icon} {m.title}</td>
                       <td className="p-2">{analytics.time[idx]||0}{t.analytics_sec}</td>
                       <td className="p-2">{analytics.clicks[idx]||0}</td>
-                      <td className="p-2">{analytics.cardsRead[idx]||0}/{analytics.cardsTotal[idx]||0}</td>
-                      <td className="p-2">{analytics.quizCorrect[idx]||0}/{analytics.quizTotal[idx]||0}/{tot}</td>
+                      <td className="p-2 text-slate-400">
+                        {isLearn
+                          ? <span className="text-slate-700 dark:text-slate-200">{analytics.cardsRead[idx]||0}/{analytics.cardsShown[idx]||0}/{cardTot}</span>
+                          : '—'}
+                      </td>
+                      <td className="p-2 text-slate-400">
+                        {isLearn
+                          ? <span className="text-slate-700 dark:text-slate-200">{analytics.quizCorrect[idx]||0}/{analytics.quizTotal[idx]||0}/{quizTot}</span>
+                          : '—'}
+                      </td>
                     </tr>
                   );
                 })}
