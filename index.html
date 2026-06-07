@@ -864,9 +864,11 @@ const FlipCardDeck = ({ terms, t, moduleId, onCardRead, initialRead, initialShow
 };
 
 // ════════ ModuleQuiz ════════
-const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
-  const [selected, setSelected] = useState({});
-  const [submitted, setSubmitted] = useState({});
+const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName, initialSelected, initialSubmitted }) => {
+  // selected: { [origQuestionIdx]: chosenOriginalOptionIdx } — 用原始 idx 為鍵,跨 session 穩定
+  // submittedSet: Set of origQuestionIdx — 已 submit 過的題目
+  const [selected, setSelected] = useState(() => initialSelected ? { ...initialSelected } : {});
+  const [submittedSet, setSubmittedSet] = useState(() => new Set(initialSubmitted || []));
   const [groupIdx, setGroupIdx] = useState(0);
   const groupSize = 2;
 
@@ -875,6 +877,8 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
   );
   const totalGroups = Math.ceil(quizIndices.length / groupSize);
 
+  // 每題的選項洗牌:shuffledMaps[displayIdx] = [origOptIdx, origOptIdx, ...]
+  // 用 quizIndices[displayIdx] 對應到原始題目
   const [shuffledMaps] = useState(() =>
     quizIndices.map(qIdx => {
       const n = questions[qIdx].opts.length;
@@ -882,12 +886,12 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
     })
   );
 
+  // statusText:用持久化 state 計算累積進度
   const totalAnswered = Object.keys(selected).length;
   const computeCorrect = () => {
     let c = 0;
-    quizIndices.forEach((qIdx, qi) => {
-      if (selected[qi] === undefined) return;
-      if (shuffledMaps[qi][selected[qi]] === _d(questions[qIdx].ans)) c++;
+    Object.entries(selected).forEach(([origQIdx, chosenOrigOptIdx]) => {
+      if (chosenOrigOptIdx === _d(questions[origQIdx].ans)) c++;
     });
     return c;
   };
@@ -898,28 +902,37 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
 
   const currentStart = groupIdx * groupSize;
   const currentIndices = quizIndices.slice(currentStart, currentStart + groupSize);
+  // 判斷當前 group 是否已 submit:該 group 所有題目都在 submittedSet 內
+  const isCurrentGroupSubmitted = currentIndices.every(qIdx => submittedSet.has(qIdx));
 
   const handleGroupSubmit = () => {
-    const allDone = currentIndices.every((_, i) => selected[currentStart + i] !== undefined);
+    const allDone = currentIndices.every(qIdx => selected[qIdx] !== undefined);
     if (!allDone) return;
-    const newSubmitted = { ...submitted, [groupIdx]: true };
-    setSubmitted(newSubmitted);
+    const newSubmitted = new Set(submittedSet);
+    currentIndices.forEach(qIdx => newSubmitted.add(qIdx));
+    setSubmittedSet(newSubmitted);
 
-    // 每次 group submit 都計算「目前累積」並回報,讓 M9 即時反映
+    // 計算累積結果,只算已 submit 的題目
     const wrongQs = [];
     let correct = 0;
     let answered = 0;
-    quizIndices.forEach((qIdx, qi) => {
-      const grpOfQi = Math.floor(qi / groupSize);
-      // 只計算已 submit 的組別
-      if (!newSubmitted[grpOfQi]) return;
-      if (selected[qi] === undefined) return;
+    newSubmitted.forEach(qIdx => {
+      const chosen = selected[qIdx];
+      if (chosen === undefined) return;
       answered++;
-      if (shuffledMaps[qi][selected[qi]] === _d(questions[qIdx].ans)) correct++;
+      if (chosen === _d(questions[qIdx].ans)) correct++;
       else wrongQs.push(questions[qIdx].q);
     });
-    // 第二個參數從「總題數」改為「已填答數」,符合 M9 表頭「答對/已填答/總題數」語意
-    onQuizSubmit(moduleId, correct, answered, wrongQs, moduleName);
+    // 多傳 selected 與已 submit 陣列,讓 App 端持久化
+    onQuizSubmit(moduleId, correct, answered, wrongQs, moduleName, { ...selected }, [...newSubmitted]);
+  };
+
+  const handleRetry = () => {
+    setGroupIdx(0);
+    setSelected({});
+    setSubmittedSet(new Set());
+    // 同步清空 analytics 內這模組的 quiz 進度
+    onQuizSubmit(moduleId, 0, 0, [], moduleName, {}, []);
   };
 
   return (
@@ -930,33 +943,34 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
         const qi = currentStart + localI;
         const q = questions[qIdx];
         const sMap = shuffledMaps[qi];
-        const isGrpSub = !!submitted[groupIdx];
+        const isQuestionSubmitted = submittedSet.has(qIdx);
+        const userChoiceOrig = selected[qIdx];  // 原始選項 idx
         return (
           <div key={qIdx} className="mb-6">
             <p className="font-bold mb-3">{qi+1}. {q.q}</p>
             <div className="space-y-2">
-              {sMap.map((origIdx, dIdx) => {
-                const isCorrect = origIdx === _d(q.ans);
-                const isSel = selected[qi] === dIdx;
+              {sMap.map((origOptIdx, dIdx) => {
+                const isCorrect = origOptIdx === _d(q.ans);
+                const isSel = userChoiceOrig === origOptIdx;
                 return (
-                  <button key={dIdx} onClick={() => !isGrpSub && setSelected(s => ({...s, [qi]: dIdx}))}
+                  <button key={dIdx} onClick={() => !isQuestionSubmitted && setSelected(s => ({...s, [qIdx]: origOptIdx}))}
                     className={`w-full text-left px-4 py-3 rounded-lg border transition-all text-sm
-                      ${isGrpSub
+                      ${isQuestionSubmitted
                         ? isCorrect ? 'bg-green-100 border-green-500 dark:bg-green-900/30'
                           : isSel ? 'bg-red-100 border-red-400 dark:bg-red-900/30' : 'border-slate-200 dark:border-slate-700'
                         : isSel ? 'border-[#004030] dark:border-[#D8C3A5] bg-[#004030]/5' : 'border-slate-200 dark:border-slate-700 hover:border-slate-400'
                       }`}>
-                    {q.opts[origIdx]}
+                    {q.opts[origOptIdx]}
                   </button>
                 );
               })}
             </div>
-            {isGrpSub && (
+            {isQuestionSubmitted && userChoiceOrig !== undefined && (
               <p className={`mt-2 text-sm italic ${
-                shuffledMaps[qi][selected[qi]] === _d(q.ans)
+                userChoiceOrig === _d(q.ans)
                   ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'
               }`}>
-                {shuffledMaps[qi][selected[qi]] === _d(q.ans)
+                {userChoiceOrig === _d(q.ans)
                   ? `✓ ${t.correct}` : `✗ ${t.incorrect}`} — {t.explanation}：{q.exp}
               </p>
             )}
@@ -964,9 +978,9 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
         );
       })}
       <div className="flex items-center gap-3">
-        {!submitted[groupIdx]
+        {!isCurrentGroupSubmitted
           ? <button onClick={handleGroupSubmit}
-              disabled={!currentIndices.every((_,i) => selected[currentStart+i] !== undefined)}
+              disabled={!currentIndices.every(qIdx => selected[qIdx] !== undefined)}
               className="px-6 py-2 bg-[#004030] dark:bg-[#D8C3A5] text-white dark:text-[#004030] font-bold rounded-lg disabled:opacity-40">
               {t.submit}
             </button>
@@ -977,7 +991,7 @@ const ModuleQuiz = ({ questions, t, moduleId, onQuizSubmit, moduleName }) => {
                   {t.quiz_next}
                 </button>
               )}
-              <button onClick={() => { setGroupIdx(0); setSelected({}); setSubmitted({}); }}
+              <button onClick={handleRetry}
                 className="px-6 py-2 border border-[#004030] dark:border-[#D8C3A5] text-[#004030] dark:text-[#D8C3A5] font-bold rounded-lg">
                 {t.quiz_retry}
               </button>
@@ -1275,6 +1289,8 @@ function App() {
       cardsRead: Array(TOTAL).fill(0), cardsShown: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
       // 用 object map 持久化已讀/已顯示的原始 index,讓 FlipCardDeck 重新掛載時能還原進度
       cardsReadIdx: {}, cardsShownIdx: {},
+      // 持久化 quiz 答題狀態(per module: { selected, submitted })
+      quizState: {},
       wrongTopics: {}
     };
     const loaded = loadLS(LS_KEY, null);
@@ -1287,7 +1303,7 @@ function App() {
     ['time','clicks','quizCorrect','quizTotal','cardsRead','cardsShown','cardsTotal'].forEach(k => {
       if (!Array.isArray(loaded[k]) || loaded[k].length !== TOTAL) loaded[k] = empty[k];
     });
-    ['wrongTopics','cardsReadIdx','cardsShownIdx'].forEach(k => {
+    ['wrongTopics','cardsReadIdx','cardsShownIdx','quizState'].forEach(k => {
       if (typeof loaded[k] !== 'object' || loaded[k] === null) loaded[k] = {};
     });
     return loaded;
@@ -1343,13 +1359,16 @@ function App() {
   }, [menuOpen]);
 
   // Quiz handler (= 覆蓋)
-  const handleQuizSubmit = (mid, correct, total, wrongQs, moduleName) => {
+  const handleQuizSubmit = (mid, correct, answered, wrongQs, moduleName, selectedMap, submittedArr) => {
     setAnalytics(a => {
       const qc = [...(a.quizCorrect || Array(TOTAL).fill(0))];
       const qt = [...(a.quizTotal || Array(TOTAL).fill(0))];
-      qc[mid] = correct; qt[mid] = total;
+      qc[mid] = correct; qt[mid] = answered;
       const wt = { ...(a.wrongTopics || {}) }; wt[mid] = wrongQs || [];
-      return { ...a, quizCorrect: qc, quizTotal: qt, wrongTopics: wt };
+      // 持久化 quiz 答題狀態(原始 question idx → 原始 option idx),供 ModuleQuiz 還原
+      const qs = { ...(a.quizState || {}) };
+      qs[mid] = { selected: selectedMap || {}, submitted: submittedArr || [] };
+      return { ...a, quizCorrect: qc, quizTotal: qt, wrongTopics: wt, quizState: qs };
     });
   };
 
@@ -1472,6 +1491,7 @@ function App() {
         quizCorrect: Array(TOTAL).fill(0), quizTotal: Array(TOTAL).fill(0),
         cardsRead: Array(TOTAL).fill(0), cardsShown: Array(TOTAL).fill(0), cardsTotal: Array(TOTAL).fill(0),
         cardsReadIdx: {}, cardsShownIdx: {},
+        quizState: {},
         wrongTopics: {}
       });
     }
@@ -1596,7 +1616,16 @@ function App() {
           </div>
 
           {/* Quiz */}
-          <ModuleQuiz key={`quiz-${module}`} questions={t[`${mk}_q`]} t={t} moduleId={module} onQuizSubmit={handleQuizSubmit} moduleName={t[`${mk}_title`]} />
+          <ModuleQuiz
+            key={`quiz-${module}`}
+            questions={t[`${mk}_q`]}
+            t={t}
+            moduleId={module}
+            onQuizSubmit={handleQuizSubmit}
+            moduleName={t[`${mk}_title`]}
+            initialSelected={analytics.quizState?.[module]?.selected || {}}
+            initialSubmitted={analytics.quizState?.[module]?.submitted || []}
+          />
         </div>
       );
     }
