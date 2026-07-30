@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -151,7 +151,7 @@ const dict = {
   zh: {
     brand: "AIWF",
     title: "AI 協作工作流方法論",
-    subtitle: "Chat， Project， Cowork， Skill， Code 的整合決策架構",
+    subtitle: "從合作模式、產品介面到執行環境的三層決策架構",
 
     nav_modules: "單元目錄", nav_prev: "上一單元", nav_next: "下一單元", nav_home: "首頁",
     key_terms: "關鍵專有名詞", flip_prompt: "點擊翻轉",
@@ -170,7 +170,7 @@ const dict = {
 
     // Analytics
     analytics_title: "學習歷程分析",
-    analytics_desc: "本模組以 localStorage 持久保存您的學習軌跡，並提供弱點分析與 CSV 匯出。",
+    analytics_desc: "學習軌跡與學員資料只存於這個瀏覽器的 localStorage；除非您自行匯出或傳送，網站不會上傳這些資料。",
     analytics_form_title: "學員基本資料",
     analytics_group: "組別", analytics_group_select: "請選擇", analytics_dept: "系級",
     analytics_dept_ph: "例：IBS3",
@@ -202,7 +202,7 @@ const dict = {
     analytics_wp_incorrect: "答錯題目：",
     analytics_wp_goto: "→ 前往複習此模組",
     analytics_wp_allpass: "所有已測驗模組答對率均達 75% 以上，表現優異！",
-    analytics_wp_saved: "學習歷程已自動儲存於本機瀏覽器",
+    analytics_wp_saved: "資料只存於這個瀏覽器；除非您自行匯出或傳送，網站不會上傳",
     analytics_wp_clear: "🗑 清除歷程",
     analytics_wp_clear_confirm: "確定要清除所有學習歷程資料嗎？此操作無法復原。",
     analytics_wp_tts_intro: "以下是您的弱點分析。",
@@ -212,248 +212,455 @@ const dict = {
     // M0
     m0_nav: "0. 執行概要",
     m0_title: "AI 協作工作流方法論",
-    m0_intro: "AI 工具的價值不只在於「能做什麼」，更在於「該如何被組織」。當 Chat、Project、Cowork、Skill、Code、Memory、KB 同時存在時，真正考驗使用者的是判斷力，而非單一功能。本方法論將分散的工具元素整合為一個可決策、可優化、可演進的工作流體系。從基礎概念出發，釐清 SPA 與純前端的差異；進入工作模式的「介面 × 能力」二維架構，理解 Cowork 內建 Code 能力、不是與 Code 並列的選項；深入記憶與知識體系的四層分工，看見 Context Window、Memory、Project、Skill、KB 各自的位置；再以 Token 經濟學作為共同度量，把直覺的「該用哪個」轉化為可計算的決策。Code 執行的角色釐清思考型與執行型任務的本質差異，以及 Code 作用範圍由介面決定的關鍵校正。Semi-Agent 工作流設計揭示為何精修 SKILL.md 等於設計微型 agent。最後以批次任務的判準與維運型 skill 的開發，完成從「創造端」到「規模端」的完整工作流。",
+    m0_intro: "AIWF 教你先辨識合作模式（Assistant、Co-pilot、Agent），再選產品介面（Chat、Work／Cowork、Codex／Claude Code），最後確認本機、雲端、Sandbox、Container 或 VM 等執行環境與權限。內容同時涵蓋記憶與知識供應、概念性成本模型、Coding Agent、自訂自主程度框架，以及 vibe coding 初學者的 Container 判斷。產品資訊截至 2026-07，實際功能仍依版本、方案與權限而異。",
     m0_why: "為什麼這套方法論重要？",
-    m0_why_desc: "因為 AI 工具正在從「單一對話助手」演進為「分層的工作流體系」。沒有方法論，使用者會在每次任務中重新發明輪子、燒掉 token、做出錯誤決策。有方法論，使用者能把精力放在真正需要思考的地方，讓機械性任務自動化。這份體系最終的目標是「Semi-Agent 工作流」——人類定義目標，AI 自主執行，雙方各司其職。",
+    m0_why_desc: "因為產品名稱會變，可靠的方法是學會判斷合作方式、工作類型與安全邊界。目標不是追求最高自主，而是選擇能驗收、能控制風險且符合任務的工作流。",
     m0_modules: [
-      { num: "01", title: "工作模式光譜", desc: "介面 × 能力的二維架構，Cowork 內建 Code 能力的關鍵校正" },
-      { num: "02", title: "記憶與知識體系", desc: "Context Window 內的 Memory、Project、Skill、KB 四層分工" },
-      { num: "03", title: "Token 經濟學", desc: "一次性成本、累積成本、起手成本的計算與權衡" },
-      { num: "04", title: "Code 執行的角色", desc: "思考型任務與執行型任務的判準，以及 Skill+Code 的組合" },
-      { num: "05", title: "Semi-Agent 工作流", desc: "從工具呼叫到自主執行的光譜，SKILL.md 作為微型 agent 章程" },
-      { num: "06", title: "維運型 Skill 與批次任務", desc: "從創造端到規模端的擴展，spa-consistency-check 案例剖析" }
+      { num: "01", title: "合作模式與產品介面", desc: "Assistant、Co-pilot、Agent，以及 Chat、Work／Cowork、Coding Agent 的三層判斷" },
+      { num: "02", title: "記憶與知識體系", desc: "Context、Memory、Project、Skill、KB 的供應與檢索方式" },
+      { num: "03", title: "成本與回收思維", desc: "概念性比較建置、載入、維護與錯誤成本" },
+      { num: "04", title: "工具與 Coding Agent", desc: "從對話、檔案工具到程式工程 Agent 的選擇" },
+      { num: "05", title: "AIWF 自主程度框架", desc: "清楚標示為自訂教學框架的 L0–L4 光譜" },
+      { num: "06", title: "Skill、環境與自我修復", desc: "Sandbox、Container、Docker、VM 與安全驗證" }
     ],
-    m0_stats: [
-      { val: "5", label: "工作模式層級" },
-      { val: "4", label: "記憶體系構面" },
-      { val: "3", label: "Token 成本類型" },
-      { val: "11", label: "決策速查表" }
-    ],
+    m0_stats: [{ val: "3", label: "決策層次" }, { val: "6", label: "核心單元" }, { val: "4", label: "互動判斷器" }, { val: "2", label: "產品生態" }],
     m0_start: "開始學習 →",
 
-    // ============ M1 工作模式光譜 ============
-    m1_nav: "1. 工作模式光譜",
-    m1_title: "介面 × 能力的二維組合架構",
-    m1_overview: "過去把 Chat / Project / Cowork / Skill / Code 講成「五個並列層次」是錯的。正確的視角是：介面決定能力範圍，能力組合決定工作流型態。Cowork 不是與 Code 並列的工具，而是內建 Code 能力的桌面 GUI 版本。",
-    m1_highlights: ["介面 × 能力", "Cowork 內建 Code", "檔案位置決定介面", "不是五選一"],
-    m1_p1: "工作模式應拆成兩個軸線。介面軸代表你在哪裡跟 Claude 互動：Claude.ai 網頁、Claude Desktop（含 Cowork 模式）、Claude Code CLI。能力軸代表這個介面內建什麼：對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。不同介面內建的能力組合不同——Claude.ai 網頁的 Code 只能作用在雲端容器，Cowork 的 Code 可以作用在你授權的本機資料夾，Claude Code CLI 則完全跑在你本機。",
-    m1_p2: "最常見的誤解是把「Cowork」和「Code」當成並列的兩個工具——其實 Cowork 內建 Code 能力，本質上就是 Claude Code 的桌面 GUI 版本，跑在 Apple Virtualization Framework 隔離的虛擬機上，你授權的本機資料夾被 mount 進這個 VM，Code（Python/bash）就能直接操作那個資料夾。換句話說，「Cowork vs Code」這個問題本身就問錯了——你用 Cowork，就自動有 Code，兩者是同一件事的兩個面向，不是要選一個。",
-    m1_p3: "校正後的判斷流程很簡單。第一步問：檔案在哪裡？在本機就選 Cowork 或 CLI；在對話內就用網頁版。第二步問：任務需要什麼能力？確認你選的介面內建那些能力。第三步：要不要加 Skill、Project、Connector？視重用頻率與脈絡需求而定。這個流程把工具決策從「五選一的水平選擇」改成「介面層 + 能力層的垂直疊加」，避免了過去「Cowork 還是 Code」這種偽問題。維運型 skill（如 spa-consistency-check）的執行就是典型案例：它需要本機檔案存取 + Code 批次處理，在 Cowork 環境一次到位，不需要分階段。",
-    m1_wrapup: "不要把工具當成五選一，要拆成介面 × 能力二維。Cowork 不是與 Code 並列的選項——Cowork 內建 Code 能力。真正的決策軸線是「檔案在哪裡 + 需要什麼能力組合」，而不是「該用哪個模式」。理解這個校正，你的工作流選擇就會從直覺猜測升級為可推理的架構決策。",
-
-    m1_terms: [
-      { front: "介面軸", back: "你在哪裡跟 Claude 互動：Claude.ai 網頁、Claude Desktop（Cowork）、Claude Code CLI。介面決定能力的觸及範圍。" },
-      { front: "能力軸", back: "介面內建什麼：對話、Code 執行、本機檔案存取、Skill 觸發、Project 載入、MCP Connector。" },
-      { front: "Cowork 模式", back: "Claude Desktop 的桌面 agent 模式，內建 Code 能力 + 本機資料夾存取。跑在隔離 VM，plan-then-act 模式。本質是 Claude Code 的 GUI 版本。" },
-      { front: "Claude.ai 網頁", back: "Code 跑在雲端容器內，只能存取上傳檔案與下載產出物，無法直接讀寫本機資料夾。" },
-      { front: "Claude Code CLI", back: "終端機工具，完全跑在使用者本機，原生作業系統權限，適合開發者與 CI 整合。" },
-      { front: "Code 能力", back: "跑 Python/bash 的能力。存在於所有介面，但作用範圍由介面決定（雲端容器 / 本機 mount / 完全本機）。" },
-      { front: "Cowork ≠ Code", back: "錯誤觀念。Cowork 內建 Code 能力，兩者不是並列選項，而是同一件事的兩個面向。" },
-      { front: "本機檔案存取", back: "讀寫使用者電腦資料夾的能力。Claude.ai 網頁沒有，Cowork 與 CLI 有。決定能否做本機批次維運。" }
+    // ============ M1 修訂版 ============
+    m1_nav: "1. 合作模式與產品介面",
+    m1_title: "先辨識合作模式，再選產品介面與執行環境",
+    m1_overview: "一句話答案：Assistant 回答你，Co-pilot 陪你做，Agent 替你完成一段工作；同一產品可依任務與授權切換工作方式。",
+    m1_highlights: ["合作模式","產品介面","執行環境與權限","截至 2026-07"],
+    m1_p1: "第一層是合作模式。Assistant 以回答、解釋與整理為主；Co-pilot 是人機合作方式，由人掌握目標、節奏與重要決策；Agent 接受目標後，能規劃、使用工具、執行、觀察結果、修正並回報。Agent 不必自己設定人生目標，也不必主動喚醒自己；由使用者啟動、在單一任務內自主完成多步驟工作，也可以稱為 Agent。",
+    m1_p2: "第二層是產品介面。典型情況下，OpenAI 可對照為 ChatGPT Chat／ChatGPT Work／Codex；Anthropic 可對照為 Claude Chat／Claude Cowork／Claude Code。Chat 偏向快速對話；Work／Cowork 偏向一般知識工作交付；Codex／Claude Code 偏向程式庫、終端、測試與 Git。Cowork 與 Claude Code 能力可能重疊，但服務不同場景，不能寫成單純的 GUI／CLI 同一產品。",
+    m1_p3: "第三層是執行環境與權限：本機、雲端、Sandbox、Container 或 VM。產品名稱與能力會更新，選擇時先問「我要只問答案、逐步共作，還是交付可驗收成果？」再問「成果是回答、文件還是程式？」最後確認檔案、網路、測試、部署與敏感資料權限。這套三層判斷比固定產品排行更耐用。",
+    m1_wrapup: "先辨識合作模式，再選產品類型，最後確認執行環境與安全邊界。產品可以被用成 Co-pilot，也可能在授權範圍內呈現 Agent 行為。",
+    m1_terms:     [
+      {
+        "front": "Assistant（助理）",
+        "back": "像顧問回答你：以解釋、整理與生成內容為主，流程通常由使用者控制。"
+      },
+      {
+        "front": "Co-pilot（副駕）",
+        "back": "像副駕陪你做：人類掌握目標、節奏與重要決策，AI 持續建議與修改。"
+      },
+      {
+        "front": "Agent（代理系統）",
+        "back": "像受託同事：接受目標後，在授權範圍內規劃、行動、檢查與回報。"
+      },
+      {
+        "front": "Chat／Work／Coding Agent",
+        "back": "Chat 偏快速協作；Work／Cowork 偏一般交付；Codex／Claude Code 偏軟體工程。"
+      },
+      {
+        "front": "典型定位",
+        "back": "描述常見用途，不保證每個帳號、方案、版本或時間點都有完全相同功能。"
+      },
+      {
+        "front": "三層架構",
+        "back": "合作模式 → 產品介面 → 執行環境與權限。"
+      }
+    ],
+    m1_q:     [
+      {
+        "q": "哪一句最能描述 Co-pilot？",
+        "opts": [
+          "AI 自己決定所有目標",
+          "人掌握節奏，AI 陪同建議與修改",
+          "只能回答單一問題",
+          "固定等於某個產品"
+        ],
+        "ans": _A1,
+        "exp": "Co-pilot 是合作方式，不是固定技術層級或單一產品。"
+      },
+      {
+        "q": "Cowork 與 Claude Code 的正確關係是？",
+        "opts": [
+          "完全相同，只差 GUI／CLI",
+          "Cowork 一定沒有工具",
+          "都可有 agentic 能力，但服務不同工作場景",
+          "Claude Code 是一般辦公 Agent"
+        ],
+        "ans": _A2,
+        "exp": "兩者能力可能重疊，但 Cowork 偏知識工作與桌面檔案，Claude Code 偏軟體工程。"
+      },
+      {
+        "q": "任務清楚、可驗收，而且要自主執行多步驟時，較符合哪種模式？",
+        "opts": [
+          "Assistant",
+          "Agent",
+          "純搜尋",
+          "只讀文件"
+        ],
+        "ans": _A1,
+        "exp": "任務型 Agent 可由使用者啟動，在單一任務內完成多步驟工作。"
+      }
     ],
 
-    m1_q: [
-      { q: "下列哪個觀念是「錯的」？",
-        opts: ["Cowork 內建 Code 能力", "Cowork 跟 Code 是並列的兩種工具", "Claude.ai 網頁版的 Code 只能作用在雲端容器", "Cowork 是 Claude Code 的桌面 GUI 版本"],
-        ans: _A1, exp: "Cowork 跟 Code 不是並列工具，而是同一件事的兩個面向——Cowork 內建 Code 能力。其他三項都正確。" },
-      { q: "校正後的工作模式應該拆成哪兩個軸線？",
-        opts: ["創造 vs. 維運", "個人 vs. 團隊", "介面 × 能力", "免費 vs. 付費"],
-        ans: _A2, exp: "介面軸（在哪裡互動）× 能力軸（內建什麼）是正確的二維拆解，避免了「五選一」的偽問題。" },
-      { q: "我要對本機資料夾跑批次維運（例如 spa-consistency-check），最該選哪個介面？",
-        opts: ["Claude.ai 網頁版", "Cowork(Claude Desktop)", "純文字 email", "GitHub Issues"],
-        ans: _A1, exp: "Cowork 內建 Code 能力 + 本機資料夾存取，是本機批次維運的最佳介面。網頁版無法直接寫回本機。" },
-      { q: "下列哪個是「Cowork」的正確描述？",
-        opts: ["Code 的競爭對手", "跑在隔離 VM、內建 Code、可存取授權本機資料夾的桌面 agent", "純對話模式的桌面版", "需要寫程式才能使用"],
-        ans: _A1, exp: "Cowork 跑在 Apple Virtualization Framework 隔離 VM，本機資料夾透過 mount 進入 VM，內建 Code 能力，plan-then-act 模式。" },
-      { q: "判斷該用哪個介面，第一步該問什麼？",
-        opts: ["要付多少錢", "檔案在哪裡", "團隊有多大", "AI 模型是哪個"],
-        ans: _A1, exp: "檔案位置決定介面選擇——在本機就選 Cowork 或 CLI，在對話內就用網頁版。這是校正後的第一步判斷。" }
-    ],
-
-    // ============ M2 記憶與知識體系 ============
+    // ============ M2 修訂版 ============
     m2_nav: "2. 記憶與知識體系",
-    m2_title: "Context Window 內的四層分工",
-    m2_overview: "Memory 管你是誰、Project 管任務範圍、Skill 管執行規格、KB 管知識內容。四者分工互補，共同存在於 Context Window 這個容器中。",
-    m2_highlights: ["Context 是容器", "Memory 個人記憶", "Project 任務脈絡", "Skill 執行章程", "KB 知識資產"],
-    m2_p1: "Context Window 是「Claude 這次對話能看到的所有文字」的總空間。很多人誤以為 Memory 等於 Context Window，其實 Memory 只是 Context Window 內的一個區塊。一個完整的 Context Window 包含：System Prompt、Memory（個人記憶）、Project Files（專案脈絡）、User Preferences（使用偏好）、Skill 內容（觸發時載入）、本次對話歷史、工具呼叫結果。這一坨全部加起來，不能超過模型的上限。理解這個結構後，你會發現「為什麼長對話會變慢、變不準」——因為 context 持續累積、擠壓其他區塊的空間。",
-    m2_p2: "四層記憶各司其職。Memory 是「跨對話延續、記住你這個人的長期樣貌」，由系統自動維護，內容是濃縮摘要而非逐字稿。Project 是「記住這個任務範圍的固定脈絡」，每次對話自動載入，起手就有完整背景。Skill 是「把執行規格與流程封裝為可觸發的章程」，一次性固定成本、多次重用。KB 是「把外部材料萃取結構化的長期資產」，比原始材料精簡，跨平台可攜耐久。這四者疊起來才是完整的記憶與執行體系，互相補位、不是互相取代。",
-    m2_p3: "為什麼這個分層重要？因為每一層的 token 經濟特性不同。Memory 是「免費背景」但不能塞太多細節，否則會稀釋掉真正重要的個人資訊。Project 「起手稍貴但對話省力」，適合穩定脈絡。Skill 「一次性成本換無限重用紅利」。KB「投資未來，換取後續無數次的省力與精準」。當你誤把 Project 當 Memory 用，或把 Skill 當 KB 用，效率就會大打折扣。正確的分層，讓每種記憶放在最適合它的位置。",
-    m2_wrapup: "Memory、Project、Skill、KB 不是「都記住你的東西」的同義詞，而是四種不同性質的記憶機制。理解它們的分工，你就能精準決定：這個資訊該放在哪一層？塞錯地方不只浪費 token，還會降低 AI 的判斷品質。",
-
-    m2_terms: [
-      { front: "Context Window", back: "Claude 這次對話能看到的所有文字的總空間。包含 System Prompt、Memory、Project、Skill、對話歷史等所有區塊。" },
-      { front: "Memory", back: "跨對話延續、記住「你這個人」的長期樣貌。由系統自動維護，內容是濃縮摘要不是逐字稿。" },
-      { front: "Project", back: "記住「這個任務範圍」的固定脈絡。掛上的檔案、指令、知識庫，每次對話自動載入。" },
-      { front: "Skill", back: "把執行規格與流程封裝為可觸發的章程。一次性固定成本、多次重用，本質是微型 agent 章程。" },
-      { front: "Knowledge Base", back: "把外部材料萃取結構化的長期資產。比原始材料精簡、跨平台可攜耐久。" },
-      { front: "Parametric Knowledge", back: "模型訓練時學到的內建知識。存在神經網路權重裡，無法直接編輯或新增。" },
-      { front: "External Knowledge", back: "使用者提供給 AI 的、原本不知道的內容。存在 Context Window 或可被檢索的位置。" },
-      { front: "元知識 KB", back: "處理「如何使用工具的方法論」的 KB。生命週期極長，會影響所有未來決策。" }
+    m2_title: "內容可能摘要、按需讀取或檢索，不一定全部塞進 Context Window",
+    m2_overview: "一句話答案：Context Window 是本次推理可直接使用的資訊範圍；Memory、Project、Skill、KB 是供應資訊的不同方式。",
+    m2_highlights: ["Context 非固定拼盤","摘要與按需讀取","RAG 檢索","依產品版本而異"],
+    m2_p1: "Context Window（上下文視窗）是模型在本次推理中可直接使用的資訊範圍。System 指令、對話、工具結果與檢索內容都可能佔用它，但產品不一定把所有 Memory、Project、Skill 或 KB 原文一次完整載入。常見方式包括摘要、指令注入、按需讀檔與 RAG（檢索增強生成）。",
+    m2_p2: "Memory 適合延續跨對話偏好，但不是「免費背景」；Project 聚焦某個任務範圍，大量內容不一定每次全載；Skill 是 Agent 的可重用工作規格，可包含流程、參考、工具與資產，本身不會獨立規劃或執行；KB 是可查詢的知識資產，不保證比原始材料短，也不保證全部進入 context。",
+    m2_p3: "實務上要把「資訊放哪裡」與「資訊如何進入本次推理」分開。長期偏好放 Memory；專案規則與材料放 Project；穩定流程放 Skill；可查詢事實與證據放 KB。實際 token 與載入機制依產品、版本、權限和檢索策略而異，因此應觀察效果並驗證，不要假設固定區塊。",
+    m2_wrapup: "Memory、Project、Skill、KB 不是四個固定塞滿的盒子，而是不同的資訊治理方式；Skill 是工作手冊，不是 Agent 本身。",
+    m2_terms:     [
+      {
+        "front": "Context Window",
+        "back": "模型本次推理可直接使用的資訊範圍，不等於所有儲存資料的總和。"
+      },
+      {
+        "front": "Memory",
+        "back": "跨對話延續的偏好或摘要，仍可能有載入與維護成本。"
+      },
+      {
+        "front": "Project",
+        "back": "特定任務的規則、材料與脈絡；內容可能摘要或按需提供。"
+      },
+      {
+        "front": "Skill",
+        "back": "Agent 的可重用工作手冊或標準作業程序，本身不會獨立執行。"
+      },
+      {
+        "front": "Knowledge Base",
+        "back": "可整理與檢索的知識資產，不必然比原文短。"
+      },
+      {
+        "front": "RAG",
+        "back": "先找出相關內容，再把必要片段提供給模型推理。"
+      }
+    ],
+    m2_q:     [
+      {
+        "q": "下列哪個敘述最準確？",
+        "opts": [
+          "所有 Project 檔案每次一定全文載入",
+          "Memory 完全不花成本",
+          "內容可能以摘要、按需讀取或 RAG 提供",
+          "Skill 本身就是 Agent"
+        ],
+        "ans": _A2,
+        "exp": "實際提供方式依產品與版本而異，常見摘要、按需讀取與檢索。"
+      },
+      {
+        "q": "Skill 最適合的比喻是？",
+        "opts": [
+          "獨立員工",
+          "Agent 的工作手冊",
+          "模型權重",
+          "永久免費記憶"
+        ],
+        "ans": _A1,
+        "exp": "Skill 提供可重用規格；需與模型、工具、權限及執行迴圈結合。"
+      },
+      {
+        "q": "哪種資訊最適合放在 KB？",
+        "opts": [
+          "每次都變的臨時按鈕狀態",
+          "可重複查詢的領域證據與知識",
+          "作業系統密碼",
+          "所有原始檔不分類堆放"
+        ],
+        "ans": _A1,
+        "exp": "KB 的價值在可查詢、可驗證與可維護的知識。"
+      }
     ],
 
-    m2_q: [
-      { q: "Memory 跟 Context Window 的關係是什麼？",
-        opts: ["完全相同", "Memory ⊂ Context Window", "Context Window ⊂ Memory", "兩者無關"],
-        ans: _A1, exp: "Context Window 是容器，Memory 是裡面的其中一個區塊。Context Window 還包含 System Prompt、Project、Skill、對話歷史等其他內容。" },
-      { q: "下列哪一項最適合放在 Memory 而不是 Project？",
-        opts: ["某門課的教學大綱", "你的長期工作背景與偏好", "某個專案的程式碼", "一份特定 PDF 的內容"],
-        ans: _A1, exp: "Memory 適合放「關於你這個人」的長期樣貌，不適合放任務細節。任務細節該放 Project。" },
-      { q: "Skill 跟 KB 最主要的差異是？",
-        opts: ["Skill 比較貴", "Skill 封裝執行流程、KB 封裝知識內容", "兩者完全相同", "KB 比較新潮"],
-        ans: _A1, exp: "Skill 是「怎麼做」的章程，KB 是「知道什麼」的資產。兩者性質不同、互相補位。" },
-      { q: "「元知識 KB」與一般領域 KB 的差別？",
-        opts: ["沒有差別", "元知識處理方法論，生命週期更長", "元知識比較短", "元知識只能給 AI 看"],
-        ans: _A1, exp: "元知識 KB 處理「如何使用工具」的方法論，會影響所有未來決策，比領域 KB 的生命週期更長。" }
+    // ============ M3 修訂版 ============
+    m3_nav: "3. 成本與回收思維",
+    m3_title: "用概念模型比較總成本，不假裝預測實際 Token 帳單",
+    m3_overview: "一句話答案：工作流是否划算，要一起看建置、每次載入、重複溝通、維護與錯誤成本。",
+    m3_highlights: ["概念性模型","非實際帳單","每次載入成本","維護與錯誤成本"],
+    m3_p1: "結構化 Skill、KB 或 Project 需要建置成本，包括整理、撰寫、測試與人工時間。每次使用還可能產生指令載入、工具結果與對話內容的執行成本；若沒有結構，則常出現重複說明與規格對齊成本。",
+    m3_p2: "產品更新後要校正規格，這是維護成本；錯誤輸出、返工與人工驗證則是錯誤成本。這些成本不全能可靠換算成 token，也會受到模型、快取、摘要、檢索、工具與計價方案影響。因此模擬器只用相對點數協助比較假設，不代表 API 或訂閱帳單。",
+    m3_p3: "不要用「做三次就一定回本」之類絕對門檻。若規格穩定、重複頻繁、錯誤代價高，結構化可能較划算；若需求只做一次、變動很快或建置成本高，則需要更多資料。好的決策會把假設寫清楚，之後用實際時間、錯誤率與使用紀錄校正。",
+    m3_wrapup: "把模擬結果當作討論假設的儀表板，而不是精確財務或 token 預測。",
+    m3_terms:     [
+      {
+        "front": "建置成本",
+        "back": "整理 Skill、KB、Project 與測試所需的人力與時間。"
+      },
+      {
+        "front": "每次載入成本",
+        "back": "每次執行時讀取指令、檢索內容、工具結果與對話的成本。"
+      },
+      {
+        "front": "重複溝通成本",
+        "back": "每次重新解釋需求、格式與限制的成本。"
+      },
+      {
+        "front": "維護成本",
+        "back": "產品、資料或規格更新後重新校正的成本。"
+      },
+      {
+        "front": "錯誤成本",
+        "back": "錯誤輸出、返工、人工驗證與風險造成的成本。"
+      },
+      {
+        "front": "概念性回收模擬",
+        "back": "用相對點數比較情境，不是實際 token 帳單。"
+      }
+    ],
+    m3_q:     [
+      {
+        "q": "概念性回收模擬器的結果代表什麼？",
+        "opts": [
+          "精確 API 帳單",
+          "保證幾次回本",
+          "在明示假設下的相對比較",
+          "所有模型通用價格"
+        ],
+        "ans": _A2,
+        "exp": "模型只協助比較假設，不預測真實帳單。"
+      },
+      {
+        "q": "下列何者常被舊式 token 計算忽略？",
+        "opts": [
+          "維護與錯誤成本",
+          "螢幕亮度",
+          "鍵盤品牌",
+          "字體顏色"
+        ],
+        "ans": _A0,
+        "exp": "規格更新、返工與人工驗證常會改變總成本。"
+      },
+      {
+        "q": "何時較可能值得結構化？",
+        "opts": [
+          "需求穩定、重複頻繁且錯誤代價高",
+          "只做一次且需求未定",
+          "完全沒有驗收方式",
+          "只因為做了三次"
+        ],
+        "ans": _A0,
+        "exp": "重用、穩定性與錯誤代價比固定次數門檻更有意義。"
+      }
     ],
 
-    // ============ M3 Token 經濟學 ============
-    m3_nav: "3. Token 經濟學",
-    m3_title: "一次性成本、累積成本、起手成本的權衡",
-    m3_overview: "看單次成本會誤判，要看任務生命週期的總成本。投資結構化（Skill、KB）= 用一次成本換無限重用紅利。",
-    m3_highlights: ["三種成本類型", "生命週期視角", "反直覺真相", "投資 vs. 即用"],
-    m3_p1: "Token 成本可分為三種類型。一次性成本（One-time）指的是讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。累積成本（Cumulative）指的是對話歷史越長吃越多、每次重講規格的成本。起手成本（Startup）指的是 Project 載入、Memory 注入這類「每次對話開頭就有」的成本。三種成本的時間分布不同，決定了它們的最佳使用情境。",
-    m3_p2: "一個反直覺的真相：Skill 通常省 token，不是耗 token。因為它取代了「每次都要對齊規格」的累積成本。同樣地，Code 通常省 token，不是耗 token——大檔案不必進 context。Project 起手貴，但長期省——適合穩定脈絡、不適合一次性任務。看單次成本會誤判，要看任務生命週期的總成本。一個 SKILL.md 讀一次 5000 token，但替你省下後續 20 輪對話中每輪 2000 token 的規格對齊，總帳是大賺。",
-    m3_p3: "Token 經濟學的最高境界是「結構化投資」。把規格寫進 Skill、把材料整理成 KB、把任務交給 Code、把脈絡放進 Project——這些都是用一次性投資換取後續無數次的省力與精準。當你開始用「生命週期總成本」而非「單次成本」來判斷，你的工作流就會自然往最高效率的方向演化。終極判準是：這個投資的回收期是多長？如果同類任務會做 3 次以上，投資 Skill 或 KB 幾乎一定划算；只做一次，就不必。",
-    m3_wrapup: "Token 經濟學不是「省錢」的小聰明，而是「設計工作流」的核心邏輯。每個決策——用 Chat 還是 Project、用 Skill 還是即時對話、用 Code 還是肉眼處理——背後都是 token 經濟學在運作。理解它，你的決策就會從直覺升級為計算。",
-
-    m3_terms: [
-      { front: "一次性成本", back: "讀 SKILL.md、載入 KB 這類「付一次、重用多次」的成本。投資型支出。" },
-      { front: "累積成本", back: "對話歷史越長吃越多、每次重講規格的成本。長對話的隱性成本來源。" },
-      { front: "起手成本", back: "Project 載入、Memory 注入這類「每次對話開頭就有」的成本。" },
-      { front: "Skill 經濟學", back: "Skill 通常省 token 不是耗 token，因為它取代了每次對齊規格的累積成本。" },
-      { front: "Code 經濟學", back: "Code 通常省 token，因為大檔案不必進 context，只有結果回到對話。" },
-      { front: "生命週期總成本", back: "把所有 token 支出加總，看整個任務週期的成本。比單次成本更能反映真實效率。" }
+    // ============ M4 修訂版 ============
+    m4_nav: "4. 工具與 Coding Agent",
+    m4_title: "Agent 會在理解、執行、觀察與修正之間循環",
+    m4_overview: "一句話答案：成果需要精確處理、直接改檔、測試、轉檔或結構化輸出時，工具或 Coding Agent 通常更合適。",
+    m4_highlights: ["理解→執行→觀察→修正","使用者不必親自寫 Code","規模壓力測試","依需求選工具"],
+    m4_p1: "不要把工作硬切成「只思考」或「只執行」。Agent 常先理解與規劃，再使用工具，觀察結果，依錯誤修正。純問答可直接對話；需要精確、可重複、可驗證的處理時，工具能降低人工錯誤。",
+    m4_p2: "建立 docx、xlsx、pptx 或 PDF 通常需要檔案工具在背景處理，但使用者不必親自寫程式，也不一定要切換到 Coding Agent。若任務涉及程式庫、多檔案修改、測試、終端或 Git，Codex／Claude Code 這類 Coding Agent 才是典型選擇。",
+    m4_p3: "把「100 份法則」改成規模壓力測試：假設數量增加，人工步驟是否容易漏、結果是否要一致、是否需要重跑與驗證？這是啟發式提問，不是 20 或 100 份的技術門檻。判斷器應綜合直接改檔、測試、轉檔、精確重複與人工出錯風險。",
+    m4_wrapup: "對話、檔案工具與 Coding Agent 是漸進選擇；看驗收需求與風險，不看固定份數。",
+    m4_terms:     [
+      {
+        "front": "Coding Agent",
+        "back": "專門處理程式庫、終端、測試、Git 與軟體開發的 Agent。"
+      },
+      {
+        "front": "工具／檔案功能",
+        "back": "可在背景建立、轉換或檢查檔案，使用者不一定需要寫程式。"
+      },
+      {
+        "front": "規模壓力測試",
+        "back": "想像數量增加後是否容易出錯，用來判斷自動化價值的啟發式問題。"
+      },
+      {
+        "front": "可重複處理",
+        "back": "同一規則能再次執行並得到一致、可檢查的結果。"
+      },
+      {
+        "front": "驗證迴圈",
+        "back": "執行後檢查結果，失敗就修正或停止。"
+      },
+      {
+        "front": "直接修改檔案",
+        "back": "需要權限與備份意識，應先確認作用範圍與刪除風險。"
+      }
+    ],
+    m4_q:     [
+      {
+        "q": "產生 PowerPoint 時，使用者一定要自己寫程式嗎？",
+        "opts": [
+          "一定",
+          "不一定，檔案工具可在背景處理",
+          "只能手工建立",
+          "必須使用 Docker"
+        ],
+        "ans": _A1,
+        "exp": "成果可能需程式工具，但使用者不一定親自寫 code。"
+      },
+      {
+        "q": "哪種情況最典型地需要 Coding Agent？",
+        "opts": [
+          "聊天腦力激盪",
+          "程式庫多檔修改、測試與 Git",
+          "詢問單字",
+          "閱讀一段短文"
+        ],
+        "ans": _A1,
+        "exp": "Coding Agent 專門處理軟體工程環境與驗證。"
+      },
+      {
+        "q": "規模壓力測試是什麼？",
+        "opts": [
+          "100 份的硬門檻",
+          "20 份的硬門檻",
+          "評估重複、錯誤與驗證需求的啟發式問題",
+          "token 計價規則"
+        ],
+        "ans": _A2,
+        "exp": "它協助思考自動化價值，不是固定數量技術門檻。"
+      }
     ],
 
-    m3_q: [
-      { q: "「Skill 通常省 token」的核心理由是？",
-        opts: ["Skill 比較便宜", "它取代了每次對齊規格的累積成本", "它縮短了對話", "它跳過了系統檢查"],
-        ans: _A1, exp: "Skill 是一次性讀取，但替你省下每次都要重新講規格的累積成本。對話越長、修改越多輪，省 token 效益越明顯。" },
-      { q: "為什麼「看單次成本會誤判」？",
-        opts: ["單次成本不準", "因為要看生命週期總成本", "因為 token 計算有誤", "因為 Anthropic 隱藏資訊"],
-        ans: _A1, exp: "一次性投資（Skill、KB）單次看很貴，但生命週期內被重用多次，總帳反而省。要用生命週期視角才能看清。" },
-      { q: "Project 的 token 特性是？",
-        opts: ["完全免費", "起手成本中到高，累積成本低", "純粹只是浪費", "等於 Memory"],
-        ans: _A1, exp: "Project 每次對話起手就載入專案內容，起手成本較高；但對話中不用重複講背景，累積成本低。適合穩定脈絡。" },
-      { q: "下列何者「不是」結構化投資？",
-        opts: ["把規格寫進 Skill", "把材料整理成 KB", "把任務交給 Code", "在每次對話重講需求"],
-        ans: _A3, exp: "每次重講需求是典型的「累積成本」，反而是結構化投資要避免的。前三項都是用一次投資換重用紅利。" }
+    // ============ M5 修訂版 ============
+    m5_nav: "5. AIWF 自主程度框架",
+    m5_title: "五級光譜是 AIWF 教學框架，不是官方產業標準",
+    m5_overview: "一句話答案：L2 任務內多步驟 Agent 已經是 Agent；等級描述自主範圍，不是產品高低排名。",
+    m5_highlights: ["AIWF 自訂框架","L2 也是 Agent","Skill 不是 Agent","觸發與安全邊界"],
+    m5_p1: "AIWF 為教學方便提出五級光譜：L0 對話回答；L1 工具輔助；L2 任務內多步驟 Agent；L3 可排程或可觸發的持續工作流；L4 跨任務、長時間且高度自主的系統。這不是 OpenAI、Anthropic 或產業統一分級。",
+    m5_p2: "Codex 與 Claude Code 都可描述為任務型 Coding Agent，不能因為由人啟動就說它們不算 Agent。是否適合更高自主程度，要看觸發條件、狀態保存、權限、監控、停止規則、回復方式與人工確認，而不是追求「越自動越好」。",
+    m5_p3: "SKILL.md 是 Agent 的可重用工作規格。只有當它與模型、工具、權限及執行迴圈結合時，才會形成穩定的任務型 Agent 工作流。Skill 本身不會觀察環境、規劃或採取行動，因此不可直接稱為微型 Agent。",
+    m5_wrapup: "把等級當作討論自主範圍的教學語言，並為每一級設計可驗收成果與安全邊界。",
+    m5_terms:     [
+      {
+        "front": "L0：對話回答",
+        "back": "針對輸入提供回答，主要流程由人控制。"
+      },
+      {
+        "front": "L1：工具輔助",
+        "back": "AI 使用單項工具協助，但多由人安排步驟。"
+      },
+      {
+        "front": "L2：任務內多步驟 Agent",
+        "back": "在單一任務中規劃、行動、觀察與修正；仍屬 Agent。"
+      },
+      {
+        "front": "L3：持續工作流",
+        "back": "可由排程、事件或條件觸發，需保存狀態並監控。"
+      },
+      {
+        "front": "L4：高度自主系統",
+        "back": "跨任務長時間運行，必須有更嚴格治理與失敗處理。"
+      },
+      {
+        "front": "SKILL.md",
+        "back": "可重用工作規格；不是會自行執行的 Agent。"
+      }
+    ],
+    m5_q:     [
+      {
+        "q": "AIWF 五級光譜的性質是？",
+        "opts": [
+          "官方標準",
+          "產業認證",
+          "AIWF 自訂教學框架",
+          "模型排行榜"
+        ],
+        "ans": _A2,
+        "exp": "它是為教學與討論自主範圍提出的框架。"
+      },
+      {
+        "q": "L2 任務內多步驟系統算 Agent 嗎？",
+        "opts": [
+          "不算",
+          "只在主動喚醒時才算",
+          "可以算任務型 Agent",
+          "只有 L4 才算"
+        ],
+        "ans": _A2,
+        "exp": "由人啟動不妨礙它在任務內規劃、執行與修正。"
+      },
+      {
+        "q": "SKILL.md 何時能形成 Agent 工作流？",
+        "opts": [
+          "單獨存在就可以",
+          "與模型、工具、權限及執行迴圈結合時",
+          "改名為 Agent.md 時",
+          "放進 PDF 時"
+        ],
+        "ans": _A1,
+        "exp": "Skill 是規格，需要執行系統與安全邊界才能運作。"
+      }
     ],
 
-    // ============ M4 Code 執行的角色 ============
-    m4_nav: "4. Code 執行的角色",
-    m4_title: "思考型任務與執行型任務的本質差異",
-    m4_overview: "Code 是執行的工具，不是思考的工具。需要「真的做出某個結果」時用它，需要「想清楚某件事」時不用。",
-    m4_highlights: ["思考 vs. 執行", "Skill + Code 絕配", "規模問題用 Code", "100 份法則", "Code 作用範圍由介面決定"],
-    m4_p1: "「該不該用 Code」對應一個更根本的問題：這個任務的本質是「思考」還是「執行」？思考型任務包括理解、解釋、討論、決策、創作——這些用「對話模式」最有效。執行型任務包括計算、轉檔、處理大量資料、產生檔案——這些用「Code 模式」最有效。混淆兩者會出問題：思考型任務硬上 Code = 浪費；執行型任務硬不用 Code = 出錯、燒 token。",
-    m4_p2: "必須用 Code 的情境包括：產生二進位檔案（docx、xlsx、pptx、pdf）、精確數值運算與統計分析、批次檔案操作、圖表生成、部署與 Git 操作。強烈建議用 Code 的情境包括：長文件程式化處理、大資料量但只要重點、重複性操作。不該用 Code 的情境包括：純對話與寫作、寫程式碼給使用者拿走（不需執行驗證時）、簡單邏輯推理。判斷的訣竅是問自己：這個任務是「需要想清楚」還是「需要真的做出來」？",
-    m4_p3: "Skill 跟 Code 不是衝突的工具，而是絕配。Code 做髒活、Skill 做精緻產出。例如：Code 負責讀 30 份 PDF、跑詞頻、生統計；Skill（例如 docx）負責把結果包裝成正式報告格式。一個更深層的判準是「100 份法則」：如果這個任務有 100 份要處理會不會崩潰？會崩潰就用 Code，不會就用 Chat + Skill。3 份還能撐，30 份開始痛，100 份必定崩潰——這個簡單的問題能幫你做出 90% 的正確判斷。最後一個關鍵校正：Code 是「能力」不是「介面」，它存在於所有介面，但作用範圍由介面決定。Claude.ai 網頁的 Code 只能作用在雲端容器內的上傳檔案；Cowork 的 Code 可以作用在你授權的本機資料夾；CLI 的 Code 完全本機原生。所以「該不該用 Code」跟「該用哪個介面」是兩個獨立問題，不要混為一談。",
-    m4_wrapup: "Code 是執行的工具，不是思考的工具。殺雞不用牛刀，挖隧道別用牙籤——選對工具是 token 經濟學最具體的展現。當你開始把任務分為「思考型」和「執行型」並對應不同模式，並理解「Code 的作用範圍由介面決定」，你的工作流效率會立刻提升一個層級。",
-
-    m4_terms: [
-      { front: "思考型任務", back: "理解、解釋、決策、創作這類「需要想清楚」的任務。對話模式最有效。" },
-      { front: "執行型任務", back: "計算、轉檔、批次、產檔這類「需要真的做出來」的任務。Code 模式最有效。" },
-      { front: "Skill + Code 組合", back: "Code 做髒活、Skill 做精緻產出。兩者分工合作，是 semi-agent 工作流的核心配置。" },
-      { front: "100 份法則", back: "如果這個任務有 100 份要處理會不會崩潰？會崩潰就用 Code，不會就用 Chat+Skill。" },
-      { front: "二進位產出", back: "docx、xlsx、pptx、pdf 這類非純文字檔案。必須透過 Code 生成，無法用對話直接產出。" },
-      { front: "規模密集型", back: "需要重複、檢查、批次處理的任務。Code 的主場。" },
-      { front: "腦力密集型", back: "需要創造、判斷、設計的任務。Chat + Skill + Project 的主場。" }
+    // ============ M6 修訂版 ============
+    m6_nav: "6. Skill、環境與自我修復",
+    m6_title: "是否需要 Code 或 Container，取決於輸出、驗證與部署需求",
+    m6_overview: "一句話答案：創造型與維運型 Skill 都可能用到工具；掃描加批次修改仍不等於自我修復。",
+    m6_highlights: ["創造／維運非硬分類","六項自我修復條件","Sandbox ≠ Container","vibe coding 環境決策"],
+    m6_p1: "創造型 Skill 偏向產生新成果，維運型 Skill 偏向檢查與更新既有成果；兩者都可能需要程式或工具。是否需要執行工具，應看資料量、輸出格式、可重複性與驗證需求，而不是只看「創造」或「維運」。",
+    m6_p2: "自我修復至少需要：自動偵測問題、明確正確性規格、產生修正、執行測試或驗證、失敗時停止或回復，以及高風險修改要求人工確認。只有掃描與批次修改，不能直接宣稱是自我修復系統。",
+    m6_p3: "vibe coding 初學者通常可先用最簡單本機方案。靜態網頁、單機工具或簡單原型常不需要 Container；網站加資料庫、多服務、部署搬移、團隊一致環境或相依衝突時可考慮 Docker Compose。Sandbox 管「允許做什麼」；Container 管「在哪種隔離環境執行」；Docker 是管理 Container 的工具；VM 是較完整的虛擬電腦。Container 不等於安全，Sandbox 也不一定使用 Container。",
+    m6_wrapup: "先請 Coding Agent 檢查專案，說明不用 Container 的簡單方案、使用它的好處與複雜度，再取得確認。",
+    m6_terms:     [
+      {
+        "front": "Sandbox（沙盒）",
+        "back": "像活動規則：限制可讀寫路徑、網路、命令與需確認的操作。"
+      },
+      {
+        "front": "Container（容器）",
+        "back": "像可重建的房間：包住應用與相依環境，但不自動等於安全。"
+      },
+      {
+        "front": "Docker",
+        "back": "建立與管理 Container 的常見工具，不是 Container 本身。"
+      },
+      {
+        "front": "VM（虛擬機器）",
+        "back": "像較完整的虛擬電腦，通常隔離較完整、成本也較高。"
+      },
+      {
+        "front": "Docker Compose",
+        "back": "用一份設定協調多個服務、網路、Volume 與 Port。"
+      },
+      {
+        "front": ".env／API Key／Volume／Port",
+        "back": ".env 常放設定；API Key 是憑證；Volume 保存資料；Port 是服務對外入口。"
+      }
     ],
-
-    m4_q: [
-      { q: "下列哪個任務最適合用 Code？",
-        opts: ["寫一篇 500 字的文章", "解釋什麼是 React", "批次處理 50 個 CSV 檔案", "討論職涯方向"],
-        ans: _A2, exp: "批次處理大量檔案是典型的執行型任務，Code 是最佳工具。其他三項都是思考型，對話模式更適合。" },
-      { q: "「100 份法則」是什麼意思？",
-        opts: ["要做 100 份才會被收費", "如果任務有 100 份會不會崩潰，會就用 Code", "Code 最多處理 100 份檔案", "Skill 最多 100 個"],
-        ans: _A1, exp: "問自己「這個任務 100 份會不會崩潰」是判斷該不該用 Code 的簡單訣竅。會崩就用 Code，不會就用 Chat+Skill。" },
-      { q: "Code 的「作用範圍」由什麼決定？",
-        opts: ["Code 本身的版本", "介面（網頁版/Cowork/CLI）", "對話長度", "訂閱方案"],
-        ans: _A1, exp: "Code 是「能力」存在於所有介面，但作用範圍由介面決定：網頁版只能作用在雲端容器，Cowork 可以作用在本機 mount 資料夾，CLI 完全本機。" },
-      { q: "下列何者「不需要」用 Code？",
-        opts: ["生成 .docx 報告", "批次更新 50 個 HTML 檔", "解釋什麼是 Semi-Agent", "跑統計分析並產出圖表"],
-        ans: _A2, exp: "「解釋什麼是 Semi-Agent」是純思考型任務，對話模式即可。其他三項都需要實際執行，必須用 Code。" }
-    ],
-
-    // ============ M5 Semi-Agent 工作流 ============
-    m5_nav: "5. Semi-Agent 工作流",
-    m5_title: "從工具呼叫到自主執行的光譜",
-    m5_overview: "Semi-Agent 是「人類定義目標 + AI 自主執行流程」的甜蜜點。SKILL.md 本質上是微型 agent 的章程。",
-    m5_highlights: ["Agent 光譜", "Level 2 甜蜜點", "向內自主", "Skill 是章程"],
-    m5_p1: "Agent 光譜從淺到深可分為五層。Level 0 純對話工具——你問一句我答一句，所有決策都在使用者身上。Level 1 工具呼叫——AI 會主動搜尋、讀檔、執行程式碼，但每一步仍是「你下指令、我執行單一動作」。Level 2 Semi-Agent——AI 能讀 Skill 內化規格與流程，自己決定多步驟工作的順序，在使用者定義的任務範圍內有局部自主性。Level 3 Agent——AI 有持續目標，自己排定子任務，會主動回報或發起對話。Level 4 Autonomous Agent——長時間運行、跨多個目標、自己管理優先順序。",
-    m5_p2: "Semi-Agent 的關鍵特徵是「向內自主、向外受控」。向內：AI 在任務內部多步驟自主執行——讀 SKILL.md、掃描資料夾、生成產出物、寫回資料夾，這一連串不需要使用者一步步指令。向外：任務的啟動與終止由使用者掌握——你說「做 SPA」AI 才做、做完就停。這種「半自主」的特性，既保留使用者的控制權，又釋放 AI 的執行能力，是目前最實用的工作流型態。判斷你的工作流位於哪個 Level，可以問：AI 有沒有在做你沒明確下指令、但任務需要的事？",
-    m5_p3: "SKILL.md 本質上是「微型 agent 的章程」。每次精修 SKILL.md，等於訓練這個 semi-agent 行為更穩定、更不需要使用者介入。換個角度看，你不是在「使用」AI，而是在「設計」一個小型 agent 系統。要從 Semi-Agent 推進到 Level 3 Agent，還需要三樣東西：觸發機制（webhook、定時、檔案變更偵測）讓任務自動啟動、跨任務記憶（執行狀態、未完成清單）、自主邊界判斷（哪些情況該自主、哪些該停下來問）。這些 Claude Code 或自建 agent 架構可以做到，但 Chat + Skill + Cowork 刻意停在 Semi-Agent 是有道理的——保留控制權，避免 AI 自作主張。",
-    m5_wrapup: "你不只是 AI 的使用者，你是 AI 工作流的設計者。每一份 SKILL.md 都是微型 agent 的章程，每一次工具組合都是工作流架構決策。Semi-Agent 不是技術名詞，而是一個讓人類與 AI 各司其職的設計哲學。",
-
-    m5_terms: [
-      { front: "Agent 光譜", back: "從 Level 0 純對話到 Level 4 Autonomous Agent 的五層分級。Semi-Agent 在 Level 2。" },
-      { front: "Semi-Agent", back: "Level 2，任務內部多步驟自主，任務範圍由使用者定義。向內自主、向外受控。" },
-      { front: "向內自主", back: "AI 在任務內部多步驟自主執行，不需使用者一步步指令。" },
-      { front: "向外受控", back: "任務的啟動與終止由使用者掌握，AI 不自己跨任務。" },
-      { front: "SKILL.md 章程", back: "每次精修 SKILL.md 等於訓練微型 agent 行為更穩定。SKILL.md 是 semi-agent 的 constitution。" },
-      { front: "Level 3 Agent", back: "持續目標、自排子任務、會主動發起。需要觸發機制、跨任務記憶、自主邊界判斷。" },
-      { front: "甜蜜點", back: "Semi-Agent 是目前最實用的甜蜜點——既釋放 AI 執行能力，又保留使用者控制權。" }
-    ],
-
-    m5_q: [
-      { q: "Semi-Agent 在 Agent 光譜的哪個位置？",
-        opts: ["Level 0", "Level 1", "Level 2", "Level 4"],
-        ans: _A2, exp: "Level 0 純對話、Level 1 工具呼叫、Level 2 Semi-Agent、Level 3 Agent、Level 4 Autonomous Agent。Semi-Agent 是 Level 2。" },
-      { q: "Semi-Agent 的關鍵特徵是？",
-        opts: ["完全自主", "完全受控", "向內自主、向外受控", "完全隨機"],
-        ans: _A2, exp: "Semi-Agent 在任務內部多步驟自主（向內），但任務的啟動終止由使用者掌握（向外）。這是它的核心特徵。" },
-      { q: "SKILL.md 的本質是？",
-        opts: ["一份說明文件", "微型 agent 的章程", "AI 的程式碼", "對話的腳本"],
-        ans: _A1, exp: "SKILL.md 是 semi-agent 的 constitution——每次精修等於訓練 agent 行為更穩定，降低使用者介入需求。" },
-      { q: "要從 Semi-Agent 推進到 Level 3 Agent，「不」需要下列哪一項？",
-        opts: ["觸發機制", "跨任務記憶", "自主邊界判斷", "更大的 context window"],
-        ans: _A3, exp: "推進到 Level 3 需要觸發機制、跨任務記憶、邊界判斷。Context window 大小不是關鍵，關鍵是「能否自主啟動和管理任務」。" }
-    ],
-
-    // ============ M6 維運型 Skill 與批次任務 ============
-    m6_nav: "6. 維運型 Skill 與批次任務",
-    m6_title: "從創造端到規模端的完整工作流",
-    m6_overview: "AI 協作工作流不只要優化「創造」，也要優化「規模」。維運型 skill 是 semi-agent 工作流的另一半，讓系統有自我修復能力。",
-    m6_highlights: ["創造 vs. 維運", "批次任務判準", "spa-consistency-check", "自我修復系統"],
-    m6_p1: "目前大多數 skill 都集中在「創造端」——把無變成有、把素材變成產出物。例如 note-to-kb 把筆記變 KB、kb-to-quiz 把 KB 變測驗、interactive-learning-spa 把規格變 SPA。但工作不只是「創造」，還有「維護現有產出物」——當規範更新後，舊的產出物該怎麼跟上？當資料夾結構漂移時，該如何稽核？這些「維護、檢查、批次更新」的工作，就是「維運型 skill」要解決的。",
-    m6_p2: "創造型與維運型 skill 在五個構面上有本質差異。輸入：創造型是原始素材，維運型是現有產出物。輸出：創造型是新的產出物，維運型是報告 + 修正後的檔案。任務本質：創造型是思考型（理解、設計），維運型是執行型（掃描、比對、修改）。是否需要 Code：創造型通常不需要，維運型通常必要。觸發頻率：創造型是每次新任務，維運型是每次規範更新或定期稽核。創造型 skill 解決「重新發明輪子」的痛，維運型 skill 解決「機械性重複勞動」的痛。",
-    m6_p3: "spa-consistency-check 是維運型 skill 的典型案例。它掃描指定資料夾中的所有 SPA HTML 檔案，依照 interactive-learning-spa 最新規範進行一致性檢查，產出 Markdown 報告，並以「逐項互動式修補」模式協助使用者更新不合規檔案。當你同時擁有創造型（produces SPA）與維運型（maintains SPA）skill 後，工作流會出現有趣的特性——它有自我修復能力。改了規範 → 跑 consistency-check 找不合規檔案 → 跑 batch-update 批次修補 → 整個系統自動跟上最新標準。這就從 Level 2 Semi-Agent 往 Level 3 Agent 推進了一小步。",
-    m6_wrapup: "AI 協作工作流的完整型態需要兩端優化：創造端 + 維運端。創造型 skill 解決「從 0 到 1」的問題，維運型 skill 解決「從 1 到 N 的一致性」問題。當兩端都建立後，你的 semi-agent 工作流會接近全自動——而起點往往就是第一個維運型 skill 的開發。",
-
-    m6_terms: [
-      { front: "創造型 Skill", back: "從原始素材產出新的產出物。例如 note-to-kb、kb-to-quiz、interactive-learning-spa。" },
-      { front: "維運型 Skill", back: "維護現有產出物的一致性。例如 spa-consistency-check、spa-batch-update。" },
-      { front: "100 份崩潰法則", back: "如果這個任務 100 份會不會崩潰？會崩潰就用 Code，不會就用 Chat+Skill。" },
-      { front: "spa-consistency-check", back: "掃描資料夾中所有 SPA 並依規範一致性檢查，產出 Markdown 報告，支援逐項互動式修補。" },
-      { front: "自我修復系統", back: "創造型 + 維運型 skill 同時存在時，系統能自動追上最新規範，接近 Level 3 Agent。" },
-      { front: "規模密集型任務", back: "需要重複、檢查、批次處理的任務，屬於 Code 的主場，維運型 skill 的應用場域。" },
-      { front: "腦力密集型任務", back: "需要創造、判斷、設計的任務，屬於 Chat + Skill 的主場，創造型 skill 的應用場域。" }
-    ],
-
-    m6_q: [
-      { q: "創造型 skill 跟維運型 skill 最主要的差異是？",
-        opts: ["創造型比較貴", "創造型解決從 0 到 1，維運型解決從 1 到 N 的一致性", "兩者沒有差異", "維運型比較新"],
-        ans: _A1, exp: "創造型 skill 把無變成有，維運型 skill 維護現有產出物的一致性。兩者解決的痛點不同。" },
-      { q: "spa-consistency-check 的主要功能是？",
-        opts: ["生成新的 SPA", "掃描現有 SPA 並依規範檢查、互動式修補", "翻譯 SPA 為多語言", "部署 SPA 到 GitHub"],
-        ans: _A1, exp: "spa-consistency-check 是維運型 skill，掃描現有 SPA、依規範檢查、產出報告，並逐項互動式修補不合規檔案。" },
-      { q: "「自我修復系統」需要什麼條件？",
-        opts: ["只要創造型 skill", "只要維運型 skill", "創造型 + 維運型 skill 同時存在", "只要 Code"],
-        ans: _A2, exp: "兩端 skill 同時存在，系統才能自動追上規範變化——改規範 → 找不合規 → 批次修補，這是自我修復的基本鏈條。" },
-      { q: "下列何者「不是」維運型 skill 的特徵？",
-        opts: ["輸入是現有產出物", "通常需要 Code", "從 0 創造新內容", "解決機械性重複勞動"],
-        ans: _A2, exp: "「從 0 創造新內容」是創造型 skill 的特徵。維運型 skill 的輸入是現有產出物，目的是維護而非創造。" }
+    m6_q:     [
+      {
+        "q": "Sandbox 與 Container 的差異是？",
+        "opts": [
+          "完全相同",
+          "Sandbox 管允許做什麼；Container 管執行環境",
+          "Sandbox 是 Docker 品牌",
+          "Container 一定安全"
+        ],
+        "ans": _A1,
+        "exp": "兩者可一起使用，但描述不同層次。"
+      },
+      {
+        "q": "何時較適合考慮 Docker Compose？",
+        "opts": [
+          "單一靜態 HTML",
+          "多服務加資料庫且需部署重建",
+          "只問概念",
+          "短暫貼一段文字"
+        ],
+        "ans": _A1,
+        "exp": "多服務、部署與一致環境是 Compose 的典型價值。"
+      },
+      {
+        "q": "只有掃描與批次修改，可以直接稱自我修復嗎？",
+        "opts": [
+          "可以",
+          "不可以，還需規格、驗證、停止／回復與風險確認",
+          "只要有 Docker 就可以",
+          "只要超過 100 份就可以"
+        ],
+        "ans": _A1,
+        "exp": "自我修復必須有完整的偵測、修正、驗證與失敗控制。"
+      }
     ],
 
     // ============ M{N+1} 互動實驗室 ============
     mlab_nav: "7. 互動實驗室",
     mlab_title: "決策速查工具",
-    mlab_desc: "把 KB 第 9 章「決策速查表」轉化為可互動的判斷工具。輸入你的情境，得到工具推薦。",
+    mlab_desc: "四個判斷器會提供合作方式、產品類型、執行環境與安全提醒；結果是教學建議，不取代專案檢查。",
     mlab_labs: [
-      { title: "介面 + 能力組合選擇器", desc: "依檔案位置、任務性質、重用頻率，推薦最適合的介面（網頁/Cowork/CLI）與能力組合" },
-      { title: "Token 經濟計算器", desc: "估算不同模式下的 token 消耗，幫你決定該投資哪一層結構化" },
-      { title: "Code 必要性判斷器", desc: "輸入任務描述，自動判斷該用 Code 還是純對話（基於 100 份法則）" },
-      { title: "Skill 開發優先順序", desc: "依痛點頻率、規格穩定性、重用次數，排序你該優先開發哪個 Skill" }
+      { title: "工作方式與環境選擇器", desc: "依成果、檔案、測試、排程、敏感資料與部署需求提供分層建議" },
+      { title: "概念性回收模擬器", desc: "比較建置、每次載入、重複溝通與維護成本；不是實際 token 帳單" },
+      { title: "Code 必要性判斷器", desc: "依重複精確、改檔、測試、轉檔與人工錯誤風險提供建議" },
+      { title: "Container 必要性判斷器", desc: "依資料庫、多服務、部署、相依衝突、GPU 與單機原型判斷" }
     ],
 
     // ============ M{N+2} 外部學習資源 ============
@@ -462,7 +669,7 @@ const dict = {
     mres_desc: "本方法論的延伸資源，包含 Anthropic 官方文件、Skill 開發指南、Claude 產品說明等。",
 
     // Footer
-    date: "Version 2026.05.23",
+    date: "內容版本 2026-07",
     copyright: "For Educational Use Only",
     architect_label: "Architect:",
     architect_name: "Prof. Shihmin Lo",
@@ -471,7 +678,7 @@ const dict = {
   en: {
     brand: "AIWF",
     title: "AI Workflow Methodology",
-    subtitle: "An Integrated Decision Framework for Chat, Project, Cowork, Skill, and Code",
+    subtitle: "A Three-Layer Framework: Collaboration, Product Surface, and Execution Environment",
 
     nav_modules: "Modules", nav_prev: "Previous", nav_next: "Next", nav_home: "Home",
     key_terms: "Key Terms", flip_prompt: "Click to flip",
@@ -490,7 +697,7 @@ const dict = {
 
     // Analytics
     analytics_title: "Learning Analytics",
-    analytics_desc: "This module persists your learning trace via localStorage, with weak-point analysis and CSV export.",
+    analytics_desc: "Learning progress and student details stay in this browser\'s localStorage. They are not uploaded unless you export or send them.",
     analytics_form_title: "Student Information",
     analytics_group: "Group", analytics_group_select: "Please select", analytics_dept: "Dept.",
     analytics_dept_ph: "e.g., IBS3",
@@ -522,7 +729,7 @@ const dict = {
     analytics_wp_incorrect: "Incorrect questions:",
     analytics_wp_goto: "→ Review this module",
     analytics_wp_allpass: "All attempted modules above 75% accuracy. Excellent!",
-    analytics_wp_saved: "Learning record auto-saved in your browser",
+    analytics_wp_saved: "Data stays in this browser unless you export or send it",
     analytics_wp_clear: "🗑 Clear Record",
     analytics_wp_clear_confirm: "Clear all learning records? This cannot be undone.",
     analytics_wp_tts_intro: "Here is your weak point analysis.",
@@ -532,248 +739,455 @@ const dict = {
     // M0
     m0_nav: "0. Executive Summary",
     m0_title: "AI Workflow Methodology",
-    m0_intro: "The value of AI tools lies not only in what they can do, but in how they are organised. When Chat, Project, Cowork, Skill, Code, Memory, and Knowledge Base coexist, the real test for users is judgment rather than features. This methodology integrates scattered tool elements into a workflow system that can be reasoned about, optimised, and evolved. Starting from foundational concepts, it clarifies the distinction between SPAs and frontend-only sites; it then enters the 'Interface × Capability' two-dimensional architecture of working modes, showing that Cowork has Code built in — it is not an option parallel to Code; it deepens into the four-tier memory and knowledge system, revealing the positions of Context Window, Memory, Project, Skill, and KB; with Token Economics as a shared metric, intuitive guesses become calculable decisions. The role of Code execution clarifies the essential difference between thinking-tasks and doing-tasks, plus the critical correction that Code's reach is determined by the interface. Semi-Agent workflow design reveals why refining SKILL.md equals designing a micro-agent. Finally, with criteria for batch tasks and the development of operational skills, the workflow extends from the creation end to the scale end.",
+    m0_intro: "AIWF teaches a durable sequence: identify the collaboration mode (Assistant, Co-pilot, Agent), choose a product surface (Chat, Work or Cowork, Codex or Claude Code), then confirm the execution environment and permissions (local, cloud, Sandbox, Container, or VM). It also covers memory and knowledge delivery, conceptual lifecycle cost, Coding Agents, the AIWF-defined autonomy framework, and Container decisions for vibe-coding beginners. Product information is current to 2026-07 and varies by version, plan, and permission.",
     m0_why: "Why does this methodology matter?",
-    m0_why_desc: "Because AI tools are evolving from a single conversational assistant into a layered workflow system. Without methodology, users reinvent the wheel, burn tokens, and make poor decisions on every task. With methodology, users focus on what truly requires thinking and automate the mechanical. The ultimate goal of this system is the Semi-Agent workflow — humans define goals, AI executes autonomously, both parties play their proper roles.",
+    m0_why_desc: "Product names change, so the durable skill is judging collaboration style, work type, and safety boundary. The goal is not maximum autonomy; it is a verifiable workflow with controlled risk.",
     m0_modules: [
-      { num: "01", title: "Working Mode Spectrum", desc: "The 'Interface × Capability' two-dimensional architecture, and the critical correction that Cowork has Code built in" },
-      { num: "02", title: "Memory & Knowledge System", desc: "Four-tier division within Context Window: Memory, Project, Skill, KB" },
-      { num: "03", title: "Token Economics", desc: "Calculating and weighing one-time, cumulative, and startup costs" },
-      { num: "04", title: "Role of Code Execution", desc: "Thinking-tasks vs doing-tasks, and the Skill+Code combination" },
-      { num: "05", title: "Semi-Agent Workflow", desc: "From tool-use to autonomy. SKILL.md as a micro-agent constitution" },
-      { num: "06", title: "Operational Skills & Batch Tasks", desc: "Extending from creation-end to scale-end. Case study: spa-consistency-check" }
+      { num: "01", title: "Collaboration and Product Surfaces", desc: "Assistant, Co-pilot, Agent, and the three-layer decision model" },
+      { num: "02", title: "Memory and Knowledge", desc: "How Context, Memory, Project, Skill, and KB supply information" },
+      { num: "03", title: "Cost and Payback Thinking", desc: "Conceptual comparison of setup, loading, maintenance, and errors" },
+      { num: "04", title: "Tools and Coding Agents", desc: "Choosing among conversation, file tools, and software agents" },
+      { num: "05", title: "AIWF Autonomy Framework", desc: "The clearly labelled AIWF-defined L0–L4 teaching spectrum" },
+      { num: "06", title: "Skills, Environments, Self-Healing", desc: "Sandbox, Container, Docker, VM, and validation controls" }
     ],
-    m0_stats: [
-      { val: "5", label: "Working Modes" },
-      { val: "4", label: "Memory Tiers" },
-      { val: "3", label: "Cost Types" },
-      { val: "11", label: "Decision Tables" }
-    ],
+    m0_stats: [{ val: "3", label: "Decision Layers" }, { val: "6", label: "Core Modules" }, { val: "4", label: "Interactive Judges" }, { val: "2", label: "Product Ecosystems" }],
     m0_start: "Start Learning →",
 
-    // ============ M1 ============
-    m1_nav: "1. Working Mode Spectrum",
-    m1_title: "Two-Dimensional Composition: Interface × Capability",
-    m1_overview: "The old framing of Chat / Project / Cowork / Skill / Code as 'five parallel layers' is wrong. The correct view: the interface determines the reach of capabilities, and the capability composition determines the workflow form. Cowork is NOT a tool parallel to Code — it is the desktop GUI version with Code capability built in.",
-    m1_highlights: ["Interface × Capability", "Cowork Has Code Built In", "File Location → Interface", "Not Pick-One-of-Five"],
-    m1_p1: "Working modes should decompose into two axes. The interface axis is where you talk with Claude: Claude.ai web, Claude Desktop (with Cowork mode), Claude Code CLI. The capability axis is what that interface bundles in: conversation, Code execution, local file access, Skill triggering, Project loading, MCP Connectors. Different interfaces bundle different capability sets — Claude.ai web's Code only acts inside the cloud container; Cowork's Code can act on user-authorised local folders; Claude Code CLI runs entirely on your local machine.",
-    m1_p2: "The most common misconception treats 'Cowork' and 'Code' as two parallel tools — but Cowork has Code built in. It is essentially the desktop GUI version of Claude Code, running inside an isolated VM via Apple Virtualization Framework. The local folder you authorise gets mounted into that VM, and Code (Python/bash) operates on the folder directly. In other words, 'Cowork vs Code' is a wrong question — when you use Cowork, you automatically have Code. They are two facets of one thing, not options to choose between.",
-    m1_p3: "The corrected decision flow is simple. Step one: where are the files? Local → choose Cowork or CLI; in-conversation → use the web. Step two: what capabilities does the task need? Confirm your chosen interface bundles them. Step three: add Skill / Project / Connector? Decided by reuse frequency and context needs. This flow upgrades tool choice from a 'pick-one-of-five horizontal selection' to 'interface layer + capability layer vertical stacking', eliminating false dichotomies like 'Cowork or Code'. Running an operational skill (e.g., spa-consistency-check) is a textbook case: it needs local file access + Code batch processing — Cowork does it in one shot, no staging required.",
-    m1_wrapup: "Don't treat tools as five-choose-one — decompose them as Interface × Capability. Cowork is not an option parallel to Code; Cowork has Code built in. The real decision axes are 'where are the files' + 'what capability mix is needed', not 'which mode to use'. Internalise this correction, and your workflow choices upgrade from intuitive guessing to reasoned architectural decisions.",
-
-    m1_terms: [
-      { front: "Interface Axis", back: "Where you interact with Claude: Claude.ai web, Claude Desktop (Cowork), Claude Code CLI. Interface determines the reach of capabilities." },
-      { front: "Capability Axis", back: "What the interface bundles: conversation, Code execution, local file access, Skill triggering, Project loading, MCP Connectors." },
-      { front: "Cowork Mode", back: "The desktop agent mode in Claude Desktop, with Code capability + local folder access built in. Runs in an isolated VM, plan-then-act flow. Essentially the GUI version of Claude Code." },
-      { front: "Claude.ai Web", back: "Code runs inside the cloud container, only accesses uploaded files and downloads, cannot directly read/write local folders." },
-      { front: "Claude Code CLI", back: "Terminal tool, runs entirely on the user's local machine with native OS permissions. Suited for developers and CI integration." },
-      { front: "Code Capability", back: "The ability to run Python/bash. Exists in every interface, but the scope of action is determined by the interface (cloud container / local mount / fully local)." },
-      { front: "Cowork ≠ Code", back: "A misconception. Cowork has Code capability built in — they are not parallel options but two facets of one thing." },
-      { front: "Local File Access", back: "Ability to read/write user's computer folders. Absent in Claude.ai web; present in Cowork and CLI. Determines whether local batch operations are possible." }
+    // ============ M1 revised ============
+    m1_nav: "1. Collaboration Modes and Product Surfaces",
+    m1_title: "Identify the collaboration mode, then choose the product surface and environment",
+    m1_overview: "One-line answer: an Assistant answers you, a Co-pilot works with you, and an Agent completes a bounded piece of work for you.",
+    m1_highlights: ["Collaboration mode","Product surface","Environment and permissions","As of 2026-07"],
+    m1_p1: "The first layer is collaboration mode. An Assistant mainly answers, explains, and organises. Co-pilot describes a human-AI working style in which the person controls the goal, pace, and important decisions. An Agent accepts a goal and can plan, use tools, act, observe results, adjust, and report. It does not need to invent its own life goals or wake itself; a user-started system can still be an Agent within one bounded task.",
+    m1_p2: "The second layer is product surface. Typical positioning is ChatGPT Chat / ChatGPT Work / Codex for OpenAI and Claude Chat / Claude Cowork / Claude Code for Anthropic. Chat favours quick dialogue, Work or Cowork favours general knowledge-work deliverables, and Codex or Claude Code favours repositories, terminals, tests, and Git. Cowork and Claude Code may overlap, but they serve different scenarios and are not merely GUI and CLI versions of one product.",
+    m1_p3: "The third layer is execution environment and permission boundary: local, cloud, Sandbox, Container, or VM. Product capabilities change, so first ask whether you want an answer, step-by-step collaboration, or a verifiable deliverable. Then ask whether the output is an answer, document, or software. Finally confirm file, network, test, deployment, and sensitive-data permissions.",
+    m1_wrapup: "Choose in this order: collaboration mode, product type, then environment and safety boundary.",
+    m1_terms:     [
+      {
+        "front": "Assistant",
+        "back": "Like an adviser who answers: mainly explains, organises, and generates content."
+      },
+      {
+        "front": "Co-pilot",
+        "back": "Like a co-driver: the person controls the route while AI keeps helping."
+      },
+      {
+        "front": "Agent",
+        "back": "Like a delegated colleague: plans, acts, checks, and reports within authorised bounds."
+      },
+      {
+        "front": "Chat / Work / Coding Agent",
+        "back": "Chat for quick collaboration, Work for general deliverables, Coding Agents for software engineering."
+      },
+      {
+        "front": "Typical positioning",
+        "back": "A common use, not a promise that every plan and version has identical capabilities."
+      },
+      {
+        "front": "Three-layer model",
+        "back": "Collaboration mode → product surface → environment and permissions."
+      }
+    ],
+    m1_q:     [
+      {
+        "q": "What best describes Co-pilot?",
+        "opts": [
+          "AI invents every goal",
+          "The person controls pace while AI helps continuously",
+          "It can only answer one question",
+          "It is one fixed product"
+        ],
+        "ans": _A1,
+        "exp": "Co-pilot is a collaboration style, not a single product or technical level."
+      },
+      {
+        "q": "How should Cowork and Claude Code be related?",
+        "opts": [
+          "They are identical except GUI/CLI",
+          "Cowork never uses tools",
+          "Both can be agentic but serve different work scenarios",
+          "Claude Code is a general office agent"
+        ],
+        "ans": _A2,
+        "exp": "Their capabilities may overlap, but their primary work contexts differ."
+      },
+      {
+        "q": "A clear, verifiable, multi-step task most closely fits which mode?",
+        "opts": [
+          "Assistant",
+          "Agent",
+          "Plain search",
+          "Read-only note"
+        ],
+        "ans": _A1,
+        "exp": "A task Agent can complete multiple steps within a bounded goal."
+      }
     ],
 
-    m1_q: [
-      { q: "Which view is WRONG?",
-        opts: ["Cowork has Code capability built in", "Cowork and Code are two parallel tools", "Claude.ai web's Code only acts in the cloud container", "Cowork is the desktop GUI version of Claude Code"],
-        ans: _A1, exp: "Cowork and Code are NOT parallel tools but two facets of one thing — Cowork has Code built in. The other three are correct." },
-      { q: "After correction, what two axes should working modes decompose into?",
-        opts: ["Creation vs. Operations", "Personal vs. Team", "Interface × Capability", "Free vs. Paid"],
-        ans: _A2, exp: "Interface axis (where you interact) × Capability axis (what's built in) is the correct two-dimensional decomposition, eliminating the false 'pick-one-of-five' framing." },
-      { q: "I want to run batch operations on a local folder (e.g., spa-consistency-check). Which interface is best?",
-        opts: ["Claude.ai web", "Cowork (Claude Desktop)", "Plain email", "GitHub Issues"],
-        ans: _A1, exp: "Cowork bundles Code capability + local folder access, making it the best interface for local batch operations. The web cannot write back to local files directly." },
-      { q: "Which is the correct description of 'Cowork'?",
-        opts: ["A competitor to Code", "A desktop agent running in an isolated VM, with Code built in, accessing authorised local folders", "The desktop version of pure conversation mode", "Requires coding skills to use"],
-        ans: _A1, exp: "Cowork runs in an isolated VM via Apple Virtualization Framework, local folders mount into the VM, Code is built in, and it follows a plan-then-act flow." },
-      { q: "When deciding which interface to use, what should you ask first?",
-        opts: ["How much does it cost", "Where are the files", "How large is the team", "Which AI model is it"],
-        ans: _A1, exp: "File location determines interface choice — local → Cowork or CLI; in-conversation → web. This is the first question after correction." }
+    // ============ M2 revised ============
+    m2_nav: "2. Memory and Knowledge",
+    m2_title: "Information may be summarised, retrieved, or read on demand",
+    m2_overview: "One-line answer: the Context Window is what the model can directly use for this inference; Memory, Project, Skill, and KB are different ways to supply information.",
+    m2_highlights: ["Context is not a fixed stack","Summaries and on-demand reads","RAG retrieval","Product-dependent"],
+    m2_p1: "The Context Window is the information directly available to the model for the current inference. System instructions, dialogue, tool results, and retrieved passages may consume it, but products do not necessarily load every Memory, Project, Skill, or KB file in full. Common mechanisms include summaries, instruction injection, on-demand file reads, and retrieval-augmented generation.",
+    m2_p2: "Memory can carry cross-conversation preferences but is not free background. Project scopes rules and material, which may not all load every time. A Skill is a reusable work specification for an Agent and may include procedures, references, tools, and assets; it does not plan or execute independently. A KB is a searchable knowledge asset and is not guaranteed to be shorter than its sources or fully present in context.",
+    m2_p3: "Separate where information is governed from how it enters the current inference. Put durable preferences in Memory, task rules and material in Project, stable procedures in Skills, and queryable evidence in a KB. Actual loading and token behaviour depends on product, version, permissions, and retrieval design.",
+    m2_wrapup: "These are information-governance mechanisms, not four boxes always loaded in full. A Skill is a work manual, not an Agent.",
+    m2_terms:     [
+      {
+        "front": "Context Window",
+        "back": "Information directly available for the current inference, not all stored data."
+      },
+      {
+        "front": "Memory",
+        "back": "Cross-conversation preferences or summaries with possible loading and maintenance cost."
+      },
+      {
+        "front": "Project",
+        "back": "Task-specific rules, files, and context that may be summarised or read on demand."
+      },
+      {
+        "front": "Skill",
+        "back": "A reusable Agent work manual or operating procedure; it does not act independently."
+      },
+      {
+        "front": "Knowledge Base",
+        "back": "Organised, retrievable knowledge that need not be shorter than source material."
+      },
+      {
+        "front": "RAG",
+        "back": "Retrieve relevant content first, then provide selected passages for reasoning."
+      }
+    ],
+    m2_q:     [
+      {
+        "q": "Which statement is most accurate?",
+        "opts": [
+          "Every Project file always loads in full",
+          "Memory is always free",
+          "Content may be summarised, read on demand, or retrieved",
+          "A Skill is an Agent"
+        ],
+        "ans": _A2,
+        "exp": "Delivery mechanisms vary by product and version."
+      },
+      {
+        "q": "What is the best analogy for a Skill?",
+        "opts": [
+          "An independent employee",
+          "An Agent work manual",
+          "Model weights",
+          "Permanent free memory"
+        ],
+        "ans": _A1,
+        "exp": "A Skill provides reusable specifications and needs an execution system."
+      },
+      {
+        "q": "What belongs most naturally in a KB?",
+        "opts": [
+          "Temporary button state",
+          "Reusable domain evidence and knowledge",
+          "Operating-system passwords",
+          "An unclassified file dump"
+        ],
+        "ans": _A1,
+        "exp": "A KB is valuable when knowledge is queryable, verifiable, and maintainable."
+      }
     ],
 
-    // ============ M2 ============
-    m2_nav: "2. Memory & Knowledge System",
-    m2_title: "Four-Tier Division Within the Context Window",
-    m2_overview: "Memory manages who you are, Project manages task scope, Skill manages execution specs, KB manages knowledge content. Four tiers complement each other inside the Context Window container.",
-    m2_highlights: ["Context as Container", "Memory = Personal", "Project = Task Scope", "Skill = Constitution", "KB = Asset"],
-    m2_p1: "The Context Window is the total space of all text Claude can see in this conversation. Many mistake Memory for Context Window itself — but Memory is only one block inside the Context Window. A complete Context Window contains: System Prompt, Memory, Project Files, User Preferences, Skill content (when triggered), the current conversation history, and tool-call results. The whole stack cannot exceed the model's limit. Understanding this structure explains why long conversations become slow and inaccurate — context keeps accumulating and squeezes out other blocks.",
-    m2_p2: "Each of the four memory tiers has its own role. Memory persists across conversations, recording the long-term shape of who you are; it is system-maintained, condensed summary rather than transcript. Project remembers the fixed context of a task scope, auto-loaded each conversation, providing complete background upfront. Skill encapsulates execution specs and flow as a triggerable constitution — one-time fixed cost, repeated reuse. KB is a long-term asset extracted and structured from external material — more concise than the raw, cross-platform, portable, durable. The four together form a complete memory-and-execution system, complementing rather than replacing each other.",
-    m2_p3: "Why does this layering matter? Because each tier has different token-economic properties. Memory is 'free background' but cannot be overloaded with detail — it would dilute the truly important personal information. Project is 'higher startup, easier conversation', suiting stable contexts. Skill is 'one-time investment for unlimited reuse dividend'. KB is 'invest in the future, harvest endless future savings and precision'. When you mistakenly treat Project as Memory, or Skill as KB, efficiency drops sharply. Correct layering places each memory type at the position best suited for it.",
-    m2_wrapup: "Memory, Project, Skill, and KB are not synonyms for 'things AI remembers about you' — they are four distinct mechanisms with different natures. Understanding their division of labour lets you decide precisely: which tier should this information go into? Wrong placement wastes tokens and degrades AI judgment quality.",
-
-    m2_terms: [
-      { front: "Context Window", back: "The total space of all text Claude can see in this conversation. Contains System Prompt, Memory, Project, Skill, conversation history, etc." },
-      { front: "Memory", back: "Cross-conversation persistence, recording your long-term shape. System-maintained, condensed summary not transcript." },
-      { front: "Project", back: "Remembers the fixed context of a task scope. Attached files, instructions, KB, auto-loaded every conversation." },
-      { front: "Skill", back: "Encapsulates execution specs and flow as a triggerable constitution. One-time fixed cost, repeated reuse. The micro-agent constitution." },
-      { front: "Knowledge Base", back: "Long-term asset from external material, extracted and structured. More concise than raw, cross-platform, portable, durable." },
-      { front: "Parametric Knowledge", back: "Built-in knowledge from model training. Stored in neural network weights, cannot be directly edited or added." },
-      { front: "External Knowledge", back: "Content provided to AI that it didn't originally know. Exists in Context Window or retrievable locations." },
-      { front: "Meta-knowledge KB", back: "A KB about 'methodology for using tools'. Extremely long lifecycle, influencing all future decisions." }
+    // ============ M3 revised ============
+    m3_nav: "3. Cost and Payback Thinking",
+    m3_title: "Compare lifecycle costs with a conceptual model, not a fake token bill",
+    m3_overview: "One-line answer: include setup, per-run loading, repeated communication, maintenance, and error costs.",
+    m3_highlights: ["Conceptual model","Not an actual bill","Per-run loading","Maintenance and errors"],
+    m3_p1: "Structuring a Skill, KB, or Project has setup cost: research, writing, testing, and human time. Every run can also incur instruction, retrieval, tool-result, and conversation cost. Without structure, users often pay repeated explanation and alignment costs.",
+    m3_p2: "Updating specifications after product changes is maintenance cost. Wrong output, rework, and human verification are error costs. These cannot all be converted reliably into tokens because models, caching, summaries, retrieval, tools, and pricing vary. The simulator therefore uses relative points, not API or subscription billing.",
+    m3_p3: "Avoid claims such as “three uses always pay back.” Structure may be worthwhile when requirements are stable, repetition is high, and mistakes are costly. A one-off, volatile task may need more evidence. Record assumptions and later calibrate them with actual time, error rate, and usage.",
+    m3_wrapup: "Treat the simulator as a dashboard for assumptions, not a precise financial or token forecast.",
+    m3_terms:     [
+      {
+        "front": "Setup cost",
+        "back": "Human time to organise, specify, and test Skills, KBs, or Projects."
+      },
+      {
+        "front": "Per-run loading cost",
+        "back": "Instructions, retrieved content, tool results, and dialogue consumed each run."
+      },
+      {
+        "front": "Repeated communication cost",
+        "back": "Restating needs, formats, and constraints."
+      },
+      {
+        "front": "Maintenance cost",
+        "back": "Updating specifications after products, data, or requirements change."
+      },
+      {
+        "front": "Error cost",
+        "back": "Wrong output, rework, verification, and risk."
+      },
+      {
+        "front": "Conceptual payback simulation",
+        "back": "A relative comparison under assumptions, not an actual token bill."
+      }
+    ],
+    m3_q:     [
+      {
+        "q": "What does the conceptual payback simulator show?",
+        "opts": [
+          "An exact API bill",
+          "Guaranteed payback runs",
+          "A relative comparison under stated assumptions",
+          "Universal model pricing"
+        ],
+        "ans": _A2,
+        "exp": "It compares assumptions rather than predicting billing."
+      },
+      {
+        "q": "What is often omitted from simplistic token calculators?",
+        "opts": [
+          "Maintenance and error cost",
+          "Monitor brightness",
+          "Keyboard brand",
+          "Font colour"
+        ],
+        "ans": _A0,
+        "exp": "Updates, rework, and verification can dominate lifecycle cost."
+      },
+      {
+        "q": "When is structure more likely worthwhile?",
+        "opts": [
+          "Stable repeated work with costly errors",
+          "One undefined task",
+          "No acceptance criteria",
+          "Only because it happened three times"
+        ],
+        "ans": _A0,
+        "exp": "Stability, repetition, and error impact matter more than a fixed count."
+      }
     ],
 
-    m2_q: [
-      { q: "What is the relationship between Memory and Context Window?",
-        opts: ["Identical", "Memory ⊂ Context Window", "Context Window ⊂ Memory", "Unrelated"],
-        ans: _A1, exp: "Context Window is the container, Memory is one block within. Context Window also contains System Prompt, Project, Skill, conversation history, etc." },
-      { q: "Which item belongs better in Memory rather than Project?",
-        opts: ["A course syllabus", "Your long-term work background and preferences", "Source code of a project", "Content of a specific PDF"],
-        ans: _A1, exp: "Memory suits 'long-term shape of who you are'. Task details belong in Project, not Memory." },
-      { q: "What is the main difference between Skill and KB?",
-        opts: ["Skill is more expensive", "Skill encapsulates execution flow, KB encapsulates knowledge content", "Identical", "KB is newer"],
-        ans: _A1, exp: "Skill is the constitution of 'how to do', KB is the asset of 'what to know'. Different in nature, complementary." },
-      { q: "What's the difference between meta-knowledge KB and a regular domain KB?",
-        opts: ["No difference", "Meta-knowledge covers methodology, longer lifecycle", "Meta-knowledge is shorter", "Meta-knowledge only for AI"],
-        ans: _A1, exp: "Meta-knowledge KB covers 'how to use tools' methodology, influencing all future decisions, with a longer lifecycle than domain KBs." }
+    // ============ M4 revised ============
+    m4_nav: "4. Tools and Coding Agents",
+    m4_title: "Agents cycle through understanding, execution, observation, and correction",
+    m4_overview: "One-line answer: tools or Coding Agents are useful when work needs repeatable precision, direct file changes, tests, conversion, or structured output.",
+    m4_highlights: ["Plan→act→observe→correct","Users need not write code","Scale stress test","Choose by acceptance needs"],
+    m4_p1: "Do not force work into “thinking only” or “doing only.” An Agent often understands and plans, uses tools, observes results, and corrects errors. Conversation works for simple questions; tools reduce manual mistakes when processing must be precise, repeatable, and verifiable.",
+    m4_p2: "Creating docx, xlsx, pptx, or PDF files often requires file-generation tools in the background, but the user need not personally code or switch to a Coding Agent. Codex or Claude Code is the typical choice when the task involves a repository, multi-file changes, tests, terminals, or Git.",
+    m4_p3: "Replace the “100-file law” with a scale stress test: if quantity grows, will manual steps be missed, must output stay consistent, and must the operation rerun and verify? This is a heuristic question, not a technical threshold at 20 or 100 items.",
+    m4_wrapup: "Conversation, file tools, and Coding Agents form a progression based on verification and risk, not a fixed item count.",
+    m4_terms:     [
+      {
+        "front": "Coding Agent",
+        "back": "An Agent specialised in repositories, terminals, tests, Git, and software engineering."
+      },
+      {
+        "front": "File tools",
+        "back": "Background creation, conversion, or validation without requiring the user to code."
+      },
+      {
+        "front": "Scale stress test",
+        "back": "A heuristic that asks whether repetition increases errors and verification needs."
+      },
+      {
+        "front": "Repeatable processing",
+        "back": "Rules can run again with consistent, checkable results."
+      },
+      {
+        "front": "Validation loop",
+        "back": "Check after execution, then correct or stop on failure."
+      },
+      {
+        "front": "Direct file changes",
+        "back": "Require clear scope, permissions, backups, and deletion awareness."
+      }
+    ],
+    m4_q:     [
+      {
+        "q": "Must a user personally code to create a PowerPoint?",
+        "opts": [
+          "Always",
+          "No; a file tool can work in the background",
+          "It must be manual",
+          "Docker is mandatory"
+        ],
+        "ans": _A1,
+        "exp": "The result may use code or tools without the user writing code."
+      },
+      {
+        "q": "What most typically calls for a Coding Agent?",
+        "opts": [
+          "Brainstorming",
+          "Repository changes, tests, and Git",
+          "Defining one word",
+          "Reading a short paragraph"
+        ],
+        "ans": _A1,
+        "exp": "Coding Agents specialise in software environments and validation."
+      },
+      {
+        "q": "What is a scale stress test?",
+        "opts": [
+          "A hard 100-item threshold",
+          "A hard 20-item threshold",
+          "A heuristic about repetition, error, and verification",
+          "A token pricing rule"
+        ],
+        "ans": _A2,
+        "exp": "It helps assess automation value without a fixed count."
+      }
     ],
 
-    // ============ M3 ============
-    m3_nav: "3. Token Economics",
-    m3_title: "Weighing One-Time, Cumulative, and Startup Costs",
-    m3_overview: "Looking at single-instance cost misleads; look at lifecycle total cost. Investing in structure (Skill, KB) equals trading one-time cost for unlimited reuse dividend.",
-    m3_highlights: ["Three Cost Types", "Lifecycle View", "Counter-Intuitive Truths", "Invest vs. Throwaway"],
-    m3_p1: "Token costs come in three types. One-time costs come from reading SKILL.md or loading KB — pay once, reuse many times. Cumulative costs come from growing conversation history and repeated spec restatements. Startup costs come from Project loading or Memory injection — present at the start of every conversation. These three differ in time distribution, determining their optimal use scenarios.",
-    m3_p2: "A counter-intuitive truth: Skills usually save tokens, not consume them — because they replace the cumulative cost of realigning specs every time. Likewise, Code usually saves tokens, not consumes them — large files don't enter context. Project has high startup cost but long-term savings, suiting stable contexts not one-off tasks. Looking at single-instance cost misleads; look at lifecycle total cost. A SKILL.md read costs 5000 tokens once, but saves 2000 tokens per turn across 20 subsequent turns — total ledger: massive savings.",
-    m3_p3: "The highest form of token economics is 'structured investment'. Writing specs into Skill, organising material into KB, delegating tasks to Code, placing context into Project — all are one-time investments traded for endless future savings and precision. When you judge by lifecycle total cost rather than single-instance cost, your workflow naturally evolves toward maximum efficiency. The ultimate criterion: what is the payback period? If similar tasks will be done 3+ times, investing in Skill or KB is almost always worth it; only once — don't bother.",
-    m3_wrapup: "Token economics is not penny-pinching cleverness, but the core logic of workflow design. Every decision — Chat or Project, Skill or live conversation, Code or manual — is underpinned by token economics. Understanding it upgrades your decisions from intuition to calculation.",
-
-    m3_terms: [
-      { front: "One-time Cost", back: "Reading SKILL.md, loading KB — 'pay once, reuse many'. Investment-type spending." },
-      { front: "Cumulative Cost", back: "Growing conversation history, repeated spec restatement. Hidden cost source in long conversations." },
-      { front: "Startup Cost", back: "Project loading, Memory injection — costs present at every conversation start." },
-      { front: "Skill Economics", back: "Skills usually save tokens, not consume them, because they replace per-turn spec realignment costs." },
-      { front: "Code Economics", back: "Code usually saves tokens — large files don't enter context, only results return to conversation." },
-      { front: "Lifecycle Total Cost", back: "Sum of all token expenditure across the task's lifecycle. Better reflects real efficiency than single-instance cost." }
+    // ============ M5 revised ============
+    m5_nav: "5. AIWF Autonomy Framework",
+    m5_title: "The five levels are an AIWF teaching framework, not an industry standard",
+    m5_overview: "One-line answer: L2 multi-step task Agents are already Agents; levels describe autonomy scope, not product rank.",
+    m5_highlights: ["AIWF-defined framework","L2 is an Agent","Skill is not an Agent","Triggers and safety"],
+    m5_p1: "AIWF proposes five teaching levels: L0 conversational answer; L1 tool assistance; L2 multi-step Agent within a task; L3 scheduled or event-triggered persistent workflow; L4 long-running, cross-task, highly autonomous system. This is not an OpenAI, Anthropic, or industry-standard classification.",
+    m5_p2: "Codex and Claude Code can both be described as task-based Coding Agents. User initiation does not disqualify them. Higher autonomy requires triggers, state, permissions, monitoring, stop rules, recovery, and human confirmation—not simply a desire for more automation.",
+    m5_p3: "SKILL.md is a reusable Agent work specification. It forms a stable task workflow only when combined with a model, tools, permissions, and an execution loop. By itself it cannot observe, plan, or act, so it is not a micro-Agent.",
+    m5_wrapup: "Use levels as teaching language for autonomy scope, with acceptance criteria and safety boundaries at every level.",
+    m5_terms:     [
+      {
+        "front": "L0: Conversational answer",
+        "back": "Responds to input while the human controls the process."
+      },
+      {
+        "front": "L1: Tool assistance",
+        "back": "Uses a bounded tool while the human mostly arranges steps."
+      },
+      {
+        "front": "L2: Multi-step task Agent",
+        "back": "Plans, acts, observes, and adjusts inside one task; it is still an Agent."
+      },
+      {
+        "front": "L3: Persistent workflow",
+        "back": "Runs on schedules or events with state and monitoring."
+      },
+      {
+        "front": "L4: Highly autonomous system",
+        "back": "Runs across tasks and time with stricter governance and recovery."
+      },
+      {
+        "front": "SKILL.md",
+        "back": "A reusable work specification, not a self-executing Agent."
+      }
+    ],
+    m5_q:     [
+      {
+        "q": "What is the status of the AIWF five-level spectrum?",
+        "opts": [
+          "Official standard",
+          "Industry certification",
+          "AIWF teaching framework",
+          "Model leaderboard"
+        ],
+        "ans": _A2,
+        "exp": "It is a teaching framework for discussing autonomy scope."
+      },
+      {
+        "q": "Can an L2 multi-step task system be an Agent?",
+        "opts": [
+          "No",
+          "Only if it wakes itself",
+          "Yes, it can be a task Agent",
+          "Only L4 counts"
+        ],
+        "ans": _A2,
+        "exp": "User initiation does not prevent task-level agentic execution."
+      },
+      {
+        "q": "When can SKILL.md form an Agent workflow?",
+        "opts": [
+          "By existing alone",
+          "When combined with model, tools, permissions, and loop",
+          "When renamed Agent.md",
+          "When exported to PDF"
+        ],
+        "ans": _A1,
+        "exp": "A Skill needs an execution system and safety boundary."
+      }
     ],
 
-    m3_q: [
-      { q: "Why do 'Skills usually save tokens'?",
-        opts: ["Skills are cheaper", "They replace per-turn spec realignment cumulative cost", "They shorten conversations", "They skip system checks"],
-        ans: _A1, exp: "A Skill is loaded once, but replaces the cumulative cost of restating specs every turn. The longer the conversation, the greater the saving." },
-      { q: "Why does 'looking at single-instance cost mislead'?",
-        opts: ["Single cost is inaccurate", "Lifecycle total cost is what matters", "Token math is wrong", "Anthropic hides info"],
-        ans: _A1, exp: "One-time investments (Skill, KB) look expensive single-instance but get reused many times within the lifecycle — total ledger reverses. Use the lifecycle view." },
-      { q: "What is the token characteristic of Project?",
-        opts: ["Completely free", "Medium-high startup, low cumulative", "Pure waste", "Equals Memory"],
-        ans: _A1, exp: "Project loads project content at every conversation start (higher startup), but no need to repeat background mid-conversation (lower cumulative). Good for stable context." },
-      { q: "Which is NOT a structured investment?",
-        opts: ["Writing specs into Skill", "Organising material into KB", "Delegating tasks to Code", "Restating requirements every conversation"],
-        ans: _A3, exp: "Restating requirements is typical 'cumulative cost' — exactly what structured investment avoids. The first three are one-time investments for reuse dividend." }
+    // ============ M6 revised ============
+    m6_nav: "6. Skills, Environments, and Self-Healing",
+    m6_title: "Code and Container needs depend on output, validation, and deployment",
+    m6_overview: "One-line answer: both creation and maintenance Skills may use tools; scan-and-batch-edit alone is not self-healing.",
+    m6_highlights: ["No hard creation/maintenance split","Six self-healing conditions","Sandbox ≠ Container","Vibe-coding environment choice"],
+    m6_p1: "Creation Skills tend to produce new artefacts, while maintenance Skills inspect and update existing artefacts. Either may need code or tools. Decide from data volume, output format, repeatability, and validation requirements—not from the label alone.",
+    m6_p2: "Self-healing requires at least automatic detection, an explicit correctness specification, a generated fix, executed tests or validation, stop or rollback on failure, and human confirmation for high-risk changes. Scanning and batch editing alone is not a self-healing system.",
+    m6_p3: "Vibe-coding beginners can often start with the simplest local option. Static sites, single-machine tools, and simple prototypes often do not need Containers. Consider Docker Compose for databases, multiple services, portable deployment, team consistency, or dependency conflicts. A Sandbox controls what is allowed; a Container controls the isolated runtime; Docker manages Containers; a VM is a fuller virtual computer. Containers are not automatically safe, and Sandboxes need not use Containers.",
+    m6_wrapup: "Ask a Coding Agent to compare the simplest non-Container option with Container benefits and complexity before creating Docker files.",
+    m6_terms:     [
+      {
+        "front": "Sandbox",
+        "back": "Like activity rules: limits files, network, commands, and approval requirements."
+      },
+      {
+        "front": "Container",
+        "back": "Like a rebuildable room for an app and dependencies; not automatically secure."
+      },
+      {
+        "front": "Docker",
+        "back": "A common tool for building and managing Containers, not the Container itself."
+      },
+      {
+        "front": "VM",
+        "back": "A fuller virtual computer, usually with stronger isolation and more overhead."
+      },
+      {
+        "front": "Docker Compose",
+        "back": "Coordinates multiple services, networks, Volumes, and Ports."
+      },
+      {
+        "front": ".env / API Key / Volume / Port",
+        "back": ".env stores settings; API Key is a credential; Volume persists data; Port exposes a service."
+      }
     ],
-
-    // ============ M4 ============
-    m4_nav: "4. Role of Code Execution",
-    m4_title: "Essential Difference Between Thinking and Doing Tasks",
-    m4_overview: "Code is the tool of doing, not thinking. Use it when something must actually be produced; don't use it when you need to think something through.",
-    m4_highlights: ["Thinking vs. Doing", "Skill + Code Pairing", "Scale Problems → Code", "100-File Law", "Reach Depends on Interface"],
-    m4_p1: "Whether to use Code maps to a deeper question: is this task's essence 'thinking' or 'doing'? Thinking-tasks include understanding, explaining, discussing, deciding, creating — best handled in conversation mode. Doing-tasks include calculation, file conversion, processing large data, generating files — best handled in Code mode. Confusing these creates problems: thinking-tasks forced into Code = waste; doing-tasks denied Code = errors and burned tokens.",
-    m4_p2: "Code is mandatory when: generating binary files (docx, xlsx, pptx, pdf), precise numerical computation and statistics, batch file operations, chart generation, deployment and Git operations. Strongly recommended for: long-document programmatic processing, big data but only need highlights, repetitive operations. Code is NOT for: pure conversation and writing, code-for-the-user-to-take-away (when no execution verification needed), simple logical reasoning. The trick is to ask yourself: does this task 'need to be thought through' or 'need to be actually produced'?",
-    m4_p3: "Skill and Code are not competing tools but a perfect pairing. Code does the dirty work, Skill produces the polished output. Example: Code reads 30 PDFs, runs word frequency, generates statistics; the docx Skill wraps results into a formal report. A deeper criterion is the '100-file law': if this task had 100 items to process, would it collapse? Yes → use Code; no → use Chat + Skill. Three: bearable; thirty: painful; one hundred: certain collapse — this simple question yields 90% correct judgments. One critical final correction: Code is a 'capability' not an 'interface' — it exists in every interface, but its scope of action is determined by the interface. Claude.ai web's Code only acts on uploaded files in the cloud container; Cowork's Code can act on user-authorised local folders; CLI's Code runs fully native on local. So 'should I use Code' and 'which interface' are two independent questions — don't conflate them.",
-    m4_wrapup: "Code is the tool of doing, not thinking. Don't kill a chicken with a battle-axe; don't dig a tunnel with a toothpick — choosing the right tool is the most concrete embodiment of token economics. When you start classifying tasks as 'thinking' or 'doing', and understand 'Code's reach depends on the interface', your workflow efficiency jumps a level.",
-
-    m4_terms: [
-      { front: "Thinking Tasks", back: "Understanding, explaining, deciding, creating — 'need to be thought through'. Conversation mode is best." },
-      { front: "Doing Tasks", back: "Computation, conversion, batch, file production — 'need to be actually produced'. Code mode is best." },
-      { front: "Skill + Code Combo", back: "Code does dirty work, Skill polishes output. The core configuration of a semi-agent workflow." },
-      { front: "100-File Law", back: "Would this task collapse with 100 items? If yes, use Code; if no, use Chat + Skill." },
-      { front: "Binary Output", back: "Non-text files like docx, xlsx, pptx, pdf. Must go through Code; cannot be produced by conversation alone." },
-      { front: "Scale-Intensive", back: "Tasks requiring repetition, checking, batching. Code's home turf." },
-      { front: "Brain-Intensive", back: "Tasks requiring creation, judgment, design. Home turf of Chat + Skill + Project." }
-    ],
-
-    m4_q: [
-      { q: "Which task best suits Code?",
-        opts: ["Write a 500-word article", "Explain what React is", "Batch process 50 CSV files", "Discuss career direction"],
-        ans: _A2, exp: "Batch processing large file counts is a textbook doing-task; Code is optimal. The other three are thinking-tasks better suited to conversation mode." },
-      { q: "What is the '100-File Law'?",
-        opts: ["You're charged after 100 files", "Ask whether the task collapses at 100 items; if yes, use Code", "Code handles max 100 files", "Skills max at 100"],
-        ans: _A1, exp: "Asking 'would this collapse at 100 items?' is the simple trick to decide Code or not. Collapse → Code; no collapse → Chat + Skill." },
-      { q: "What determines Code's 'scope of action'?",
-        opts: ["Code's own version", "The interface (web / Cowork / CLI)", "Conversation length", "Subscription tier"],
-        ans: _A1, exp: "Code is a 'capability' present in every interface, but its scope of action is determined by the interface: web acts only in cloud container, Cowork on mounted local folders, CLI fully native." },
-      { q: "Which task does NOT need Code?",
-        opts: ["Generate a .docx report", "Batch update 50 HTML files", "Explain what Semi-Agent means", "Run statistics and produce charts"],
-        ans: _A2, exp: "'Explain Semi-Agent' is a pure thinking-task — conversation mode suffices. The other three require actual execution and must use Code." }
-    ],
-
-    // ============ M5 ============
-    m5_nav: "5. Semi-Agent Workflow",
-    m5_title: "From Tool-Use to Autonomous Execution",
-    m5_overview: "Semi-Agent is the sweet spot of 'human defines goals + AI executes autonomously'. SKILL.md is essentially the constitution of a micro-agent.",
-    m5_highlights: ["Agent Spectrum", "Level 2 Sweet Spot", "Inward Autonomy", "Skill as Constitution"],
-    m5_p1: "The Agent spectrum has five levels, from shallow to deep. Level 0 Pure Conversation — you ask, I answer; all decisions sit with the user. Level 1 Tool Use — AI actively searches, reads files, runs code, but each step is still 'user commands, I execute one action'. Level 2 Semi-Agent — AI loads Skills, internalises specs and flow, and self-decides multi-step task sequences within the user-defined task scope. Level 3 Agent — AI has persistent goals, self-schedules subtasks, proactively reports or initiates. Level 4 Autonomous Agent — long-running, cross-goal, self-prioritising.",
-    m5_p2: "The defining trait of Semi-Agent is 'inward autonomy, outward control'. Inward: AI autonomously executes multi-step tasks — reading SKILL.md, scanning folder, generating output, writing back — without step-by-step user commands. Outward: tasks are initiated and terminated by the user — you say 'make a SPA' and AI starts; when done, AI stops. This semi-autonomous quality preserves user control while releasing AI's execution power. It is currently the most practical workflow type. To identify your workflow's Level, ask: is the AI doing things you didn't explicitly command but the task requires?",
-    m5_p3: "SKILL.md is essentially the constitution of a micro-agent. Each refinement trains the semi-agent to behave more stably with less user intervention. In other words: you're not 'using' AI, you're 'designing' a small agent system. To push from Semi-Agent to Level 3 Agent, three things are needed: trigger mechanisms (webhook, schedule, file-change detection) for self-starting tasks; cross-task memory (execution state, pending list); autonomy-boundary judgment (when to act, when to ask). Claude Code or self-built agent frameworks can do this — but Chat + Skill + Cowork deliberately stops at Semi-Agent for a reason: preserve control, prevent AI overreach.",
-    m5_wrapup: "You are not merely a user of AI; you are the designer of AI workflows. Every SKILL.md is a micro-agent's constitution; every tool combination is a workflow architecture decision. Semi-Agent is not a technical term but a design philosophy for humans and AI to share roles properly.",
-
-    m5_terms: [
-      { front: "Agent Spectrum", back: "Five levels from Level 0 Pure Conversation to Level 4 Autonomous Agent. Semi-Agent sits at Level 2." },
-      { front: "Semi-Agent", back: "Level 2, multi-step autonomy inside user-defined task scope. Inward autonomy, outward control." },
-      { front: "Inward Autonomy", back: "AI autonomously executes multi-step tasks without step-by-step user commands." },
-      { front: "Outward Control", back: "Task initiation and termination remain in the user's hands. AI doesn't self-jump across tasks." },
-      { front: "SKILL.md Constitution", back: "Each refinement trains the micro-agent to behave more stably. SKILL.md is the semi-agent's constitution." },
-      { front: "Level 3 Agent", back: "Persistent goals, self-scheduling subtasks, proactive initiation. Needs triggers, cross-task memory, autonomy boundaries." },
-      { front: "Sweet Spot", back: "Semi-Agent is today's most practical sweet spot — releases AI execution power while preserving user control." }
-    ],
-
-    m5_q: [
-      { q: "Where does Semi-Agent sit on the Agent spectrum?",
-        opts: ["Level 0", "Level 1", "Level 2", "Level 4"],
-        ans: _A2, exp: "Level 0 Pure Conversation; Level 1 Tool Use; Level 2 Semi-Agent; Level 3 Agent; Level 4 Autonomous Agent. Semi-Agent is Level 2." },
-      { q: "What is the defining trait of Semi-Agent?",
-        opts: ["Fully autonomous", "Fully controlled", "Inward autonomous, outward controlled", "Fully random"],
-        ans: _A2, exp: "Semi-Agent is autonomous within the task (inward), but task start/stop is user-controlled (outward). That is its core trait." },
-      { q: "What is the essence of SKILL.md?",
-        opts: ["A user guide", "A micro-agent's constitution", "AI's source code", "A conversation script"],
-        ans: _A1, exp: "SKILL.md is the semi-agent's constitution — each refinement trains agent behaviour to be more stable, reducing user-intervention needs." },
-      { q: "What is NOT needed to push from Semi-Agent to Level 3 Agent?",
-        opts: ["Trigger mechanism", "Cross-task memory", "Autonomy boundary judgment", "Larger context window"],
-        ans: _A3, exp: "Advancing to Level 3 requires triggers, cross-task memory, and boundary judgment. Context-window size isn't critical — what matters is autonomous task launch and management." }
-    ],
-
-    // ============ M6 ============
-    m6_nav: "6. Operational Skills & Batch Tasks",
-    m6_title: "Completing the Workflow from Creation End to Scale End",
-    m6_overview: "An AI workflow needs to optimise not only creation but also scale. Operational skills are the other half of a semi-agent workflow, giving the system self-healing capability.",
-    m6_highlights: ["Creation vs. Operations", "Batch Task Criterion", "spa-consistency-check", "Self-Healing System"],
-    m6_p1: "Most skills today cluster at the 'creation end' — turning nothing into something, materials into output. For example: note-to-kb turns notes into KB, kb-to-quiz turns KB into quiz, interactive-learning-spa turns spec into SPA. But work is not only creation — there's also maintaining existing outputs. When the spec updates, how do older outputs catch up? When folder structures drift, how to audit? These maintenance, check, and batch-update tasks are what operational skills solve.",
-    m6_p2: "Creation and operational skills differ in nature across five dimensions. Input: creation takes raw material, operations takes existing output. Output: creation makes new artefacts, operations makes report + corrected files. Task nature: creation is thinking (understand, design), operations is doing (scan, compare, modify). Need for Code: creation typically does not need it, operations typically does. Trigger frequency: creation triggers per new task, operations triggers per spec update or periodic audit. Creation skills cure 'reinventing the wheel'; operational skills cure 'mechanical repetition'.",
-    m6_p3: "spa-consistency-check is a canonical example of an operational skill. It scans all SPA HTML files in a folder, checks consistency against the latest interactive-learning-spa spec, produces a Markdown report, and helps the user update non-compliant files via 'item-by-item interactive patching'. When you have both creation-type (produces SPA) and operational-type (maintains SPA) skills, an interesting property emerges — the workflow becomes self-healing. Change the spec → run consistency-check to find non-compliant → run batch-update to patch — the whole system auto-catches-up to the new standard. This pushes Level 2 Semi-Agent a small step toward Level 3 Agent.",
-    m6_wrapup: "The complete form of an AI workflow needs optimisation at both ends: creation + operations. Creation skills solve the 'zero-to-one' problem; operational skills solve the 'one-to-N consistency' problem. Once both ends are built, your semi-agent workflow approaches full automation — and the starting point is usually the development of your first operational skill.",
-
-    m6_terms: [
-      { front: "Creation Skill", back: "Produces new artefacts from raw material. Examples: note-to-kb, kb-to-quiz, interactive-learning-spa." },
-      { front: "Operational Skill", back: "Maintains consistency of existing artefacts. Examples: spa-consistency-check, spa-batch-update." },
-      { front: "100-File Collapse Law", back: "Would this task collapse at 100 items? Collapse → Code; not → Chat+Skill." },
-      { front: "spa-consistency-check", back: "Scans all SPAs in a folder against the spec, produces Markdown report, supports item-by-item interactive patching." },
-      { front: "Self-Healing System", back: "When creation + operational skills coexist, the system auto-catches-up to spec changes — approaching Level 3 Agent." },
-      { front: "Scale-Intensive Task", back: "Tasks requiring repetition, checking, batching. Code's home turf and the realm of operational skills." },
-      { front: "Brain-Intensive Task", back: "Tasks requiring creation, judgment, design. Home turf of Chat + Skill, and the realm of creation skills." }
-    ],
-
-    m6_q: [
-      { q: "What is the main difference between creation and operational skills?",
-        opts: ["Creation is more expensive", "Creation solves zero-to-one, operations solves one-to-N consistency", "No difference", "Operations is newer"],
-        ans: _A1, exp: "Creation skills turn nothing into something. Operational skills maintain consistency of existing artefacts. Different pain points." },
-      { q: "What is the main function of spa-consistency-check?",
-        opts: ["Generate new SPAs", "Scan existing SPAs against spec, check + interactive patching", "Translate SPAs into multiple languages", "Deploy SPAs to GitHub"],
-        ans: _A1, exp: "spa-consistency-check is an operational skill — scans existing SPAs, checks spec compliance, produces report, and item-by-item patches non-compliant files." },
-      { q: "What enables a 'self-healing system'?",
-        opts: ["Only creation skills", "Only operational skills", "Both creation and operational skills coexisting", "Only Code"],
-        ans: _A2, exp: "Both types must coexist before the system can auto-catch-up to spec changes — change spec → find non-compliant → batch patch. That's the basic self-healing chain." },
-      { q: "Which is NOT a trait of operational skills?",
-        opts: ["Input is existing output", "Typically needs Code", "Creates new content from zero", "Solves mechanical repetition"],
-        ans: _A2, exp: "'Creates new content from zero' is a trait of creation skills. Operational skills take existing artefacts as input, aiming to maintain rather than create." }
+    m6_q:     [
+      {
+        "q": "How do Sandbox and Container differ?",
+        "opts": [
+          "They are identical",
+          "Sandbox controls permissions; Container provides a runtime",
+          "Sandbox is a Docker brand",
+          "Container is always safe"
+        ],
+        "ans": _A1,
+        "exp": "They can work together but describe different layers."
+      },
+      {
+        "q": "When is Docker Compose more relevant?",
+        "opts": [
+          "One static HTML file",
+          "Multiple services plus a database and deployment",
+          "One conceptual question",
+          "A pasted paragraph"
+        ],
+        "ans": _A1,
+        "exp": "Multi-service deployment and reproducibility are typical benefits."
+      },
+      {
+        "q": "Is scanning plus batch editing enough to claim self-healing?",
+        "opts": [
+          "Yes",
+          "No; it also needs specs, validation, failure control, and risk approval",
+          "Only with Docker",
+          "Only above 100 files"
+        ],
+        "ans": _A1,
+        "exp": "Self-healing requires a complete detection, correction, validation, and failure-control loop."
+      }
     ],
 
     // Lab
     mlab_nav: "7. Interactive Lab",
     mlab_title: "Decision Quick-Reference Tools",
-    mlab_desc: "The 'Decision Quick-Reference' chapter from the KB, turned into interactive judgment tools. Input your scenario, get tool recommendations.",
+    mlab_desc: "Four judges suggest collaboration, product type, environment, and safety notes. Results are teaching guidance, not a substitute for project inspection.",
     mlab_labs: [
-      { title: "Interface + Capability Selector", desc: "Recommends the best interface (Web/Cowork/CLI) and capability combination based on file location, task nature, and reuse frequency" },
-      { title: "Token Economics Calculator", desc: "Estimates token consumption under different modes to help decide which structural layer to invest in" },
-      { title: "Code Necessity Judge", desc: "Input task description, auto-judges whether to use Code or pure conversation (based on 100-file law)" },
-      { title: "Skill Development Priority", desc: "Ranks which Skill to develop first based on pain frequency, spec stability, and reuse count" }
+      { title: "Work Style and Environment Selector", desc: "Uses output, files, tests, scheduling, sensitive data, and deployment needs" },
+      { title: "Conceptual Payback Simulator", desc: "Compares setup, per-run loading, repeated communication, and maintenance; not a token bill" },
+      { title: "Code Necessity Judge", desc: "Uses repeatability, file changes, tests, conversion, and manual error risk" },
+      { title: "Container Necessity Judge", desc: "Uses database, services, deployment, conflicts, GPU, and local-prototype needs" }
     ],
 
     // Resources
@@ -782,7 +1196,7 @@ const dict = {
     mres_desc: "Extended resources for this methodology, including Anthropic official docs, Skill development guides, and Claude product information.",
 
     // Footer
-    date: "Version 2026.05.23",
+    date: "Content version 2026-07",
     copyright: "For Educational Use Only",
     architect_label: "Architect:",
     architect_name: "Prof. Shihmin Lo",
@@ -1022,151 +1436,106 @@ const LinkCard = ({label, url, desc}) => (
   </a>
 );
 
-// ════════ Lab 1: 工作模式選擇器（介面 + 能力推薦）════════
+// ════════ Shared lab controls ════════
+const LabCheck = ({checked, onChange, children}) => (
+  <label className="flex items-start gap-2 text-sm cursor-pointer">
+    <input type="checkbox" checked={checked} onChange={e=>onChange(e.target.checked)} className="mt-1" />
+    <span>{children}</span>
+  </label>
+);
+
+// ════════ Lab 1: 工作方式與環境選擇器 ════════
 const ModeSelectorLab = ({lang}) => {
-  const [fileLoc, setFileLoc] = useState('');
-  const [taskType, setTaskType] = useState('');
-  const [reuseFreq, setReuseFreq] = useState('');
+  const [output, setOutput] = useState('answer');
+  const [localFiles, setLocalFiles] = useState(false);
+  const [tests, setTests] = useState(false);
+  const [scheduled, setScheduled] = useState(false);
+  const [sensitive, setSensitive] = useState(false);
+  const [deploy, setDeploy] = useState(false);
   const txt = {
-    zh: { title: "介面 + 能力組合選擇器",
-      q1: "檔案在哪裡?", q2: "任務性質?", q3: "重用頻率?",
-      f1: "在對話內(上傳/貼上)", f2: "在本機資料夾", f3: "在 GitHub repo 等遠端",
-      t1: "純對話/思考", t2: "需運算或產出檔案", t3: "批次處理多檔案",
-      r1: "只做一次", r2: "做 3-5 次", r3: "做 10 次以上",
-      result: "推薦組合", interface: "介面", capability: "能力",
-      select: "請選擇",
-      hint_web: "Claude.ai 網頁版", hint_cowork: "Cowork(Claude Desktop)", hint_cli: "Claude Code CLI",
-      cap_chat: "對話", cap_code: "Code", cap_local: "本機檔案", cap_skill: "Skill", cap_proj: "Project" },
-    en: { title: "Interface + Capability Selector",
-      q1: "Where are the files?", q2: "Task nature?", q3: "Reuse frequency?",
-      f1: "In conversation (upload/paste)", f2: "Local folder", f3: "Remote (GitHub repo, etc.)",
-      t1: "Pure conversation/thinking", t2: "Needs computation or file output", t3: "Batch processing multiple files",
-      r1: "Once only", r2: "3-5 times", r3: "10+ times",
-      result: "Recommended Combo", interface: "Interface", capability: "Capabilities",
-      select: "Please select",
-      hint_web: "Claude.ai Web", hint_cowork: "Cowork (Claude Desktop)", hint_cli: "Claude Code CLI",
-      cap_chat: "Chat", cap_code: "Code", cap_local: "Local Files", cap_skill: "Skill", cap_proj: "Project" }
+    zh: { title:'工作方式與環境選擇器', output:'工作成果', answer:'回答', document:'文件', software:'程式',
+      local:'需要直接修改本機檔案', tests:'需要執行測試或 Git', scheduled:'需要排程或長時間運行',
+      sensitive:'涉及敏感資料', deploy:'需要部署或多人使用', result:'分層建議',
+      coop:'合作方式', product:'產品類型', env:'執行環境', container:'Container', safety:'安全提醒',
+      chat:'Assistant／Co-pilot', agent:'任務型 Agent', persistent:'可觸發的持續工作流',
+      chatProduct:'Chat', work:'Work／Cowork', coding:'Codex／Claude Code',
+      browser:'對話或雲端工作區', localEnv:'授權的本機工作區與 Sandbox', hosted:'受控部署環境',
+      noContainer:'通常先不需要', inspect:'先由 Agent 檢查專案', consider:'若有多服務或資料庫，再考慮 Docker Compose',
+      safeNormal:'確認檔案與網路權限', safeSensitive:'限制讀寫範圍、避免放入憑證，並確認資料處理規則',
+      safeScheduled:'設定停止條件、監控、回復與人工確認' },
+    en: { title:'Work Style and Environment Selector', output:'Output', answer:'Answer', document:'Document', software:'Software',
+      local:'Directly modify local files', tests:'Run tests or Git', scheduled:'Schedule or run for a long time',
+      sensitive:'Sensitive data', deploy:'Deploy or share with others', result:'Layered recommendation',
+      coop:'Collaboration', product:'Product type', env:'Environment', container:'Container', safety:'Safety note',
+      chat:'Assistant / Co-pilot', agent:'Task Agent', persistent:'Triggered persistent workflow',
+      chatProduct:'Chat', work:'Work / Cowork', coding:'Codex / Claude Code',
+      browser:'Conversation or cloud workspace', localEnv:'Authorised local workspace and Sandbox', hosted:'Controlled deployment environment',
+      noContainer:'Usually not needed yet', inspect:'Ask an Agent to inspect the project first', consider:'Consider Docker Compose only for databases or multiple services',
+      safeNormal:'Confirm file and network permissions', safeSensitive:'Restrict file scope, keep credentials out, and confirm data policy',
+      safeScheduled:'Define stop conditions, monitoring, recovery, and human approval' }
   }[lang];
-  const recommend = () => {
-    if (!fileLoc || !taskType || !reuseFreq) return null;
-    // 介面決定
-    let iface;
-    if (fileLoc === 'local') iface = reuseFreq === 'high' && taskType === 'batch' ? txt.hint_cli : txt.hint_cowork;
-    else if (fileLoc === 'remote') iface = txt.hint_cowork; // remote 拉下來變本機處理
-    else iface = txt.hint_web;
-    // 能力決定
-    const caps = [txt.cap_chat];
-    if (taskType !== 'thinking') caps.push(txt.cap_code);
-    if (fileLoc === 'local' || fileLoc === 'remote') caps.push(txt.cap_local);
-    if (reuseFreq !== 'once') caps.push(txt.cap_skill);
-    if (reuseFreq === 'high') caps.push(txt.cap_proj);
-    return { iface, caps: caps.join(' + ') };
-  };
-  const r = recommend();
+  const coop = scheduled ? txt.persistent : (output === 'answer' && !localFiles && !tests ? txt.chat : txt.agent);
+  const product = output === 'software' || tests ? txt.coding : output === 'document' || localFiles ? txt.work : txt.chatProduct;
+  const env = deploy ? txt.hosted : localFiles || tests ? txt.localEnv : txt.browser;
+  const container = output === 'software' && deploy ? txt.consider : localFiles || tests ? txt.inspect : txt.noContainer;
+  const safety = scheduled ? txt.safeScheduled : sensitive ? txt.safeSensitive : txt.safeNormal;
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
       <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">{txt.q1}</label>
-          <select value={fileLoc} onChange={e=>setFileLoc(e.target.value)}
-            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">{txt.select}</option>
-            <option value="chat">{txt.f1}</option>
-            <option value="local">{txt.f2}</option>
-            <option value="remote">{txt.f3}</option>
+      <div className="space-y-3">
+        <label className="block text-sm">{txt.output}
+          <select value={output} onChange={e=>setOutput(e.target.value)} className="mt-1 w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
+            <option value="answer">{txt.answer}</option><option value="document">{txt.document}</option><option value="software">{txt.software}</option>
           </select>
+        </label>
+        <LabCheck checked={localFiles} onChange={setLocalFiles}>{txt.local}</LabCheck>
+        <LabCheck checked={tests} onChange={setTests}>{txt.tests}</LabCheck>
+        <LabCheck checked={scheduled} onChange={setScheduled}>{txt.scheduled}</LabCheck>
+        <LabCheck checked={sensitive} onChange={setSensitive}>{txt.sensitive}</LabCheck>
+        <LabCheck checked={deploy} onChange={setDeploy}>{txt.deploy}</LabCheck>
+        <div className="mt-4 p-4 bg-[#004030]/10 dark:bg-[#D8C3A5]/10 rounded-lg border-l-4 border-[#D8C3A5] text-sm space-y-1">
+          <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">{txt.result}</p>
+          <p><b>{txt.coop}:</b> {coop}</p><p><b>{txt.product}:</b> {product}</p><p><b>{txt.env}:</b> {env}</p>
+          <p><b>{txt.container}:</b> {container}</p><p><b>{txt.safety}:</b> {safety}</p>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">{txt.q2}</label>
-          <select value={taskType} onChange={e=>setTaskType(e.target.value)}
-            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">{txt.select}</option>
-            <option value="thinking">{txt.t1}</option>
-            <option value="compute">{txt.t2}</option>
-            <option value="batch">{txt.t3}</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-2">{txt.q3}</label>
-          <select value={reuseFreq} onChange={e=>setReuseFreq(e.target.value)}
-            className="w-full p-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900">
-            <option value="">{txt.select}</option>
-            <option value="once">{txt.r1}</option>
-            <option value="mid">{txt.r2}</option>
-            <option value="high">{txt.r3}</option>
-          </select>
-        </div>
-        {r && (
-          <div className="mt-4 p-4 bg-[#004030]/10 dark:bg-[#D8C3A5]/10 rounded-lg border-l-4 border-[#D8C3A5]">
-            <p className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">{txt.result}</p>
-            <div className="space-y-2">
-              <div>
-                <span className="text-xs text-slate-500">{txt.interface}: </span>
-                <span className="text-base font-bold text-[#004030] dark:text-[#D8C3A5]">{r.iface}</span>
-              </div>
-              <div>
-                <span className="text-xs text-slate-500">{txt.capability}: </span>
-                <span className="text-sm font-medium text-[#004030] dark:text-[#D8C3A5]">{r.caps}</span>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
 };
 
-// ════════ Lab 2: Token 經濟計算器 ════════
+// ════════ Lab 2: 概念性回收模擬器 ════════
 const TokenCalcLab = ({lang}) => {
-  const [skillSize, setSkillSize] = useState(5000);
-  const [perTurnSaving, setPerTurnSaving] = useState(2000);
-  const [turns, setTurns] = useState(20);
+  const [setup, setSetup] = useState(40);
+  const [perRun, setPerRun] = useState(8);
+  const [repeatSaved, setRepeatSaved] = useState(12);
+  const [maintenance, setMaintenance] = useState(15);
+  const [runs, setRuns] = useState(5);
   const txt = {
-    zh: { title: "Token 經濟計算器", skill: "Skill 載入成本(token)", save: "每輪省下(token)",
-      turn: "對話總輪數", total_save: "累積省下", net: "淨收益", payback: "回收輪數",
-      verdict_good: "✅ 投資 Skill 划算", verdict_bad: "⚠️ 還沒回本,考慮再用幾次" },
-    en: { title: "Token Economics Calculator", skill: "Skill load cost (tokens)", save: "Save per turn (tokens)",
-      turn: "Total turns", total_save: "Total saved", net: "Net gain", payback: "Payback turns",
-      verdict_good: "✅ Skill investment pays off", verdict_bad: "⚠️ Not yet recouped, use more times" }
+    zh:{ title:'概念性回收模擬器', note:'相對成本點數，非實際 token 帳單', setup:'建置成本', perRun:'每次載入成本',
+      saved:'每次減少的重複溝通', maintenance:'維護成本', runs:'預期執行次數', structured:'結構化總成本',
+      unstructured:'未結構化總成本', likely:'可能較划算', need:'需更多資料', assumption:'此模型未估算模型價格、快取、錯誤風險與人力時薪。' },
+    en:{ title:'Conceptual Payback Simulator', note:'Relative cost points, not an actual token bill', setup:'Setup cost', perRun:'Per-run loading',
+      saved:'Repeated communication avoided per run', maintenance:'Maintenance cost', runs:'Expected runs', structured:'Structured total',
+      unstructured:'Unstructured total', likely:'May be more economical', need:'Need more evidence', assumption:'This model excludes model prices, caching, error risk, and labour rates.' }
   }[lang];
-  const totalSave = perTurnSaving * turns;
-  const net = totalSave - skillSize;
-  const payback = Math.ceil(skillSize / perTurnSaving);
+  const structured = setup + maintenance + perRun * runs;
+  const unstructured = (perRun + repeatSaved) * runs;
+  const likely = structured < unstructured;
+  const slider = (label, value, setValue, max=100) => <label className="block text-sm">{label}: <b>{value}</b><input type="range" min="0" max={max} value={value} onChange={e=>setValue(+e.target.value)} className="w-full" /></label>;
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
-      <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
+      <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5]">{txt.title}</h3>
+      <p className="text-xs text-orange-600 dark:text-orange-300 mb-4">{txt.note}</p>
       <div className="space-y-3">
-        <div>
-          <label className="block text-sm mb-1">{txt.skill}: <span className="font-bold">{skillSize}</span></label>
-          <input type="range" min="1000" max="20000" step="500" value={skillSize}
-            onChange={e=>setSkillSize(+e.target.value)} className="w-full" />
+        {slider(txt.setup, setup, setSetup)}{slider(txt.perRun, perRun, setPerRun, 40)}
+        {slider(txt.saved, repeatSaved, setRepeatSaved, 40)}{slider(txt.maintenance, maintenance, setMaintenance, 60)}
+        {slider(txt.runs, runs, setRuns, 30)}
+        <div className="grid grid-cols-2 gap-2 text-center">
+          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg"><p className="text-xs">{txt.structured}</p><b>{structured}</b></div>
+          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg"><p className="text-xs">{txt.unstructured}</p><b>{unstructured}</b></div>
         </div>
-        <div>
-          <label className="block text-sm mb-1">{txt.save}: <span className="font-bold">{perTurnSaving}</span></label>
-          <input type="range" min="100" max="5000" step="100" value={perTurnSaving}
-            onChange={e=>setPerTurnSaving(+e.target.value)} className="w-full" />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">{txt.turn}: <span className="font-bold">{turns}</span></label>
-          <input type="range" min="1" max="100" value={turns}
-            onChange={e=>setTurns(+e.target.value)} className="w-full" />
-        </div>
-        <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
-            <p className="text-xs text-slate-500">{txt.total_save}</p>
-            <p className="font-bold text-[#004030] dark:text-[#D8C3A5]">{totalSave}</p>
-          </div>
-          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
-            <p className="text-xs text-slate-500">{txt.net}</p>
-            <p className={`font-bold ${net>0?'text-green-600':'text-red-500'}`}>{net>0?'+':''}{net}</p>
-          </div>
-          <div className="p-3 bg-slate-100 dark:bg-slate-700 rounded-lg">
-            <p className="text-xs text-slate-500">{txt.payback}</p>
-            <p className="font-bold text-[#004030] dark:text-[#D8C3A5]">{payback}</p>
-          </div>
-        </div>
-        <p className="text-sm text-center mt-3 italic">{net>0?txt.verdict_good:txt.verdict_bad}</p>
+        <p className="text-center font-bold text-[#004030] dark:text-[#D8C3A5]">{likely ? txt.likely : txt.need}</p>
+        <p className="text-xs text-slate-500">{txt.assumption}</p>
       </div>
     </div>
   );
@@ -1174,84 +1543,65 @@ const TokenCalcLab = ({lang}) => {
 
 // ════════ Lab 3: Code 必要性判斷器 ════════
 const CodeNecessityLab = ({lang}) => {
-  const [n, setN] = useState(10);
-  const [hasBinary, setHasBinary] = useState(false);
-  const [hasCompute, setHasCompute] = useState(false);
+  const [repeatable, setRepeatable] = useState(false);
+  const [files, setFiles] = useState(false);
+  const [tests, setTests] = useState(false);
+  const [convert, setConvert] = useState(false);
+  const [errorProne, setErrorProne] = useState(false);
   const txt = {
-    zh: { title: "Code 必要性判斷器", count: "任務數量(假設要做 N 份)",
-      binary: "需要產出 .docx/.xlsx/.pptx/.pdf?",
-      compute: "需要精確數值運算或統計?",
-      verdict: "判斷", must: "必須用 Code", recommend: "建議用 Code", optional: "可不用 Code" },
-    en: { title: "Code Necessity Judge", count: "Item count (assume N items)",
-      binary: "Output .docx/.xlsx/.pptx/.pdf?",
-      compute: "Precise computation or statistics?",
-      verdict: "Verdict", must: "Must use Code", recommend: "Recommend Code", optional: "Code optional" }
+    zh:{title:'Code 必要性判斷器', repeat:'需要可重複的精確處理', files:'需要直接修改檔案', tests:'需要執行測試或 Git',
+      convert:'需要轉檔或產生結構化檔案', error:'人工逐項操作容易出錯', verdict:'建議',
+      chat:'對話即可', tools:'建議使用工具／檔案功能', coding:'建議使用 Coding Agent', clarify:'建議先釐清需求'},
+    en:{title:'Code Necessity Judge', repeat:'Repeatable precise processing', files:'Direct file changes', tests:'Tests or Git',
+      convert:'Conversion or structured file output', error:'Manual steps are error-prone', verdict:'Recommendation',
+      chat:'Conversation is enough', tools:'Use tools or file features', coding:'Use a Coding Agent', clarify:'Clarify the requirement first'}
   }[lang];
-  const verdict = () => {
-    if (hasBinary) return { text: txt.must, color: 'text-red-500' };
-    if (hasCompute || n >= 20) return { text: txt.recommend, color: 'text-orange-500' };
-    return { text: txt.optional, color: 'text-green-600' };
-  };
-  const v = verdict();
+  const score = [repeatable, files, tests, convert, errorProne].filter(Boolean).length;
+  const verdict = tests || (files && repeatable) ? txt.coding : convert || files || score >= 2 ? txt.tools : score === 0 ? txt.chat : txt.clarify;
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
       <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
       <div className="space-y-3">
-        <div>
-          <label className="block text-sm mb-1">{txt.count}: <span className="font-bold">{n}</span></label>
-          <input type="range" min="1" max="100" value={n}
-            onChange={e=>setN(+e.target.value)} className="w-full" />
-        </div>
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input type="checkbox" checked={hasBinary} onChange={e=>setHasBinary(e.target.checked)} />
-          {txt.binary}
-        </label>
-        <label className="flex items-center gap-2 text-sm cursor-pointer">
-          <input type="checkbox" checked={hasCompute} onChange={e=>setHasCompute(e.target.checked)} />
-          {txt.compute}
-        </label>
-        <div className="mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-lg text-center">
-          <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">{txt.verdict}</p>
-          <p className={`text-xl font-bold ${v.color}`}>{v.text}</p>
-        </div>
+        <LabCheck checked={repeatable} onChange={setRepeatable}>{txt.repeat}</LabCheck><LabCheck checked={files} onChange={setFiles}>{txt.files}</LabCheck>
+        <LabCheck checked={tests} onChange={setTests}>{txt.tests}</LabCheck><LabCheck checked={convert} onChange={setConvert}>{txt.convert}</LabCheck>
+        <LabCheck checked={errorProne} onChange={setErrorProne}>{txt.error}</LabCheck>
+        <div className="mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-lg text-center"><p className="text-xs text-slate-500">{txt.verdict}</p><p className="text-xl font-bold text-[#004030] dark:text-[#D8C3A5]">{verdict}</p></div>
       </div>
     </div>
   );
 };
 
-// ════════ Lab 4: Skill 開發優先順序 ════════
+// ════════ Lab 4: Container 必要性判斷器 ════════
 const SkillPriorityLab = ({lang}) => {
-  const [pain, setPain] = useState(5);
-  const [stable, setStable] = useState(5);
-  const [reuse, setReuse] = useState(5);
+  const [database, setDatabase] = useState(false);
+  const [services, setServices] = useState(false);
+  const [portable, setPortable] = useState(false);
+  const [deploy, setDeploy] = useState(false);
+  const [conflict, setConflict] = useState(false);
+  const [gpu, setGpu] = useState(false);
+  const [prototype, setPrototype] = useState(true);
   const txt = {
-    zh: { title: "Skill 開發優先順序", pain: "痛點頻率(1-10)", stable: "規格穩定性(1-10)", reuse: "預期重用次數(1-10)",
-      score: "優先級分數", high: "🔥 高優先級,立刻做", mid: "⭐ 中優先級,排程做", low: "💭 低優先級,先觀察" },
-    en: { title: "Skill Development Priority", pain: "Pain frequency (1-10)", stable: "Spec stability (1-10)", reuse: "Expected reuse (1-10)",
-      score: "Priority Score", high: "🔥 High priority, do now", mid: "⭐ Medium priority, schedule it", low: "💭 Low priority, observe first" }
+    zh:{title:'Container 是否必要', db:'包含資料庫', services:'包含多個服務', portable:'需要搬到其他電腦', deploy:'部署給別人',
+      conflict:'相依套件容易衝突', gpu:'需要 GPU', prototype:'只是本機單人原型', verdict:'判斷',
+      no:'暫時不需要', optional:'可選；先比較額外複雜度', compose:'建議評估 Docker Compose', inspect:'先由 Agent 檢查專案',
+      gpuWarn:'GPU／Windows 的驅動、容器執行環境與效能設定較複雜，先驗證本機方案與部署目標。'},
+    en:{title:'Is a Container Necessary?', db:'Includes a database', services:'Includes multiple services', portable:'Must move to another computer', deploy:'Deploy for others',
+      conflict:'Dependency conflicts', gpu:'Needs a GPU', prototype:'Local single-user prototype only', verdict:'Verdict',
+      no:'Not needed yet', optional:'Optional; compare added complexity first', compose:'Evaluate Docker Compose', inspect:'Ask an Agent to inspect the project first',
+      gpuWarn:'GPU and Windows add driver, runtime, and performance complexity. Validate the local option and deployment target first.'}
   }[lang];
-  const score = Math.round((pain * 2 + stable + reuse * 2) / 5 * 10) / 10;
-  const verdict = score >= 7 ? txt.high : score >= 5 ? txt.mid : txt.low;
+  const score = [database, services, portable, deploy, conflict].filter(Boolean).length;
+  const verdict = gpu ? txt.inspect : database && services ? txt.compose : prototype && score === 0 ? txt.no : score >= 2 ? txt.compose : txt.optional;
   return (
     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 border border-slate-200 dark:border-slate-700">
       <h3 className="font-serif font-bold text-lg text-[#004030] dark:text-[#D8C3A5] mb-4">{txt.title}</h3>
       <div className="space-y-3">
-        <div>
-          <label className="block text-sm mb-1">{txt.pain}: <span className="font-bold">{pain}</span></label>
-          <input type="range" min="1" max="10" value={pain} onChange={e=>setPain(+e.target.value)} className="w-full" />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">{txt.stable}: <span className="font-bold">{stable}</span></label>
-          <input type="range" min="1" max="10" value={stable} onChange={e=>setStable(+e.target.value)} className="w-full" />
-        </div>
-        <div>
-          <label className="block text-sm mb-1">{txt.reuse}: <span className="font-bold">{reuse}</span></label>
-          <input type="range" min="1" max="10" value={reuse} onChange={e=>setReuse(+e.target.value)} className="w-full" />
-        </div>
-        <div className="mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-lg text-center">
-          <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">{txt.score}: {score}</p>
-          <p className="text-lg font-bold text-[#004030] dark:text-[#D8C3A5]">{verdict}</p>
-        </div>
+        <LabCheck checked={database} onChange={setDatabase}>{txt.db}</LabCheck><LabCheck checked={services} onChange={setServices}>{txt.services}</LabCheck>
+        <LabCheck checked={portable} onChange={setPortable}>{txt.portable}</LabCheck><LabCheck checked={deploy} onChange={setDeploy}>{txt.deploy}</LabCheck>
+        <LabCheck checked={conflict} onChange={setConflict}>{txt.conflict}</LabCheck><LabCheck checked={gpu} onChange={setGpu}>{txt.gpu}</LabCheck>
+        <LabCheck checked={prototype} onChange={setPrototype}>{txt.prototype}</LabCheck>
+        <div className="mt-4 p-4 bg-slate-100 dark:bg-slate-700 rounded-lg text-center"><p className="text-xs text-slate-500">{txt.verdict}</p><p className="text-xl font-bold text-[#004030] dark:text-[#D8C3A5]">{verdict}</p></div>
+        {gpu && <p className="text-xs text-orange-600 dark:text-orange-300">{txt.gpuWarn}</p>}
       </div>
     </div>
   );
@@ -1277,7 +1627,7 @@ function App() {
   const LS_STU = 'AIWF_SPA_student';
   const loadLS = (key, fb) => { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fb; } catch { return fb; } };
 
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState('zh');
   const [isDark, setIsDark] = useState(true);
   const [module, setModule] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1323,6 +1673,7 @@ function App() {
   }));
 
   useEffect(() => { document.documentElement.classList.toggle('dark', isDark); }, [isDark]);
+  useEffect(() => { document.documentElement.lang = lang === 'zh' ? 'zh-Hant' : 'en'; }, [lang]);
   useEffect(() => { try { localStorage.setItem(LS_KEY, JSON.stringify(analytics)); } catch {} }, [analytics]);
   useEffect(() => { try { localStorage.setItem(LS_STU, JSON.stringify(studentInfo)); } catch {} }, [studentInfo]);
 
@@ -1511,6 +1862,7 @@ function App() {
           </div>
           <div className="bg-gradient-to-br from-[#004030] to-[#004030]/80 dark:from-slate-800 dark:to-slate-900 text-white rounded-2xl p-8 shadow-xl">
             <p className="text-base md:text-lg leading-relaxed text-[#D8C3A5]/95">{t.m0_intro}</p>
+            <p className="mt-4 text-xs text-white/75">{lang==='zh' ? '此單檔頁面依賴外部 CDN；離線時可能無法載入。' : 'This single-file page relies on external CDNs and may not load offline.'}</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {t.m0_stats.map((s,i)=>(
@@ -1649,19 +2001,23 @@ function App() {
 
     if (module === IDX_RES) {
       const resources = lang === 'zh' ? [
-        { label: "Anthropic 官方文件", url: "https://docs.claude.com", desc: "Claude 產品、API、Skill 開發、Prompt 工程完整文件" },
-        { label: "Claude.ai 產品支援", url: "https://support.claude.com", desc: "使用說明、訂閱方案、功能介紹" },
-        { label: "Skill 開發指南", url: "https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview", desc: "Prompt 工程基礎,Skill 設計可參考" },
-        { label: "Claude Code", url: "https://docs.claude.com", desc: "命令列工具,Level 3 Agent 的開發環境" },
-        { label: "MCP (Model Context Protocol)", url: "https://docs.claude.com", desc: "外部工具與服務的整合協定" },
-        { label: "Anthropic Newsroom", url: "https://www.anthropic.com/news", desc: "最新產品發布、研究進展、政策說明" }
+        { label: "ChatGPT Work 與 Codex", url: "https://help.openai.com/en/articles/20001275/", desc: "Chat、Work 與 Codex 的官方典型定位" },
+        { label: "OpenAI Codex", url: "https://openai.com/codex/", desc: "Codex 軟體開發 Agent 官方介紹" },
+        { label: "Claude Cowork", url: "https://www.anthropic.com/product/claude-cowork", desc: "一般知識工作與桌面檔案操作" },
+        { label: "Claude Code", url: "https://www.anthropic.com/product/claude-code", desc: "程式庫、終端、測試與 Git" },
+        { label: "Claude Code 快速開始", url: "https://docs.anthropic.com/en/docs/claude-code/getting-started", desc: "安裝、啟動與執行環境" },
+        { label: "Anthropic 隔離架構", url: "https://www.anthropic.com/engineering/how-we-contain-claude", desc: "claude.ai、Claude Code 與 Cowork 的環境邊界" },
+        { label: "Claude Project RAG", url: "https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects", desc: "Project 知識如何檢索" },
+        { label: "Claude 建立與編輯檔案", url: "https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude", desc: "檔案產生與編輯功能" }
       ] : [
-        { label: "Anthropic Documentation", url: "https://docs.claude.com", desc: "Complete docs for Claude products, API, Skill development, Prompt engineering" },
-        { label: "Claude.ai Support", url: "https://support.claude.com", desc: "User guide, subscription plans, feature introduction" },
-        { label: "Skill Development Guide", url: "https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview", desc: "Prompt engineering basics, reference for Skill design" },
-        { label: "Claude Code", url: "https://docs.claude.com", desc: "Command-line tool, dev environment for Level 3 Agent" },
-        { label: "MCP (Model Context Protocol)", url: "https://docs.claude.com", desc: "Integration protocol for external tools and services" },
-        { label: "Anthropic Newsroom", url: "https://www.anthropic.com/news", desc: "Latest product releases, research progress, policy notes" }
+        { label: "ChatGPT Work and Codex", url: "https://help.openai.com/en/articles/20001275/", desc: "Official typical positioning for Chat, Work, and Codex" },
+        { label: "OpenAI Codex", url: "https://openai.com/codex/", desc: "Official overview of the software-development Agent" },
+        { label: "Claude Cowork", url: "https://www.anthropic.com/product/claude-cowork", desc: "General knowledge work and desktop files" },
+        { label: "Claude Code", url: "https://www.anthropic.com/product/claude-code", desc: "Repositories, terminals, tests, and Git" },
+        { label: "Claude Code Quickstart", url: "https://docs.anthropic.com/en/docs/claude-code/getting-started", desc: "Installation, startup, and environment" },
+        { label: "Anthropic Containment Architecture", url: "https://www.anthropic.com/engineering/how-we-contain-claude", desc: "Environment boundaries across claude.ai, Claude Code, and Cowork" },
+        { label: "Claude Project RAG", url: "https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects", desc: "How Project knowledge is retrieved" },
+        { label: "Create and Edit Files with Claude", url: "https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude", desc: "File creation and editing features" }
       ];
       return (
         <div className="space-y-6 animate-fade-in">
